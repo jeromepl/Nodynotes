@@ -210,12 +210,12 @@
 			var board_id = <?php echo $board_id ?>;
 			
 			//Caching stuff
-			/*var appCache = window.applicationCache;
+			var appCache = window.applicationCache;
 			appCache.addEventListener("updateready", function(e) {
 				appCache.swapCache();
 				window.location.reload(); //need to reload the page when the manifest has changed (meaning website update) to apply updates
 			}, false);
-			appCache.update();*/
+			appCache.update();
 			
         </script>
         <?php include('events.php')?>
