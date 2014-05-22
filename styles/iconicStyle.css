@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+/* Body */
+body .iconic * {
+	fill: #020024;
+}
+body .iconic-property-accent {
+	fill: #09F;
+	stroke: #09F;
+}
+
+/* Header */
+header .iconic * {
+	fill: white;
+	stroke: white;
+}
+header .iconic-property-accent {
+	fill: #09F;
+	stroke: #09F;
+}
+
+/* Change content circle buttons */
+#changeContent_change .iconic-property-fill {
+	fill: #6CC729;
+}
+#changeContent_cancel .iconic-property-fill {
+	fill: #D20000;
+}
+
+/* Node icons */
+.node .iconic * {
+	fill: black;
+}
+.node .iconic-property-accent {
+	fill: #666;
+	stroke: #666;
+}
