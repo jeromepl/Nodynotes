@@ -3,10 +3,18 @@ function Board(id) {
 	this.nodes = [];
 	this.linkBars = [];
 	
-	var that = this;
-	
 	$.getJSON("server_side/getNodes.php?board_id=" + this.id, function(data) {
 		//console.log(data);
+		localStorage.setItem('data', JSON.stringify(data)); //save the json to a file on the user's computer for offline mode		
+		loadData(data); //load data the normal way
+		
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		loadData(JSON.parse(localStorage.getItem('data'))); //if no internet connection, load local data from user's computer
+	});
+	
+	var that = this;
+	
+	function loadData(data) {
 		for(var i = 0; i < data.nodes.length; i++) { //nodes
 			that.nodes.push(new Node(data.nodes[i].title, data.nodes[i].text, data.nodes[i].color, data.nodes[i].icon, data.nodes[i].xPos, data.nodes[i].yPos, data.nodes[i].id));
 			
@@ -42,10 +50,7 @@ function Board(id) {
 		}
 		
 		setup(); //function called when the data has loaded
-		
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		alert('Error receiving the nodes, subtitles and likbars: ' + errorThrown + ': ' + textStatus); 
-	});
+	}
 	
 	function setup() { //function called when the data has loaded
 		subMaxWidth = $('.subtitle').css('max-width');
