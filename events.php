@@ -10,7 +10,7 @@ $(function() {
 	$('#content_title input').hide();
 	$('#content_text textArea').hide();
 	
-	var theBoard = new Board(board_id); //variable is currently unused
+	new Board(board_id); //create the board
 	
 	//NODE CREATION
 	<?php
