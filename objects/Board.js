@@ -4,12 +4,11 @@ function Board(id) {
 	this.linkBars = [];
 	
 	$.getJSON("server_side/getNodes.php?board_id=" + this.id, function(data) {
-		//console.log(data);
-		localStorage.setItem('data', JSON.stringify(data)); //save the json to a file on the user's computer for offline mode		
-		loadData(data); //load data the normal way
+		//console.log(data);	
+		loadData(data);
 		
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		loadData(JSON.parse(localStorage.getItem('data'))); //if no internet connection, load local data from user's computer
+		alert("An error occured while trying to save. Please check your internet connection and try again later.");
 	});
 	
 	var that = this;
