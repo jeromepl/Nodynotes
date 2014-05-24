@@ -23,7 +23,7 @@
 								or die(print_r($bdd->errorInfo()));
 									
 		while($data = $answer->fetch()) {
-			addEl($nodes, $data['id'], $data['title'], $data['text'], $data['score']);
+			addEl($nodes, 'node', $data['id'], $data['title'], $data['text'], $data['score']);
 		}
 		
 		$answer->closeCursor();
@@ -40,7 +40,24 @@
 								or die(print_r($bdd->errorInfo()));
 									
 		while($data = $answer->fetch()) {
-			addEl($subtitles, $data['id'], $data['title'], $data['text'], $data['score']);
+			addEl($subtitles, 'subtitle', $data['id'], $data['title'], $data['text'], $data['score']);
+		}
+
+		$answer->closeCursor();
+
+        $answer = $bdd->prepare('SELECT t.title tag_title, n.*,
+									MATCH(t.title) AGAINST(:query1 IN BOOLEAN MODE) AS score
+									FROM tags t
+									INNER JOIN nodes n ON n.id = t.node_id
+									INNER JOIN boards b ON b.id = n.board_id
+									WHERE b.user_id = :user_id AND MATCH(t.title) AGAINST(:query2 IN BOOLEAN MODE) ORDER BY score DESC');
+		$answer->execute(array('user_id' => $_SESSION['id'],
+								'query1' => $_POST['query'],
+								'query2' => $_POST['query']))
+								or die(print_r($bdd->errorInfo()));
+
+		while($data = $answer->fetch()) {
+			addEl($nodes, 'tag', $data['id'], $data['title'], $data['text'], $data['score']);
 		}
 		
 		$answer->closeCursor();
@@ -48,25 +65,37 @@
 		//merge the subtitles and nodes
 		$result = merge($nodes, $subtitles);
 		
-		foreach($result as $key => $el) {
-			print('<b>' . $el['type'] . ': ' . $el['title'] . ', ' . $el['score'] . '</b><br>');
-			print('<p>' . $el['text'] . '</p>');
-		}
-		
-		echo json_encode($result);
+		echo json_encode($result); //result is sent back to the javascript page as JSON
 	}
 	
-	function addEl(&$elArray, $id, $title, $text, $score) {
-		if(!in_array($id, $elArray)) { //prevents duplicates
-			$elArray[] = array(); //add an element to the array
-			$current = count($elArray)-1;
-			$elArray[$current]['id'] = $id;
-			$elArray[$current]['title'] = stripslashes(strip_tags($title)); //add the title and text to the element in the array
-			$elArray[$current]['text'] = stripslashes(strip_tags($text));
-			$elArray[$current]['score'] = $score;
-			//type is added when merging arrays
-		}
+	function addEl(&$elArray, $type, $id, $title, $text, $score) {
+        $keyInArray = ($type == 'tag')? id_in_array($id, $elArray) : false; //if it's a tag and the node is already in the array, skip to 'else' statement
+        if(!$keyInArray) {
+            $elArray[] = array(); //add an element(an array) to the array
+            $current = count($elArray)-1;
+            $elArray[$current]['id'] = $id;
+            $elArray[$current]['title'] = stripslashes(strip_tags($title)); //add the title and text to the element in the array
+            $elArray[$current]['text'] = stripslashes(strip_tags($text));
+            $elArray[$current]['score'] = $score;
+            if ($type == 'node' || $type == 'tag') $elArray[$current]['type'] = 'N';
+            else $elArray[$current]['type'] = 'S';
+        }
+        else { //add the scores
+            $elArray[$keyInArray]['score'] += $score;
+            sortElement($elArray, $keyInArray); //resort the newly modified element base on its new score
+        }
 	}
+
+    function sortElement(&$elArray, $keyEl) {
+        //No need to take care of the event where the element would be too high in the array since the score is always going to increase
+        //if the element is too low in the array
+        while($elArray[$keyEl]['score'] > $elArray[$keyEl - 1]['score']) { //the array is sorted decreasingly
+            $temp = $elArray[$keyEl - 1];
+            $elArray[$keyEl - 1] = $elArray[$keyEl];
+            $elArray[$keyEl] = $temp;
+            $keyEl -= 1;
+        }
+    }
 	
 	function merge($l1, $l2) {
 		$i1 = 0; $i2 = 0; $i3 = 0;
@@ -74,30 +103,34 @@
 		while ($i1 <= count($l1)-1 && $i2 <= count($l2)-1) {
 			if ($l1[$i1]['score'] > $l2[$i2]['score']) {
 				$temp[$i3] = array();
-				$temp[$i3] = $l1[$i1++];
-				$temp[$i3++]['type'] = 'N';
+				$temp[$i3++] = $l1[$i1++];
 			}
 			else {
 				$temp[$i3] = array();
-				$temp[$i3] = $l2[$i2++];
-				$temp[$i3++]['type'] = 'S';
+				$temp[$i3++] = $l2[$i2++];
 			}
 		}
 
 		while ($i1 <= count($l1)-1) {
 			$temp[$i3] = array();
-			$temp[$i3] = $l1[$i1++];
-			$temp[$i3++]['type'] = 'N';
+			$temp[$i3++] = $l1[$i1++];
 		}
 
 		while ($i2 <= count($l2)-1) {
 			$temp[$i3] = array();
-			$temp[$i3] = $l2[$i2++];
-			$temp[$i3++]['type'] = 'S';
+			$temp[$i3++] = $l2[$i2++];
 		}
 		
 		return $temp;
 	}
+
+    function id_in_array($id, &$array) { //function to determine if the node id is already in the array
+        foreach ($array as $key => $item) {
+            if ($item['type'] == 'N' && $item['id'] == $id) {
+                return $key; //return a the array key to the node
+            }
+        }
+        return null;
+    }
 		
 	//$words = preg_split("#\\s+#", $_POST['query'], NULL, PREG_SPLIT_NO_EMPTY);
-		
