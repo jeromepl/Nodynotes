@@ -70,5 +70,5 @@
 		}
 		$answer1->closeCursor();
 	}
-	file_put_contents ( "text.json" , json_encode($post_data) );
+
 	echo json_encode($post_data);
