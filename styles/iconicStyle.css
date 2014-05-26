@@ -18,6 +18,15 @@ header .iconic-property-accent {
 	fill: #09F;
 	stroke: #09F;
 }
+/* Search results (in header) */
+.search_result .iconic * {
+	fill: black;
+	stroke: black;
+}
+.search_result .iconic-property-accent {
+	fill: black;
+	stroke: black;
+}
 
 /* Change content circle buttons */
 #changeContent_change .iconic-property-fill {

@@ -54,5 +54,12 @@ function Board(id) {
 	function setup() { //function called when the data has loaded
 		subMaxWidth = $('.subtitle').css('max-width');
 		nodeTitleMinWidth = $('.node').css('min-width');
+
+        if(searchedFor) {
+            if(searchedFor.charAt(1) =='n') //it's a node
+                $.data($(searchedFor)[0], 'node').object.selected();
+            else if(searchedFor.charAt(1) =='s') //it's a subtitle
+                $.data($(searchedFor)[0], 'subtitle').object.selected();
+        }
 	}
 }

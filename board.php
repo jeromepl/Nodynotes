@@ -28,12 +28,22 @@
 	<body>
     	<header>
         	<div id='head_container'>
-        		<a href="home.php">Nody Notes</a>
-                <div id="head_friends" class="head_icon"><img data-src="images/person.svg" class="iconic iconic-md" data-gender="genderless"></div>
-                
-                <input type='text' placeholder="Find something" />
-            	<div id="head_search" class="head_icon"><img data-src="images/magnifying-glass.svg" class="iconic iconic-md"></div>
-                <a href="server_side/disconnect.php">Disconnect</a>
+                <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
+                    <a id='disconnect' href="server_side/disconnect.php">Disconnect</a>
+                </div>
+                <div id='head_left'>
+        		  <a id='link_home' href="home.php">Nody Notes</a>
+                    <div id="head_friends" class="head_icon"><img data-src="images/person.svg" class="iconic iconic-md" data-gender="genderless"></div>
+                </div>
+                <div id='head_middle'>
+                    <div id='search'>
+                        <input type='text' placeholder="Find something" />
+                        <div id='search_results'>
+                            <h4 id='search_noResults'>No results found</h4>
+                        </div>
+                        <div id='head_search' class='head_icon'><img data-src="images/magnifying-glass.svg" class="iconic iconic-md"></div>
+                    </div>
+                </div>
             </div>
         </header>
         <div id='nodesContainer'>
@@ -182,6 +192,7 @@
 			var changedSub = null;
 			var nodeTitleMinWidth;
 			var subMaxWidth;
+            var searchedFor = ''; //if the value doesn't change, there was no redirection from search
 			
 			var iconic = new IconicJS({
 				autoInjectDone: function (count) {

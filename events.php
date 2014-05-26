@@ -22,17 +22,50 @@ $(function() {
 		$req = $bdd->prepare('UPDATE users SET last_board = :board_id WHERE id = :user_id');
 		$nb = $req->execute(array('board_id' => $board_id,
 									'user_id' => $_SESSION['id']));
-	
-		//Set the board area to the right place and check if the board belongs to the user
-		$answer = $bdd->prepare('SELECT * FROM boards WHERE id = :id AND user_id = :user_id');
-		$answer->execute(array('id' => $board_id, 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-		if($data = $answer->fetch()) { //if the board belongs to the user
-			echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
-		}
-		else {
-			die(); //NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
-		}
-		$answer->closeCursor();
+
+        //Set the board area to the right place and check if the board belongs to the user
+        if (isset($_GET['node_id'])) {
+            $answer = $bdd->prepare('SELECT n.yPos, n.xPos FROM nodes n
+                                    INNER JOIN boards b ON b.id = n.board_id
+                                    WHERE n.id = :id AND b.user_id = :user_id');
+            $answer->execute(array('id' => $_GET['node_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+            if($data = $answer->fetch()) { //if the board belongs to the user
+                echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                    left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
+            }
+            else {
+                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
+            }
+            $answer->closeCursor();
+        }
+        else if (isset($_GET['sub_id'])) {
+            $answer = $bdd->prepare('SELECT s.id, n.yPos, n.xPos FROM subtitles s
+                                    INNER JOIN nodes n ON n.id = s.node_id
+                                    INNER JOIN boards b ON b.id = n.board_id
+                                    WHERE s.id = :id AND b.user_id = :user_id');
+            $answer->execute(array('id' => $_GET['sub_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+            if($data = $answer->fetch()) { //if the board belongs to the user
+                echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                    left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
+            }
+            else {
+                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
+            }
+            $answer->closeCursor();
+        }
+        else {
+            $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id AND user_id = :user_id');
+            $answer->execute(array('id' => $board_id, 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+            if($data = $answer->fetch()) { //if the board belongs to the user
+                echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
+            }
+            else {
+                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
+            }
+            $answer->closeCursor();
+        }
 	?>
 	
 	titleMinWidth = $('.nodeTitle').css('width'); //width = min-width at the beginning, because no scaling occured (Used for expanding the title)
@@ -215,7 +248,7 @@ $(function() {
 			
 			if(selectedNode) { //if it's not null
 				if(tar[0] === $('#showContent')[0] || tar.parents('#showContent').length || tar[0] === $('#toolbar')[0] || tar.parents('#toolbar').length
-					|| tar[0] === $('#toolbar2')[0] || tar.parents('#toolbar2').length || clickedInsideContent) return; //if mousedown happened inside the content shower
+					|| tar[0] === $('#toolbar2')[0] || tar.parents('#toolbar2').length || tar.is('header') || tar.parents('header').length || clickedInsideContent) return; //if mousedown happened inside the content shower or header
 				
 				var parentNode = tar.parents('.node:not(board_node)');
 				if((parentNode.length && (tar.hasClass('subtitle') && !tar.hasClass('ellipsis') || tar.parents('.subtitle:not(.ellipsis)').length)) ||
@@ -369,6 +402,65 @@ $(function() {
 			ellipsisNode.retractSubtitles();
 		}
 	});
+
+    //SEARCHING EVERYTHING
+	$(document).on('focusin', '#head_container input[type="text"]', function(e) {
+		setTimeout(function() { //a timeout needs to be set because something in chrome and IE was deselecting it right after selecting it
+			$('#head_container input[type="text"]').select();
+		}, 20);
+	});
+	$(document).on('keyup', '#head_container input[type="text"]', function(e) {
+		mainSearch($('#head_container input[type="text"]').val());
+		if(e.which == 13) $('#head_container input[type="text"]').blur();
+	});
+	$(document).on('click', '#head_search', function(e) {
+		mainSearch($('#head_container input[type="text"]').val());
+	});
+    $(document).on('click', function(e) {
+        var tar = $(e.target);
+        if(!tar.is('#search_results') && !tar.parents('#search_results').length &&
+          !tar.is('#search input') && !tar.parents('#search input').length &&
+          !tar.is('#head_search') && !tar.parents('#head_search').length) {
+
+            $('#search_results').hide();
+            $('#search input').val('');
+            $('.search_result').remove();
+        }
+    });
+	function mainSearch(input) { //this function hides all boards not matching the user input
+        $('#search_results').show();
+
+        input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory
+
+        $.getJSON("server_side/search.php?query=" + input + "*", function(data) {
+            //console.log(data);
+            $('.search_result').remove();
+
+            if(data.length == 0) {
+                $('#search_noResults').show();
+            }
+            else {
+                $('#search_noResults').hide();
+                for(var i = 0; i < data.length; i++) {
+                    var currentA = $('<a>').appendTo('#search_results').addClass('search_result');
+                    if(data[i].type == 'node') {
+                        $('<div>').appendTo(currentA).addClass('search_nodeResult');
+                        currentA.attr('href', "board.php?id=" + data[i].board_id + "&node_id=" + data[i].id);
+                    }
+                    else {
+                        $('<div>').appendTo(currentA).addClass('search_subtitleResult');
+                        currentA.attr('href', "board.php?id=" + data[i].board_id + "&sub_id=" + data[i].id);
+                    }
+                    var currentDiv = $('<div>').appendTo(currentA).addClass('search_textResult');
+                    $('<h3>').appendTo(currentDiv).text(data[i].title);
+                    $('<p>').appendTo(currentDiv).text(data[i].text);
+                }
+            }
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ": " + errorThrown);
+        });
+	}
 	
 	//SEARCHING BOARD
 	$(document).on('mouseenter', '#board_search_img', function(e) {

@@ -9,6 +9,7 @@ header {
 	background-color: #09F;
 	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
+    text-align: center;
 }
 
 #head_container {
@@ -17,7 +18,21 @@ header {
 	height: 40px;
 }
 
-header a {
+#head_left {
+    float: left;
+    height: 100%;
+}
+
+#head_middle {
+    height: 100%;
+}
+
+#head_right {
+    float: right;
+    height: 100%;
+}
+
+#link_home {
 	display: inline-block;
 	color: white;
 	padding: 5px 10px;
@@ -32,11 +47,27 @@ header a {
 	text-decoration: none;
 }
 
+#disconnect {
+    display: inline-block;
+	color: white;
+	padding: 5px 10px;
+	margin: 0;
+	margin-right: 20px;
+    margin-top: 4px;
+    vertical-align: middle;
+	font-size: 20px;
+	font-weight: bold;
+	font-style: italic;
+	cursor: pointer;
+	border-radius: 4px 4px 0 0;
+	text-decoration: none;
+}
+
 header a:hover {
 	background-color: rgba(100, 100, 100, 0.15);
 }
 
-header svg {
+header svg:not(.search_resultSVG) {
 	display: inline-block;
 	padding: 7px;
 	margin: 0;
@@ -73,15 +104,107 @@ header svg {
 	margin-left: 40px;
 }
 
+#search {
+    display: inline-block;
+    margin-left: -350px;
+    width: 350px;
+    text-align: center;
+}
+
 header input {
 	border: none;
 	outline: none;
 	padding: 3px 5px;
 	border-radius: 2px;
-	margin-left: 70px;
-	width: 200px;
+	width: 220px;
 }
 
 header input:focus {
 	box-shadow: #09F 0 0 12px;
+}
+
+#search_results {
+    display: none;
+    position: absolute;
+    margin-top: -5px;
+    margin-left: -9px;
+    padding-top: 4px;
+    min-height: 65px;
+    max-height: 450px;
+    overflow-y: scroll;
+    width: 350px;
+    background-color: white;
+    border: 2px solid #020024;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    box-shadow: #999 0 2px 3px;
+}
+
+#search_noResults {
+    display: none;
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+}
+
+.search_result {
+    display: block;
+    position: relative;
+    padding: 5px 7px 5px 0;
+    overflow: hidden;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.search_result:hover {
+    background-color: #DDD;
+}
+
+.search_nodeResult {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    margin-top: -18px; /* 30 + 2 borders of 3px, everything divided by 2 gives 18*/
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: 3px solid black;
+    background-color: #EEE;
+}
+
+.search_subtitleResult {
+   position: absolute;
+    left: 6px;
+    top: 50%;
+    margin-top: -8px;
+    border-radius: 4px;
+    width: 40px;
+    height: 10px;
+    border: 3px solid black;
+    background-color: #EEE;
+}
+
+.search_textResult {
+    display: inline-block;
+    width: 82%;
+    text-align: left;
+    float: right;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.search_textResult h3 {
+    margin: 0;
+    overflow:hidden;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.search_textResult p {
+    margin: 0;
+    height: 20px;
+    overflow:hidden;
+    white-space: nowrap;
+	text-overflow: ellipsis;
 }

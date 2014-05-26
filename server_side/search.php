@@ -2,45 +2,44 @@
 
 	include_once("mySQL_connection.php"); //where $bdd is set
 	session_start();
+    header('Content-Type: application/json');
 	
-	//TO BE REMOVED
-	$_POST['query'] = "+color*";
-	$_SESSION['id'] = 1;
-	
-	//All matching objects are going to be store in these variables:
+	//All matching objects are going to be stored in these variables:
 	$nodes = array();
 	$subtitles = array();
 	
-	if(isset($_SESSION['id']) && isset($_POST['query'])) {
+    //TODO Add option to search in the current board instead of all of them
+
+	if(isset($_SESSION['id']) && isset($_GET['query'])) {
 		$answer = $bdd->prepare('SELECT n.*,
 									MATCH(n.title, n.text) AGAINST(:query1 IN BOOLEAN MODE) AS score
 									FROM nodes n
 									INNER JOIN boards b ON b.id = n.board_id
 									WHERE b.user_id = :user_id AND MATCH(n.title, n.text) AGAINST(:query2 IN BOOLEAN MODE) ORDER BY score DESC');
 		$answer->execute(array('user_id' => $_SESSION['id'],
-								'query1' => $_POST['query'],
-								'query2' => $_POST['query'])) 
+								'query1' => $_GET['query'],
+								'query2' => $_GET['query']))
 								or die(print_r($bdd->errorInfo()));
 									
 		while($data = $answer->fetch()) {
-			addEl($nodes, 'node', $data['id'], $data['title'], $data['text'], $data['score']);
+			addEl($nodes, 'node', $data['id'], $data['board_id'], $data['title'], $data['text'], $data['score']);
 		}
 		
 		$answer->closeCursor();
 		
-		$answer = $bdd->prepare('SELECT s.*,
+		$answer = $bdd->prepare('SELECT s.*, n.board_id,
 									MATCH(s.title, s.text) AGAINST(:query1 IN BOOLEAN MODE) AS score
 									FROM subtitles s
 									INNER JOIN nodes n ON n.id = s.node_id
 									INNER JOIN boards b ON b.id = n.board_id
 									WHERE b.user_id = :user_id AND MATCH(s.title, s.text) AGAINST(:query2 IN BOOLEAN MODE) ORDER BY score DESC');
 		$answer->execute(array('user_id' => $_SESSION['id'],
-								'query1' => $_POST['query'],
-								'query2' => $_POST['query'])) 
+								'query1' => $_GET['query'],
+								'query2' => $_GET['query']))
 								or die(print_r($bdd->errorInfo()));
 									
 		while($data = $answer->fetch()) {
-			addEl($subtitles, 'subtitle', $data['id'], $data['title'], $data['text'], $data['score']);
+			addEl($subtitles, 'subtitle', $data['id'], $data['board_id'], $data['title'], $data['text'], $data['score']);
 		}
 
 		$answer->closeCursor();
@@ -52,12 +51,12 @@
 									INNER JOIN boards b ON b.id = n.board_id
 									WHERE b.user_id = :user_id AND MATCH(t.title) AGAINST(:query2 IN BOOLEAN MODE) ORDER BY score DESC');
 		$answer->execute(array('user_id' => $_SESSION['id'],
-								'query1' => $_POST['query'],
-								'query2' => $_POST['query']))
+								'query1' => $_GET['query'],
+								'query2' => $_GET['query']))
 								or die(print_r($bdd->errorInfo()));
 
 		while($data = $answer->fetch()) {
-			addEl($nodes, 'tag', $data['id'], $data['title'], $data['text'], $data['score']);
+			addEl($nodes, 'tag', $data['id'], $data['board_id'], $data['title'], $data['text'], $data['score']);
 		}
 		
 		$answer->closeCursor();
@@ -68,17 +67,18 @@
 		echo json_encode($result); //result is sent back to the javascript page as JSON
 	}
 	
-	function addEl(&$elArray, $type, $id, $title, $text, $score) {
+	function addEl(&$elArray, $type, $id, $board_id, $title, $text, $score) {
         $keyInArray = ($type == 'tag')? id_in_array($id, $elArray) : false; //if it's a tag and the node is already in the array, skip to 'else' statement
         if(!$keyInArray) {
             $elArray[] = array(); //add an element(an array) to the array
             $current = count($elArray)-1;
             $elArray[$current]['id'] = $id;
+            $elArray[$current]['board_id'] = $board_id;
             $elArray[$current]['title'] = stripslashes(strip_tags($title)); //add the title and text to the element in the array
             $elArray[$current]['text'] = stripslashes(strip_tags($text));
             $elArray[$current]['score'] = $score;
-            if ($type == 'node' || $type == 'tag') $elArray[$current]['type'] = 'N';
-            else $elArray[$current]['type'] = 'S';
+            if ($type == 'node' || $type == 'tag') $elArray[$current]['type'] = 'node';
+            else $elArray[$current]['type'] = 'subtitle';
         }
         else { //add the scores
             $elArray[$keyInArray]['score'] += $score;
@@ -89,7 +89,7 @@
     function sortElement(&$elArray, $keyEl) {
         //No need to take care of the event where the element would be too high in the array since the score is always going to increase
         //if the element is too low in the array
-        while($elArray[$keyEl]['score'] > $elArray[$keyEl - 1]['score']) { //the array is sorted decreasingly
+        while($keyEl > 0 && $elArray[$keyEl]['score'] > $elArray[$keyEl - 1]['score']) { //the array is sorted decreasingly
             $temp = $elArray[$keyEl - 1];
             $elArray[$keyEl - 1] = $elArray[$keyEl];
             $elArray[$keyEl] = $temp;
@@ -121,16 +121,16 @@
 			$temp[$i3++] = $l2[$i2++];
 		}
 		
-		return $temp;
+		return $temp; //returns the merged and sorted array
 	}
 
     function id_in_array($id, &$array) { //function to determine if the node id is already in the array
         foreach ($array as $key => $item) {
-            if ($item['type'] == 'N' && $item['id'] == $id) {
+            if ($item['type'] == 'node' && $item['id'] == $id) {
                 return $key; //return a the array key to the node
             }
         }
         return null;
     }
 		
-	//$words = preg_split("#\\s+#", $_POST['query'], NULL, PREG_SPLIT_NO_EMPTY);
+	//NOTE If splitting words is ever necessary: $words = preg_split("#\\s+#", $_GET['query'], NULL, PREG_SPLIT_NO_EMPTY);
