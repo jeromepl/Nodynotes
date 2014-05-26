@@ -18,7 +18,7 @@ function Subtitle(id, position, title, text, node) {
 	else this.left = this.xPos[4];
 	
 	this.top = -25 + this.position * 25;
-	this.element = $('<h4>').appendTo(this.node.element).addClass('subtitle').text(this.title).css({top: this.top * this.node.scaleFactor, left: this.left});
+	this.element = $('<h4>').appendTo(this.node.element).addClass('subtitle').text(this.title).css({top: this.top * this.node.scaleFactor, left: this.left}).attr('id', 'subtitle' + this.id);
 	$.data(this.element[0], 'subtitle', {object: this}); //save the object's reference to be able to act on it in event listeners
 	
 	this.paddingTop = this.element.css('padding-top');

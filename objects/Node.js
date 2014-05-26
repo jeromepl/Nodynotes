@@ -12,16 +12,16 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	this.tags = [];
 	this.moveInfo = {}; // Info about the movement of the node (setted in the mousedown/mouseup/mousemove events)
 	
-	this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos, left: xPos, background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'});
+	this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos, left: xPos, background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
 	$.data(this.element[0], 'node', {object: this}); //save the object's reference to be able to act on it in event listeners
 	
 	this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);
 	
 	if(icon != 'none') { //if there is an icon
 		$('<span>').appendTo(this.element); // this empty span allows the image to be vertically centered
-		this.iconElement = $('<img>').appendTo(this.element).attr({src: 'images/' + this.icon + '.svg', id: 'node' + this.id}).addClass('iconic-lg').hide();
+		this.iconElement = $('<img>').appendTo(this.element).attr({src: 'images/' + this.icon + '.svg', id: 'icon_node' + this.id}).addClass('iconic-lg').hide();
 		var iconEl;
-		iconic.inject('#node' + this.id, {
+		iconic.inject('#icon_node' + this.id, {
 			each: function (svg) {
 				iconEl = $(svg);
 			}
