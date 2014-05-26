@@ -1,6 +1,7 @@
 <?php
 
 	include_once("mySQL_connection.php"); //where $bdd is set
+    header('Content-Type: application/json');
 
 	$post_data = array();
 	$post_data['nodes'] = array();
