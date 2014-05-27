@@ -23,7 +23,7 @@
 			$post_data['nodes'][$key]['xPos'] = $data1['xPos'];
 			$post_data['nodes'][$key]['yPos'] = $data1['yPos'];
 			$post_data['nodes'][$key]['id'] = $data1['id'];
-			$post_data['nodes'][$key]['icon'] = $data1['icon'];
+			$post_data['nodes'][$key]['icon'] = stripslashes(strip_tags($data1['icon']));
 			$post_data['nodes'][$key]['subtitles'] = array();
 			$post_data['nodes'][$key]['tags'] = array();
 				
