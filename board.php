@@ -79,6 +79,7 @@
                 <div id='overlay_subDelSingle' class='overlay_subDel'></div>
             </div>
             <div id='toolbar2'>
+                <!-- Everything is placed in a div, otherwise the border is not correctly shown with the SVGs -->
             	<div id='tool2_img_1' class="tool2_icon"><img data-src="images/plus.svg" title='Add subtitle' class='iconic iconic-md'></div>
             	<div id='tool2_img_2' class="tool2_icon"><img data-src="images/x.svg" title='Delete node' class='iconic iconic-md'></div>
             	<div id='tool2_img_3' class="tool2_icon"><img data-src="images/brush.svg" title='Change color' class='iconic iconic-md'></div>
@@ -103,14 +104,19 @@
                     
                     <img src="images/pointer.png" draggable = "false">
                 </div>
-                <div id="tag_box">
-                	<div id="tag_form">
-                		<input type="text" id="tag_name" />
-                    	<div id="add_tag">Add tag</div>
+
+                <div id='tag_box'>
+                	<div id='tag_form'>
+                		<input type='text' id='tag_name' />
+                    	<div id='add_tag'>Add tag</div>
                     </div>
-                    <div id="all_tags">
-                    </div>
-                    
+                    <div id='all_tags'></div>
+                    <img src="images/pointer.png" draggable = "false">
+                </div>
+
+                <div id='icon_box'>
+                    <h2>Icons:</h2>
+                    <div id='all_icons'></div>
                     <img src="images/pointer.png" draggable = "false">
                 </div>
 			</div>
@@ -183,6 +189,7 @@
 			var colorChanging = false;
 			var addingBoard = false;
 			var tagsOpen = false;
+            var iconsOpen = false;
 			var ellipsisClicked = false;
 			var ellipsisNode; //the node on which the clicked ellipsis is
 			var selectedTool = 1;

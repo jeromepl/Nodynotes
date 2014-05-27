@@ -141,7 +141,7 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET s.position = :position 
 											WHERE s.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('position' => addslashes($_POST['subtitle_position']),
+					$nb = $req->execute(array('position' => $_POST['subtitle_position'],
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
 				}			
@@ -151,10 +151,19 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET n.color = :color 
 											WHERE n.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('color' => $_POST['color'],
+					$nb = $req->execute(array('color' => addslashes($_POST['color']),
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
 				}
+                else if(isset($_POST['icon'])) {
+                    $req = $bdd->prepare('UPDATE nodes n
+											INNER JOIN boards b ON b.id = n.board_id
+											SET n.icon = :icon
+											WHERE n.id = :id AND b.user_id = :user_id');
+					$nb = $req->execute(array('icon' => addslashes($_POST['icon']),
+												'id' => $_POST['id'],
+												'user_id' => $_SESSION['id']));
+                }
 			}
 				
 			echo $nb;

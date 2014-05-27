@@ -273,6 +273,10 @@ $(function() {
 			$('#tag_name').val('');
 			tagsOpen = false;
 		}
+        if(iconsOpen) { //don't show icons and colors at the same time
+			$('#icon_box').hide();
+			tagsOpen = false;
+		}
     });
 	//COLOR CHANGING
 	$(document).on('mouseenter', '.colorBox', function(e) { //to give a preview
@@ -295,7 +299,99 @@ $(function() {
 	});
 	
 	$(document).on('click', '#tool2_img_4', function() { // Change icon
+        if(colorChanging) { //don't show icons and colors at the same time
+			$('#colorChoices').hide();
+			colorChanging = false;
+		}
+        if(tagsOpen) { //don't show tags and icons at the same time
+			$('#tag_box').hide();
+            $('#tag_name').val('');
+			tagsOpen = false;
+		}
+
+        if(!iconsOpen) {
+			$('#icon_box').show();
+			iconsOpen = true;
+
+            //If icons have not yet loaded, load them
+            if($('.icon_choice').length <= 1) {
+                //Add the "no icon" div in javascript because it was displaying weirdly in html
+                var tempDiv = $('<div>').appendTo('#all_icons').addClass('icon_choice selectedIcon').attr('id', 'no_icon');
+                $('<img>').appendTo(tempDiv).attr('data-src', 'images/x.svg').addClass('iconic-md').hide();
+                var iconEl;
+                iconic.inject('#no_icon img', {
+                    each: function (svg) {
+                        iconEl = $(svg);
+                    }
+                }, function (count) {
+                    iconEl.show();
+                });
+
+                $.getJSON("server_side/listIcons.php", function(data) {
+
+                    for(var i = 0; i < data.length; i++) {
+                        var tempDiv = $('<div>').appendTo('#all_icons').addClass('icon_choice').attr('id', 'iconDiv_' + data[i].replace(/\.svg/, ''));
+                        $('<img>').appendTo(tempDiv).attr({'data-src': 'images/icons/' + data[i], id: data[i].replace(/\.svg/, '') + '_icon'}).addClass('iconic-md').hide();
+                        var iconEl;
+                        iconic.inject('#' + data[i].replace(/\.svg/, '') + '_icon', {
+                            each: function (svg) {
+                                iconEl = $(svg);
+                            }
+                        }, function (count) {
+                            iconEl.show();
+                        });
+                    }
+                    selectIcon($.data($('#toolbar2')[0], 'node').object); //outline the current icon
+
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert("An error occured while trying to load icons. Please check your internet connection and try again later.");
+                });
+            }
+            else
+                selectIcon($.data($('#toolbar2')[0], 'node').object); //outline the current icon
+		}
+		else { //toggle
+			$('#icon_box').hide();
+			iconsOpen = false;
+		}
 	});
+    //ICONS EVENTS AND FUNCTIONS
+    $(document).on('click', '.icon_choice', function(e) {
+        var tempNode = $.data($('#toolbar2')[0], 'node').object;
+        tempNode.icon = $(this).attr('id').replace('iconDiv_', '');
+        if(tempNode.icon == 'no_icon') tempNode.icon = 'none';
+        $('#icon_node' + tempNode.id).remove(); //delete the old icon
+
+        if(tempNode.icon != 'none') {
+            $('<img>').appendTo(tempNode.element).attr({'data-src': 'images/icons/' + tempNode.icon + '.svg', id: 'icon_node' + tempNode.id}).addClass('iconic-md').hide();
+            var iconEl;
+            iconic.inject('#icon_node' + tempNode.id, { //inject the new icon
+                each: function (svg) {
+                    iconEl = $(svg);
+                }
+            }, function (count) {
+                iconEl.show();
+            });
+        }
+
+		save({action: 'update', id: tempNode.id, icon: tempNode.icon});
+
+        $('#icon_box').hide();
+        iconsOpen = false;
+	});
+    function selectIcon(node) {
+        var unselectedIcon = $('.selectedIcon');
+        unselectedIcon.removeClass('selectedIcon'); //deselect the previous icon
+        iconic.update(unselectedIcon[0]);
+        if(node.icon != 'none') { //outline the current icon
+            $('#iconDiv_' + node.icon).addClass('selectedIcon');
+            iconic.update('#icon_' + node.icon);
+        }
+        else {
+            $('#no_icon').addClass('selectedIcon');
+            iconic.update('#no_icon');
+        }
+    }
 	
 	$(document).on('click', '#tool2_img_5', function() { // Inputs/Outputs
 	});
@@ -314,6 +410,10 @@ $(function() {
 		if(colorChanging) { //don't show tags and colors at the same time
 			$('#colorChoices').hide();
 			colorChanging = false;
+		}
+        if(iconsOpen) { //don't show tags and icons at the same time
+			$('#icon_box').hide();
+			iconsOpen = false;
 		}
 	});
 	//TAGS EVENTS

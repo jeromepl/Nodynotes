@@ -23,10 +23,6 @@ header .iconic-property-accent {
 	fill: black;
 	stroke: black;
 }
-.search_result .iconic-property-accent {
-	fill: black;
-	stroke: black;
-}
 
 /* Change content circle buttons */
 #changeContent_change .iconic-property-fill {
@@ -37,10 +33,19 @@ header .iconic-property-accent {
 }
 
 /* Node icons */
+#icon_box .iconic * {
+    fill: #666;
+    stroke: #666;
+}
+#no_icon .iconic * {
+    fill: #AAA;
+    stroke: #AAA;
+}
+.selectedIcon .iconic * {
+    fill: #75b5e2 !important;
+    stroke: #75b5e2 !important;
+}
 .node .iconic * {
 	fill: black;
-}
-.node .iconic-property-accent {
-	fill: #666;
-	stroke: #666;
+    stroke: black;
 }

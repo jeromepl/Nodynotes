@@ -17,9 +17,9 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	
 	this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);
 	
+    $('<span>').appendTo(this.element); // this empty span allows the image to be vertically centered (put it anyway in case an iconis added later)
 	if(icon != 'none') { //if there is an icon
-		$('<span>').appendTo(this.element); // this empty span allows the image to be vertically centered
-		this.iconElement = $('<img>').appendTo(this.element).attr({src: 'images/' + this.icon + '.svg', id: 'icon_node' + this.id}).addClass('iconic-lg').hide();
+		$('<img>').appendTo(this.element).attr({'data-src': 'images/icons/' + this.icon + '.svg', id: 'icon_node' + this.id}).addClass('iconic-md').hide();
 		var iconEl;
 		iconic.inject('#icon_node' + this.id, {
 			each: function (svg) {
@@ -192,6 +192,10 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 			$('#tag_box').hide();
 			$('#tag_name').val('');
 			tagsOpen = false;
+		}
+        else if(iconsOpen) {
+			$('#icon_box').hide();
+			iconsOpen = false;
 		}
 	}
 	
