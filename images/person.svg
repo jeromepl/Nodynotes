@@ -6,13 +6,13 @@
       <path d="M96 35c0 22.1-10.1 45-32 45-20.1 0-32-22.9-32-45s14.3-35 32-35 32 12.9 32 35z" class="iconic-person-head iconic-property-fill"/>
     </g>
   </g>
-  <g data-width="112" data-height="128" class="iconic-lg iconic-container" display="none" transform="translate(8)">
+  <g data-width="112" data-height="128" class="iconic-lg iconic-container" display="inline" transform="translate(8)">
     <g class="iconic-person-female" display="none">
       <path d="M78.7 80c-.7 0-1.7.5-2.3 1-6.3 5.8-13.4 9-20.4 9-7.3 0-14.4-3.4-20.5-9-.6-.6-1.6-1-2.3-1h-1.2c-8 0-32 16-32 40v6.5c0 .8.7 1.5 1.5 1.5h109c.8 0 1.5-.7 1.5-1.5v-6.5c0-24-24-40-32-40h-1.3z" class="iconic-person-female-body iconic-property-fill"/>
       <path d="M104 64c-8 0-18-5.3-18-24 0-22.1-12.3-40-30-40s-30 17.9-30 40c0 18.7-10 24-18 24 0 0 11.5 4.3 24.9 1 5.9 10.1 14.8 17 23.1 17s17.3-7 23.2-17.2c13.2 3.5 24.8-.8 24.8-.8z" class="iconic-person-female-head iconic-property-fill"/>
     </g>
   </g>
-  <g data-width="128" data-height="128" class="iconic-lg iconic-container" display="none">
+  <g data-width="128" data-height="128" class="iconic-lg iconic-container" display="inline">
     <g class="iconic-person-male" display="none">
       <path d="M90.8 80c-.8 0-1.9.5-2.5 1.1-6.6 7.1-14.9 10.9-24.3 10.9s-17.8-3.8-24.3-10.9c-.6-.6-1.7-1.1-2.5-1.1h-5.2c-17.7 0-32 14.3-32 32v14.5c0 .8.7 1.5 1.5 1.5h125c.8 0 1.5-.7 1.5-1.5v-14.5c0-17.7-14.3-32-32-32h-5.2z" class="iconic-person-male-body iconic-property-fill"/>
       <path d="M80 8c-.5-7.5-9.4-8-16-8-31.8 0-36.3 26-30 40 0 22.1 10 44 30 44 19.8 0 30-21.9 30-44 7.7-23.7-6.2-32-14-32z" class="iconic-person-male-head iconic-property-fill"/>
@@ -56,7 +56,7 @@
   </g>
 <script class="iconic-api" type="application/ecmascript">
 //<![CDATA[
-var iconicApis=window._Iconic?window._Iconic.smartIconApis:{};iconicApis["person"]=iconicApis["person"]||function(t){var e=function(e){t.setAttribute("data-gender",e);var i,r,n,c=t.querySelectorAll(".iconic-person-genderless"),a=t.querySelectorAll(".iconic-person-female"),o=t.querySelectorAll(".iconic-person-male");switch(i=r=n="none",e){case"female":i="inline";break;case"male":n="inline";break;default:r="inline"}for(var s=0;s<c.length;s++)c[s].setAttribute("display",r),a[s].setAttribute("display",i),o[s].setAttribute("display",n)},i=function(){var i=t.getAttribute("data-gender");i&&e(i)};return{update:i,setGender:e}};
+var iconicApis=window._Iconic?window._Iconic.smartIconApis:{};iconicApis["person"]=iconicApis["person"]||function(t){var e=function(e){t.setAttribute("data-gender",e);var i,r,n,a=t.querySelectorAll(".iconic-person-genderless"),c=t.querySelectorAll(".iconic-person-female"),o=t.querySelectorAll(".iconic-person-male");switch(i=r=n="none",e){case"female":i="inline";break;case"male":n="inline";break;default:r="inline"}for(var s=0;s<a.length;s++)a[s].setAttribute("display",r),c[s].setAttribute("display",i),o[s].setAttribute("display",n)},i=function(){var i=t.getAttribute("data-gender");i&&e(i)};return{update:i,setGender:e}};
 //]]>
 </script>
 </svg>

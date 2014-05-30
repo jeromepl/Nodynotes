@@ -5,18 +5,18 @@
       <path d="M62.7 32.7l-61.4 30.6c-.7.4-1.3 0-1.3-.8v-61c0-.8.6-1.2 1.3-.8l61.3 30.7c.8.3.8.9.1 1.3z" class="iconic-property-fill"/>
     </g>
   </g>
-  <g data-width="52" data-height="64" class="iconic-lg iconic-container" display="none" transform="translate(38 32)">
+  <g data-width="52" data-height="64" class="iconic-lg iconic-container" display="inline" transform="translate(38 32)">
     <g class="iconic-media-pause" display="none">
       <path class="iconic-media-pause-line iconic-media-pause-line-left iconic-property-stroke" d="M6 0v64" stroke="#000" stroke-width="12" stroke-miterlimit="10" fill="none"/>
       <path class="iconic-media-pause-line iconic-media-pause-line-right iconic-property-stroke" d="M46 0v64" stroke="#000" stroke-width="12" stroke-miterlimit="10" fill="none"/>
     </g>
   </g>
-  <g data-width="64" data-height="64" class="iconic-lg iconic-container" display="none" transform="translate(32 32)">
+  <g data-width="64" data-height="64" class="iconic-lg iconic-container" display="inline" transform="translate(32 32)">
     <g class="iconic-media-record" display="none">
       <circle cx="32" cy="32" r="32" class="iconic-property-fill"/>
     </g>
   </g>
-  <g data-width="64" data-height="64" class="iconic-lg iconic-container" display="none" transform="translate(32 32)">
+  <g data-width="64" data-height="64" class="iconic-lg iconic-container" display="inline" transform="translate(32 32)">
     <g class="iconic-media-stop" display="none">
       <path d="M62.5 64h-61c-.8 0-1.5-.7-1.5-1.5v-61c0-.8.7-1.5 1.5-1.5h61c.8 0 1.5.7 1.5 1.5v61c0 .8-.7 1.5-1.5 1.5z" class="iconic-property-fill"/>
     </g>
