@@ -125,6 +125,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 		$('#showContent').show();
 		$('#showContent p').html(this.text); //html so that <br> tags are not removed
 		$('#showContent h1').text(this.title);
+        $('#tool2_img_2').attr('title', 'Delete Node');
 		
 		/*if(this.element.position().left + $('#nodesArea').position().left > $('#showContent').outerWidth() + 30) {*/ // to show the content shower to the right or left of the element
 			$('#showContent').css({top: this.element.position().top - 25, left: this.element.position().left - 280});
@@ -171,7 +172,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 		this.isSelected = false;
 		
 		this.retractSubtitles();
-		for(var i = 0; i < this.subtitles.length; i++) {
+		for(var i = 0; i < this.subtitles.length; i++) { //reset subtitle
 			this.subtitles[i].hideSubtitle();
 			if(this.subtitles[i].isSelected) {
 				this.subtitles[i].element.css('border', 'none');

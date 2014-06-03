@@ -37,6 +37,7 @@ function Subtitle(id, position, title, text, node) {
 		//show the new title and text corresponding to the subtitle
 		$('#showContent p').html(this.text); //html so that <br> tags are not removed
 		$('#showContent h1').text(this.title);
+        $('#tool2_img_2').attr('title', 'Delete Subtitle');
 		
 		this.element.css('border', 'solid 2px #09F');
 		
