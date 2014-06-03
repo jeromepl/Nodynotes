@@ -8,10 +8,10 @@ function Board(id) {
 		loadData(data);
 		
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		alert("An error occured while trying to save. Please check your internet connection and try again later.");
+		alert("An error occured while trying to get your data. Please check your internet connection and try again later.");
 	});
 	
-	var that = this;
+	var that = this; //for the object to be accessible inside getJSON
 	
 	function loadData(data) {
 		for(var i = 0; i < data.nodes.length; i++) { //nodes
