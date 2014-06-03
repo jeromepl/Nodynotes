@@ -20,7 +20,7 @@ $(function() {
 		
 		//Save this board into the latest seen board
 		$req = $bdd->prepare('UPDATE users SET last_board = :board_id WHERE id = :user_id');
-		$nb = $req->execute(array('board_id' => $board_id,
+		$req->execute(array('board_id' => $_GET['id'],
 									'user_id' => $_SESSION['id']));
 
         //Set the board area to the right place and check if the board belongs to the user
@@ -57,7 +57,7 @@ $(function() {
         }
         else {
             $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id AND user_id = :user_id');
-            $answer->execute(array('id' => $board_id, 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+            $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
             if($data = $answer->fetch()) { //if the board belongs to the user
                 echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
             }
@@ -73,7 +73,7 @@ $(function() {
 	//SHOW SIDEBAR
 	var sidebarExpanded = false;
 	$(document).on('click', '#unfold_button', function(e) {
-		if(!addingBoard) {
+		if(!addingBoard && selectedTool != 6) {
 			if(!sidebarExpanded) {
 				$('#sidebar').animate({left: '+=385px'}, 200);
 				sidebarExpanded = true;
@@ -91,7 +91,7 @@ $(function() {
 	var area_startPositionX = 0, area_startPositionY = 0;
 	var tool_initTop = 0, tool_initLeft = 0;
 	$(document).on('mousedown', function(e) {
-		if(!addingBoard) {
+		if(!addingBoard && selectedTool != 6) {
 			if(e.target === $('#nodesContainer')[0] || $(e.target).hasClass('linkBar')) { //clicked on background or a link bar
 				moving = true;
 				moveInfo.startY = e.clientY; //used to move the toolbar
@@ -345,7 +345,7 @@ $(function() {
 	
 	//SCALING NODES AND SHOWING TITLE
 	$(document).on('mouseenter', '.node:not(.board_node)', function(e) {
-		if(selectedTool != 2 && !changingContent && !addingBoard) {
+		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
 			var node = $.data(this, 'node').object;	
 			
 			var tar = $(e.target);
@@ -355,19 +355,19 @@ $(function() {
 		}
     });	
 	$(document).on('mouseleave', '.node:not(.board_node)', function(e) {
-		if(selectedTool != 2 && !changingContent && !addingBoard) {
+		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
 			$.data(this, 'node').object.resetScale(); //reset scale also retracts the title
 		}
     });
 	
 	//SHOWING SUBTITLES' TITLES
 	$(document).on('mouseenter', '.subtitle:not(.ellipsis)', function(e) {
-		if(selectedTool != 2 && !changingContent && !addingBoard) {
+		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
 			$.data(this, 'subtitle').object.showSubtitle();
 		}
 	});
 	$(document).on('mouseleave', '.subtitle:not(.ellipsis)', function(e) { //back to normal size
-		if(selectedTool != 2 && !changingContent && !addingBoard) {
+		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
 			var subtitle = $.data(this, 'subtitle').object;
 			if(!subtitle.node.isSelected) subtitle.hideSubtitle();
 		}
@@ -376,7 +376,7 @@ $(function() {
 	//EXPANDING SUBTITLES
 	var sub_clickStartPositionX, sub_clickStartPositionY;
 	$(document).on('click', '.ellipsis', function(e) { //SHOW
-		if(!changingContent && !addingBoard) {
+		if(!changingContent && !addingBoard && selectedTool != 6) {
 			$.data($(this).parents('.node')[0], 'node').object.expandSubtitles(); //find the node attached to the ellipsis
 			ellipsisClicked = true;
 		}

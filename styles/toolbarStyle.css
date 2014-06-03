@@ -57,7 +57,113 @@
 	border-left: 5px #FFA500 solid !important;
 }
 
+#board_properties { /* pop-up window in the middle of the screen */
+    display: none;
+    position: fixed;
+    width: 650px;
+    height: 300px;
+    top: 50%;
+    margin-top: -150px;
+    left: 50%;
+    margin-left: -325px;
+    padding: 10px;
+    background-color: #F3F3F3;
+	border: solid 3px #020024;
+	border-radius: 3px;
+	box-shadow: 0 2px 7px #666;
+    z-index: 20;
+    font-weight: 400;
+    cursor: default;
+
+    user-select: text; /*L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
+	-moz-user-select: text;
+	-khtml-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+    -o-user-select: text;
+}
+
+#board_newTitle { /* Replaces the title to enter a new one */
+    display: block;
+    position: relative;
+    width: 300px;
+    height: 32px;
+    left: 50%;
+    margin: 12px 0; /* 15 - 3 because of the padding and border */
+    margin-left: -150px;
+    padding: 1px 0;
+    border-width: 2px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: text;
+}
+#board_properties h1 {
+    height: 32px;
+    margin: 15px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: text;
+}
+#board_properties h2 {
+    display: inline-block;
+    width: 295px;
+    margin: 15px;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: text;
+}
+#board_properties h3 {
+    display: inline-block;
+    width: 295px;
+    margin: 15px;
+    font-weight: 400;
+    font-size: 19px;
+    text-align: right;
+    cursor: text;
+}
+
+.property_button {
+    display: inline-block;
+    margin: 15px 20px;
+    padding: 0 10px;
+	border: solid #020024 2px;
+	border-radius: 4px;
+	height: 35px;
+	line-height: 35px;
+	color: white;
+	cursor: pointer;
+	text-align: center;
+}
+
+#board_changetitle {
+    float: left;
+    background: linear-gradient(#0CF, #09F);
+}
+
+#board_changetitle:hover {
+	background: linear-gradient(#0BF, #08F);
+}
+
+#board_delete {
+    float: right;
+    background: linear-gradient(#E30, #C00);
+}
+
+#board_delete:hover {
+	background: linear-gradient(#E03301, #B00);
+}
+
+#properties_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+
 /** TOOLBAR 2 **/
+
 #toolbar2 {
 	display: none; /*Don't show on opening*/
 	position: absolute;
@@ -291,7 +397,6 @@
 }
 
 #all_icons {
-    /*width: 100%;*/
     height: 143px;
     padding: 10px;
     overflow-y: scroll;

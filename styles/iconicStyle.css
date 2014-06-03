@@ -3,6 +3,7 @@
 /* Body */
 body .iconic * {
 	fill: #020024;
+    stroke: #020024;
 }
 body .iconic-property-accent {
 	fill: #09F;
@@ -17,11 +18,6 @@ header .iconic * {
 header .iconic-property-accent {
 	fill: #09F;
 	stroke: #09F;
-}
-/* Search results (in header) */
-.search_result .iconic * {
-	fill: black;
-	stroke: black;
 }
 
 /* Change content circle buttons */
@@ -48,4 +44,16 @@ header .iconic-property-accent {
 .node .iconic * {
 	fill: black;
     stroke: black;
+}
+
+/* Sidebar icons */
+#sidebar .iconic * {
+    fill: #020024;
+    stroke: #020024;
+}
+
+/* Close board_property window */
+#board_properties .iconic *{
+    fill: #666;
+    stroke: #666;
 }

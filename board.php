@@ -5,6 +5,15 @@
 	}
 	
 	include_once("server_side/mySQL_connection.php"); //where $bdd is set
+
+    //setup for the global variable board_id
+    if(!isset($_GET['id']) || !is_numeric($_GET['id'])) { //get the last seen board
+        $answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
+        $answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+        $data = $answer->fetch();
+
+        $_GET['id'] = $data['last_board'];
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,13 +89,13 @@
             </div>
             <div id='toolbar2'>
                 <!-- Everything is placed in a div, otherwise the border is not correctly shown with the SVGs -->
-            	<div id='tool2_img_1' class="tool2_icon"><img data-src="images/plus.svg" title='Add subtitle' class='iconic iconic-md'></div>
-            	<div id='tool2_img_2' class="tool2_icon"><img data-src="images/x.svg" title='Delete node' class='iconic iconic-md'></div>
-            	<div id='tool2_img_3' class="tool2_icon"><img data-src="images/brush.svg" title='Change color' class='iconic iconic-md'></div>
-            	<div id='tool2_img_4' class="tool2_icon"><img data-src="images/image.svg" title='Change icon' class='iconic iconic-md' data-orientation="landscape"></div>
-                <div id='tool2_img_5' class="tool2_icon"><img data-src="images/transfer.svg" title='Inputs/Outputs' class='iconic iconic-md'></div>
-            	<div id='tool2_img_6' class="tool2_icon"><img data-src="images/tags.svg" title='Manage tags' class='iconic iconic-md'></div>
-            	<div id='tool2_img_7' class="tool2_icon"><img data-src="images/ellipses.svg" title='Sublink' class='iconic iconic-md'></div>
+            	<div id='tool2_img_1' class="tool2_icon" title='Add Subtitle'><img data-src="images/plus.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_2' class="tool2_icon" title='Delete Node'><img data-src="images/x.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_3' class="tool2_icon" title='Change Color'><img data-src="images/brush.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
+                <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/transfer.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/tags.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_7' class="tool2_icon" title='Sublink'><img data-src="images/ellipses.svg" class='iconic iconic-md'></div>
                 
                 <div id='colorChoices'>
                     <div class='colorBox' style='background-color: #FB001A;'></div>
@@ -120,14 +129,30 @@
                     <img src="images/pointer.png" draggable = "false">
                 </div>
 			</div>
+            <div id='board_properties'> <!-- Placed here to be centered in the nodesContainer -->
+                <input id='board_newTitle' type="text" style="display: none;" />
+                <?php
+                    $answer = $bdd->prepare('SELECT id, title, date_creation FROM boards WHERE user_id = :user_id AND id = :id');
+				    $answer->execute(array('user_id' => $_SESSION['id'], 'id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
+                    $data = $answer->fetchAll();
+                    echo "<h1>" . stripslashes(strip_tags($data[0]['title'])) . "</h1>";
+                    echo "<h2>Author:</h2><h3>" . $_SESSION['name_first'] . " " . $_SESSION['name_last'] . "</h3><br>";
+                    echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
+                    echo "<h2>Link to this board:</h2><h3>localhost/Nodes/board.php?id=" . $data[0]['id'] ."</h3><br>";
+                    $answer->closeCursor();
+                ?>
+                <div id='board_changetitle' class='property_button'>Change Title</div>
+                <div id='board_delete' class='property_button'>Delete Board</div>
+                <img id='properties_close' data-src="images/x.svg" title='Close window' class='iconic iconic-sm'>
+            </div>
         </div>
     	<div id='toolbar'>
-        	<div id='tool_img_1' class="tool_icon"><img data-src="images/move.svg" title='Move/Select tool' class='iconic iconic-lg'></div>
-            <div id='tool_img_2' class="tool_icon"><img data-src="images/x.svg" title='Delete tool' class='iconic iconic-lg'></div>
-        	<div id='tool_img_3' class="tool_icon"> <img data-src="images/link.svg" title='Link tool' class='iconic iconic-lg' data-state="intact"></div>
-            <div id='tool_img_4' class="tool_icon"><img data-src="images/plus.svg" title='Add node' class='iconic iconic-lg'></div>
-            <div id='tool_img_5' class="tool_icon"><img data-src="images/fork.svg" title='Share board' class='iconic iconic-lg'></div>
-            <div id='tool_img_6' class="tool_icon"><img data-src="images/list.svg" title='Board properties' class="iconic iconic-lg"></div>
+        	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/move.svg" class='iconic iconic-lg'></div>
+            <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/x.svg" class='iconic iconic-lg'></div>
+        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/link.svg" class='iconic iconic-lg' data-state="intact"></div>
+            <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/plus.svg" class='iconic iconic-lg'></div>
+            <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/action.svg" class='iconic iconic-lg' data-state="undo"></div>
+            <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/list.svg" class="iconic iconic-lg"></div>
         </div>
         
         <div id='sidebar'>
@@ -147,11 +172,12 @@
 						$answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
 						while($data = $answer->fetch()) {
 							echo '<a href="board.php?id=' . $data['id'] . '">
-									<div class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
+									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
 									  <h3 class="nodeTitle">' . stripslashes(strip_tags($data['title'])) . '</h3>
 								  	</div>
 								</a>';
 						}
+                        $answer->closeCursor();
 					?>
                     <h4 id="board_noResults">No results found</h4>
            		</div>
@@ -201,6 +227,7 @@
 			var subMaxWidth;
             var searchedFor = ''; //if the value doesn't change, there was no redirection from search
 			
+            //Initialize Iconic
 			var iconic = new IconicJS({
 				autoInjectDone: function (count) {
 					//icons are hidden in nodeStyle.css
@@ -210,22 +237,8 @@
 					$('#changeContent_cancel').hide();
 				}
 			});
-			
-			<?php
-				//setup for the global variable board_id
-				global $board_id;
-				if(isset($_GET['id']) && is_numeric($_GET['id'])) {
-					$board_id = $_GET['id'];
-				}
-				else { //get the last seen board
-					$answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
-					$answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-					$data = $answer->fetch();
-					
-					$board_id = $data['last_board'];
-				}
-			?>
-			var board_id = <?php echo $board_id ?>;
+
+			var board_id = <?php echo $_GET['id'] ?>;
 			
         </script>
         <?php include('events.php')?>

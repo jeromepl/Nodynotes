@@ -129,13 +129,13 @@ $(function() {
 	$(document).on('click', '#tool_img_3', function() { // Link tool
 		selectTool(3);
 		
-		if(!changingContent) {	
+		if(!changingContent && !addingBoard) {
 			$('.node:not(.board_node)').css('cursor', 'default');	
 		}
     });
 	//EVENT LISTENERS FOR LINKING
 	$(document).on('mousedown', '.node:not(.board_node)', function(e) {
-		if(selectedTool == 3 && !changingContent) {
+		if(selectedTool == 3 && !changingContent && !addingBoard && selectedTool != 6) {
 			var node = $.data(this, 'node').object;
 			
 			if(!link_firstSelected) {
@@ -200,7 +200,7 @@ $(function() {
 	$(document).on('click', '#tool_img_4', function() { // Add node
 		if(selectedTool == 3) selectTool(3); //reset the link tool
 	
-		if(!changingContent) {
+		if(!changingContent && !addingBoard && selectedTool != 6) {
 			nodes.push(new Node('Title', 'Change content...', '00d7dd', 'none', $('#nodesContainer').outerWidth() / 2.2 - $('#nodesArea').position().left,
 			 $('#nodesContainer').outerHeight() / 2.6 - $('#nodesArea').position().top, id--));
 			
@@ -230,12 +230,44 @@ $(function() {
     });
 	
 	$(document).on('click', '#tool_img_6', function() { //Board properties
+        $('#board_properties').show(); //board properties is hiden in the deselectTool() function
+        selectTool(6);
 	});
+    //BOARD PROPERTIES EVENTS
+    $(document).on('click', '#properties_close', function(e) {
+        selectTool(6); //this will deselect the property tool and select the move tool since the property tool is already selected
+    });
+    $(document).on('click', '#board_changetitle', function(e) {
+        if($('#board_properties h1').is(':visible')) {
+            $('#board_properties h1').hide();
+            $('#board_newTitle').val($('#board_properties h1').text()).show().select();
+        }
+        else
+            changeBoardTitle($('#board_newTitle').val());
+
+    });
+    $(document).on('keypress', '#board_newTitle', function(e) {
+        if(e.which == 13 && $('#board_newTitle').val() != '')
+            changeBoardTitle($('#board_newTitle').val());
+    });
+    function changeBoardTitle(newTitle) {
+        if(newTitle != '') {
+            $('#board_newTitle').val('').hide();
+            $('#board_properties h1').text(newTitle).show();
+            $('#board_node' + board_id + ' .nodeTitle').text(newTitle);
+            saveBoard({action: 'update', board_id: board_id, title: newTitle});
+        }
+    }
+    $(document).on('click', '#board_delete', function(e) {
+        //TODO redirect to another board after deleting this one
+        /*var del = confirm("Are you sure you want to delete this board? This action can't be undone!");
+        if(del) saveBoard({action: 'delete', board_id: board_id});*/
+        alert("We are currently working on this feature. Sorry for the inconvenience.");
+    });
 	
-	
-	//TOOLBAR #2
+	/** TOOLBAR #2 **/
 	$(document).on('click', '#tool2_img_1', function() { // Add subtitle
-		if(!changingContent) {
+		if(!changingContent && !addingBoard && selectedTool != 6) {
 			var node = $.data($('#toolbar2')[0], 'node').object;
 			node.deselected(); //deselect to reset the subtitles
 			node.addSubtitle(id--, node.subtitles.length, 'Subtitle', 'Change content...');
@@ -317,7 +349,7 @@ $(function() {
             if($('.icon_choice').length <= 1) {
                 //Add the "no icon" div in javascript because it was displaying weirdly in html
                 var tempDiv = $('<div>').appendTo('#all_icons').addClass('icon_choice selectedIcon').attr('id', 'no_icon');
-                $('<img>').appendTo(tempDiv).attr('data-src', 'images/x.svg').addClass('iconic-md').hide();
+                $('<img>').appendTo(tempDiv).attr({'data-src': 'images/x.svg', title: 'No icon'}).addClass('iconic-md').hide();
                 var iconEl;
                 iconic.inject('#no_icon img', {
                     each: function (svg) {
@@ -331,7 +363,7 @@ $(function() {
 
                     for(var i = 0; i < data.length; i++) {
                         var tempDiv = $('<div>').appendTo('#all_icons').addClass('icon_choice').attr('id', 'iconDiv_' + data[i].replace(/\.svg/, ''));
-                        $('<img>').appendTo(tempDiv).attr({'data-src': 'images/icons/' + data[i], id: data[i].replace(/\.svg/, '') + '_icon'}).addClass('iconic-md').hide();
+                        $('<img>').appendTo(tempDiv).attr({'data-src': 'images/icons/' + data[i], id: data[i].replace(/\.svg/, '') + '_icon', title: data[i].replace(/\.svg/, '')}).addClass('iconic-md').hide();
                         var iconEl;
                         iconic.inject('#' + data[i].replace(/\.svg/, '') + '_icon', {
                             each: function (svg) {
@@ -380,16 +412,12 @@ $(function() {
         iconsOpen = false;
 	});
     function selectIcon(node) {
-        var unselectedIcon = $('.selectedIcon');
-        unselectedIcon.removeClass('selectedIcon'); //deselect the previous icon
-        iconic.update(unselectedIcon[0]);
+        $('.selectedIcon').removeClass('selectedIcon'); //deselect the previous icon
         if(node.icon != 'none') { //outline the current icon
             $('#iconDiv_' + node.icon).addClass('selectedIcon');
-            iconic.update('#icon_' + node.icon);
         }
         else {
             $('#no_icon').addClass('selectedIcon');
-            iconic.update('#no_icon');
         }
     }
 	

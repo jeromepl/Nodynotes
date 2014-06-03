@@ -20,7 +20,7 @@ function moveIntoView() { //Moves the nodesArea in case the information would be
 		$('#toolbar2').css('top', $('#toolbar2').position().top - (totalY - viewHeight)); //also move the 2nd toolbar (it's placed outside of the nodesArea
 	}
 	
-	//if it's too much to the left
+	//if it's too far to the left
 	var areaX = $('#nodesArea').position().left, showX = $('#showContent').position().left;
 	if(showX + areaX < 0) {
 		$('#nodesArea').css('left', areaX + Math.abs(areaX + showX) + 5); //to to leave a little space
@@ -39,6 +39,7 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 				console.log(answer);
 				if(data.action == 'insert' && object) {
 					object.id = answer;
+                    object.element.attr('id', object.element.attr('id').replace(/[0-9\-]+/, answer));
 					
 					//Only save link bar when the node id is known (in the case a node is added directly to another node)
 					if(data.what2Add == 'node' && selectedNode && newLinkBar) 
@@ -51,7 +52,7 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 				$('#saving').delay(700).fadeOut(1000);
 			})
 		.fail(function(jqXHR, textStatus, errorThrown) { //if there is an error
-    		alert('Error while saving: ' + errorThrown + ' --> ' + textStatus);
+    		alert("An error occured while trying to save. Please check your internet connection and try again later.");
  		 });
 }
 
@@ -76,7 +77,7 @@ function saveBoard(data) {
 				$('#saving').delay(700).fadeOut(1000);
 			})
 		.fail(function(jqXHR, textStatus, errorThrown) { //if there is an error
-			alert('Error while saving: ' + errorThrown + ' --> ' + textStatus);
+			alert("An error occured while trying to save. Please check your internet connection and try again later.");
 		});
 }
 
@@ -100,6 +101,7 @@ function selectTool(toolID) {
 		
 		if(selectedNode) selectedNode.deselected(); //deselect node
 		
+        if(selectedTool == 6 && toolID == 6) toolID = 1; //If the user wants to close the board properties box by re-clicking on the tool, select the default tool
 		deselectTool(selectedTool); //deselect the previous tool
 		
 		var query = '#tool_img_' + toolID;
@@ -122,6 +124,14 @@ function deselectTool(toolID) {
 		$('#fakeLink').hide();
 		link_firstSelected = null;
 	}
+    else if(toolID == 6) {
+        $('#board_properties').hide();
+
+        if($('#board_properties h1').css('display') == 'none') {
+            $('#board_newTitle').val('').hide();
+            $('#board_properties h1').show();
+        }
+    }
 }
 	
 function nl2br(str) {
