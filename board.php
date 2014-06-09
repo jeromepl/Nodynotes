@@ -42,7 +42,7 @@
                 </div>
                 <div id='head_left'>
         		  <a id='link_home' href="home.php">Nody Notes</a>
-                    <div id="head_friends" class="head_icon"><img data-src="images/person.svg" class="iconic iconic-md" data-gender="genderless"></div>
+                    <div id="head_friends" class="head_icon"><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></div>
                 </div>
                 <div id='head_middle'>
                     <div id='search'>
@@ -50,7 +50,7 @@
                         <div id='search_results'>
                             <h4 id='search_noResults'>No results found</h4>
                         </div>
-                        <div id='head_search' class='head_icon'><img data-src="images/magnifying-glass.svg" class="iconic iconic-md"></div>
+                        <div id='head_search' class='head_icon'><img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md"></div>
                     </div>
                 </div>
             </div>
@@ -69,9 +69,9 @@
                     
                     <img src="images/pointer.png" id="pointer" class="pointerRight" draggable = "false">
                     <div id='changeContent'>
-                        <img data-src="images/pencil.svg" id='changeContentButton' class="iconic iconic-md" title="Edit">
-                        <img data-src="images/circle-check.svg" id="changeContent_change" class="iconic iconic-md" title="Apply">
-                        <img data-src="images/circle-x.svg" id="changeContent_cancel" class="iconic iconic-md" title="Cancel">
+                        <img data-src="images/icons/pencil.svg" id='changeContentButton' class="iconic iconic-md" title="Edit">
+                        <img data-src="images/icons/circle-check.svg" id="changeContent_change" class="iconic iconic-md" title="Apply">
+                        <img data-src="images/icons/circle-x.svg" id="changeContent_cancel" class="iconic iconic-md" title="Cancel">
                     </div>
                 </div>
                 <div id='fakeLink' class='linkBar' style="display: none; z-index: 1;"></div>
@@ -89,13 +89,13 @@
             </div>
             <div id='toolbar2'>
                 <!-- Everything is placed in a div, otherwise the border is not correctly shown with the SVGs -->
-            	<div id='tool2_img_1' class="tool2_icon" title='Add Subtitle'><img data-src="images/plus.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_2' class="tool2_icon" title='Delete Node'><img data-src="images/x.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_3' class="tool2_icon" title='Change Color'><img data-src="images/brush.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
-                <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/transfer.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/tags.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_7' class="tool2_icon" title='Sublink'><img data-src="images/ellipses.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_1' class="tool2_icon" title='Add Subtitle'><img data-src="images/icons/plus.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_2' class="tool2_icon" title='Delete Node'><img data-src="images/icons/x.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_3' class="tool2_icon" title='Change Color'><img data-src="images/icons/brush.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/icons/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
+                <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/icons/transfer.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/icons/tags.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_7' class="tool2_icon" title='Sublink'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
                 
                 <div id='colorChoices'>
                     <div class='colorBox' style='background-color: #FB001A;'></div>
@@ -111,7 +111,7 @@
                     <div class='colorBox' style='background-color: #555;'></div>
                     <div class='colorBox' style='background-color: #000;'></div>
                     
-                    <img src="images/pointer.png" draggable = "false">
+                    <img src="images/pointer-grey.png" draggable = "false">
                 </div>
 
                 <div id='tag_box'>
@@ -120,13 +120,13 @@
                     	<div id='add_tag'>Add tag</div>
                     </div>
                     <div id='all_tags'></div>
-                    <img src="images/pointer.png" draggable = "false">
+                    <img src="images/pointer-grey.png" draggable = "false">
                 </div>
 
                 <div id='icon_box'>
                     <h2>Icons:</h2>
                     <div id='all_icons'></div>
-                    <img src="images/pointer.png" draggable = "false">
+                    <img src="images/pointer-grey.png" draggable = "false">
                 </div>
 			</div>
             <div id='board_properties'> <!-- Placed here to be centered in the nodesContainer -->
@@ -143,16 +143,16 @@
                 ?>
                 <div id='board_changetitle' class='property_button'>Change Title</div>
                 <div id='board_delete' class='property_button'>Delete Board</div>
-                <img id='properties_close' data-src="images/x.svg" title='Close window' class='iconic iconic-sm'>
+                <img id='properties_close' data-src="images/icons/x.svg" title='Close window' class='iconic iconic-sm'>
             </div>
         </div>
     	<div id='toolbar'>
-        	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/move.svg" class='iconic iconic-lg'></div>
-            <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/x.svg" class='iconic iconic-lg'></div>
-        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/link.svg" class='iconic iconic-lg' data-state="intact"></div>
-            <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/plus.svg" class='iconic iconic-lg'></div>
-            <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/action.svg" class='iconic iconic-lg' data-state="undo"></div>
-            <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/list.svg" class="iconic iconic-lg"></div>
+        	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
+            <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
+        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/link.svg" class='iconic iconic-lg' data-state="intact"></div>
+            <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
+            <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
+            <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
         </div>
         
         <div id='sidebar'>
@@ -161,10 +161,10 @@
             </div>
             <div id='board_chooser'>
                 <h2>Your boards</h2>
-                <img data-src="images/plus.svg" class="iconic iconic-lg" id="add_board" title="Add Board">
+                <img data-src="images/icons/plus.svg" class="iconic iconic-lg" id="add_board" title="Add Board">
                 <div id='board_search'>
                     <input type='text' placeholder="Search boards" />
-                    <img data-src="images/magnifying-glass.svg" class="iconic iconic-md" id="board_search_img">
+                    <img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md" id="board_search_img">
                 </div>
                 <div id='boards'>
                 	<?php 
