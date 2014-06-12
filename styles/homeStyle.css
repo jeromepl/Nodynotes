@@ -1,206 +1,329 @@
 @charset "utf-8";
 
 html {
-	height: 100%;
+    font-family: asap, sans-serif;
+    font-style: normal;
+	font-weight: 400;
 }
 
 body {
-	margin: 0;
-	font-family: asap, sans-serif;
-    font-style: normal;
-	font-weight: 400;
+    margin: 0;
 	background-color: white;
-	height: 100%;
 }
 
-header {
-	width: 100%;
-	height: 90px;
-	border-bottom: solid 4px #06F;
-	background-color: #09F;
-	box-shadow: 0 5px 5px #CCC;
-	z-index: 10;
-}
-
-#head_container {
-	background-color: #020024;
-	width: 100%;
-	height: 80px;
-}
-
-#head_left {
-	display: inline-block;
-	height: 100%;
-	width: 49%;
-	min-width: 275px;
-}
-
-#head_left span {
-	display: inline-block;
-	height: 100%;
-	vertical-align: middle;
-}
-
-#head_left h1 {
-	display: inline-block;
-	float: right;
-	color: white;
-	height: 43px;
-	padding: 5px 10px;
-	margin: 10px 0;
-	vertical-align: middle;
-	font-size: 48px;
-	font-weight: bold;
-	font-style: italic;
+.container {
+    width: 980px;
+    margin: auto;
+    text-align: center;
 }
 
 .button {
 	background: linear-gradient(#0BF, #09F);
 	border: solid white 1px;
 	border-radius: 4px;
+    width: 80px;
 	height: 35px;
 	line-height: 35px;
 	color: white;
 	cursor: pointer;
 	text-align: center;
+	font-family: asap;
+	font-size: 17px;
+    font-weight: bold;
+    text-shadow: 0 1px 1px #333;
 }
 
 .button:hover {
 	background: linear-gradient(#0AF, #08F);
 }
 
-#head_right {
-	display: inline-block;
-	height: 100%;
-	width: 49%;
-	min-width: 550px;
+header {
+    height: 60px;
+    border-bottom: solid 3px #06F;
+	background-color: #09F;
+	box-shadow: 0 5px 5px #CCC;
+	z-index: 10;
 }
 
-#head_right span {
-	display: inline-block;
-	height: 100%;
-	vertical-align: middle;
+#header {
+	background-color: #020024;
+	width: 100%;
+	height: 55px;
 }
 
-#connection {
-	float: right;
+#head_container {
+    padding: 5px 0;
+    height: 45px;
+}
+
+#head_container h1 {
+	display: inline-block;
+    float: left;
 	color: white;
-	height: 100%;
-	vertical-align: middle;
+	height: 40px;
+	padding: 0;;
+    margin: 0;
+	font-size: 42px;
+	font-weight: bold;
+	font-style: italic;
+    text-shadow: 0 2px 2px #999;
 }
 
-#connection span {
-	display: inline-block;
-	height: 100%;
-	vertical-align: middle;
+#head_container form {
+    float: right;
+    padding-top: 5px;
 }
 
-#connection_or {
-	margin: 5px;
-	display: inline-block;
-}
-
-#login_box {
-	display: inline-block;
-}
-
-#login_box input[type=text], #login_box input[type='password'] {
+#head_container input[type=text], #head_container input[type='password'] {
 	display: inline-block;
 	margin-right: 10px;
-	border-radius: 2px;
-	padding: 3px 5px;
+	border-radius: 3px;
+    border: solid 1px #AAA;
+    padding: 3px 5px;
 	height: 20px;
+    font-size: 14px;
 	border: none;
 	outline: none;
 }
 
-#login_box input[type=text]:focus, #login_box input[type='password']:focus {
+#head_container input[type=text]:focus, #head_container input[type='password']:focus {
 	box-shadow: #09F 0 0 12px;
 }
 
 #login {
-	display: inline-block;
-	width: 80px;
-	font-family: asap;
-	font-size: 16px;
-	padding: 0;
-	margin: 0;
-	box-sizing: content-box;
-}
-
-#signup {
-	display: inline-block;
-	width: 80px;
-	text-decoration: none;
-	font-size: 16px;
+    text-shadow: 0 1px 1px #777;
 }
 
 #banner {
-	position: relative;
-	width: 100%;
-	height: 60%;
-	min-height: 250px;
-	overflow: hidden;
-	background-color: #EAEAEA;
+    margin-top: 40px;
+    background: url('../images/banner.png') center repeat;
+    height: 450px;
 }
 
-#banner_img {
-	position: absolute;
-	top: -200px;
-	left: 0;
+#banner_text {
+    display: table;
+    height: 100%;
 }
 
-#description {
-	position: absolute;
-	right: 5%;
-	top: 100px;
-	width: 550px;
-	padding: 10px;
-	margin-left: -275px;
-	border-radius: 7px;
-	background-color: white;
-	box-shadow: 1px 1px 10px #999;
+#intro {
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+    /*color: #020024;*/
+    color: white;
 }
 
-#description h2 {
-	font-size: 36px;
-	font-weight: bold;
-	padding-left: 5px;
+#intro h1 {
+    margin: 0;
+    margin-top: 45px;
+    text-align: left;
+    font-size: 56px;
+    text-shadow: 1px 1px 1px #9b9b9b;
 }
 
-#description p {
-	padding-left: 25px;
-	font-size: 19px;
+#intro p {
+    text-align: left;
+    font-size: 20px;
+    line-height: 30px;
 }
 
-#description a {
-	float: right;
-	margin-top: 15px;
+#signup_block {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 50%;
+    /*background-color: rgba(250, 250, 250, 0.7);
+    border-radius: 5px;*/
 }
 
-#option_bar {
-	width: 100%;
-	height: 40px;
-	background-color:rgba(20, 20, 20, 0.6);
+#signup_block form {
+    display: inline-block;
+    margin-top: 50px;
+    width: 80%;
 }
 
-#option_bar ul {
-	color: white;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100%;
-	text-align: center;
+#signup_block input {
+    display: block;
+    width: 354px;
+    height: 30px;
+    margin: 8px auto 0 auto;
+    border-radius: 7px;
+	padding: 3px 5px;
+	border: solid 1px #666;
+	outline: none;
+    font-size: 18px;
 }
 
-#option_bar ul span {
-	display: inline-block;
-	height: 100%;
-	vertical-align: middle;
+#signup_block input[name="name_first"],  #signup_block input[name="name_last"]{
+    display: inline-block;
+    width: 169px;
 }
 
-#option_bar li {
-	display: inline-block;
-	vertical-align: middle;
-	margin: 0 30px;
+#signup {
+    width: 366px;
+    height: 44px;
+    margin-top: 15px;
+    border-radius: 7px;
+    border: solid 1px #020024;
+    font-size: 21px;
+}
+
+#signup_block form p {
+    width: 346px;
+    margin: 15px auto;
+    color: #666;
+    text-align: left;
+    padding: 5px 10px 5px 10px;
+}
+
+#signup_block form p a {
+    color: #09F;
+    text-decoration: none;
+}
+
+#signup_block form p a:hover {
+    text-decoration: underline;
+}
+
+#what {
+    margin-top: 80px;
+    font-size: 44px;
+}
+
+#what_description {
+    font-size: 19px;
+    letter-spacing: 1px;
+    line-height: 25px;
+}
+
+.feature {
+    display: table;
+    height: 265px;
+    width: 100%;
+}
+
+.feature_left {
+    text-align: left;
+}
+
+.feature_right {
+    text-align: right;
+    background-color: #FAFAFA;
+}
+
+.feature_icon {
+    display: table-cell;
+    vertical-align: middle;
+    width: 20%;
+    padding: 0 15px;
+}
+
+.feature_icon svg {
+    width: 175px !important;
+    height: 175px !important;
+}
+
+.feature_left .feature_text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 175px;
+    padding-left: 30px;
+}
+
+.feature_right .feature_text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 175px;
+    padding-right: 30px;
+}
+
+.feature_text h2 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.feature_text p {
+    margin: 0;
+    font-size: 18px;
+}
+
+#backToTop {
+    display: inline-block;
+    width: 250px;
+    height: 40px;
+    padding-top: 5px;
+    margin-top: 30px;
+    font-size: 28px;
+    border-radius: 8px;
+    border: solid 1px black;
+    background: linear-gradient(#00e00a, #02be0c);
+    text-decoration: none;
+    text-shadow: 0 1px 2px #333;
+}
+
+#backToTop:hover {
+    background: linear-gradient(#00d30a, #02af0c);
+}
+
+#footer {
+    height: 22px;
+    margin-top: 75px;
+    padding-top: 5px;
+    background-color: #EEE;
+}
+
+#footer h3 {
+    text-align: left;
+    float: left;
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+#links {
+    float: right;
+    height: 19px;
+}
+
+#footer a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+#footer a:hover {
+    text-decoration: underline;
+}
+
+/** ICONIC STYLING **/
+
+.iconic-globe-land-mass {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-brush-head {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-share-boxed-arrow {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-shield-shadow {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-magnifying-glass-handle-connector, .iconic-magnifying-glass-reflection {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-fork-point-trunk-start, .iconic-fork-point-fork {
+    fill: #09F;
+    stroke: #09F;
 }
