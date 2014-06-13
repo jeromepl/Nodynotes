@@ -226,7 +226,8 @@ $(function() {
 		}
 	});
 	
-	$(document).on('click', '#tool_img_5', function() { // Share board
+	$(document).on('click', '#tool_img_5', function() { // Undo action
+        alert("We are currently working on this feature. Sorry for the inconvenience.");
     });
 	
 	$(document).on('click', '#tool_img_6', function() { //Board properties
@@ -349,7 +350,7 @@ $(function() {
             if($('.icon_choice').length <= 1) {
                 //Add the "no icon" div in javascript because it was displaying weirdly in html
                 var tempDiv = $('<div>').appendTo('#all_icons').addClass('icon_choice selectedIcon').attr('id', 'no_icon');
-                $('<img>').appendTo(tempDiv).attr({'data-src': 'images/x.svg', title: 'No icon'}).addClass('iconic-md').hide();
+                $('<img>').appendTo(tempDiv).attr({'data-src': 'images/icons/x.svg', title: 'No icon'}).addClass('iconic-md').hide();
                 var iconEl;
                 iconic.inject('#no_icon img', {
                     each: function (svg) {
@@ -394,7 +395,7 @@ $(function() {
         if(tempNode.icon == 'no_icon') tempNode.icon = 'none';
         $('#icon_node' + tempNode.id).remove(); //delete the old icon
 
-        if(tempNode.icon != 'none') {
+        if(tempNode.icon != 'none') { //Otherwise don't add an icon
             $('<img>').appendTo(tempNode.element).attr({'data-src': 'images/icons/' + tempNode.icon + '.svg', id: 'icon_node' + tempNode.id}).addClass('iconic-md').hide();
             var iconEl;
             iconic.inject('#icon_node' + tempNode.id, { //inject the new icon

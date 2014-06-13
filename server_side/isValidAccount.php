@@ -20,7 +20,12 @@
 			$_SESSION['id'] = $answer['id'];
 			$_SESSION['name_first'] = stripslashes(strip_tags($answer['name_first']));
 			$_SESSION['name_last'] = stripslashes(strip_tags($answer['name_last']));
-			header('Location: ../board.php');
+            if(isset($_GET['ref_id'])) {
+                header('Location: ../board.php?id=' . $_GET['ref_id']);
+            }
+            else {
+                header('Location: ../board.php');
+            }
 		}
 	}
 	else header('Location: ../home.php?er=3'); //tell the user an error occured

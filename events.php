@@ -16,12 +16,7 @@ $(function() {
 	<?php
 		include_once("server_side/mySQL_connection.php"); //should already be included at this point
 		
-		//SQL connection and session start are done in board.php, since this file is included
-		
-		//Save this board into the latest seen board
-		$req = $bdd->prepare('UPDATE users SET last_board = :board_id WHERE id = :user_id');
-		$req->execute(array('board_id' => $_GET['id'],
-									'user_id' => $_SESSION['id']));
+		//Session start is done in board.php, since this file is included
 
         //Set the board area to the right place and check if the board belongs to the user
         if (isset($_GET['node_id'])) {
@@ -33,9 +28,6 @@ $(function() {
                 echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
                     left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
                 echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
-            }
-            else {
-                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
             }
             $answer->closeCursor();
         }
@@ -50,9 +42,6 @@ $(function() {
                     left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
                 echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
             }
-            else {
-                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
-            }
             $answer->closeCursor();
         }
         else {
@@ -61,11 +50,13 @@ $(function() {
             if($data = $answer->fetch()) { //if the board belongs to the user
                 echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
             }
-            else {
-                die(); //TODO NEED TO TELL THE USER HE CAN'T LOOK AT THE BOARD
-            }
             $answer->closeCursor();
         }
+
+        //Save this board into the last seen board
+        $req = $bdd->prepare('UPDATE users SET last_board = :board_id WHERE id = :user_id');
+        $req->execute(array('board_id' => $_GET['id'],
+				            'user_id' => $_SESSION['id']));
 	?>
 	
 	titleMinWidth = $('.nodeTitle').css('width'); //width = min-width at the beginning, because no scaling occured (Used for expanding the title)

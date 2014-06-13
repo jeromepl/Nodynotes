@@ -289,6 +289,9 @@ body {
 }
 
 #changeContent_change, #changeContent_cancel {
+    display: inline-block;
+    width: 25px; /* Something was causing a margin otherwise (and setting margin to 0 did not solve this) */
+    height: 25px;
 	border-radius: 50%;
 	background-color: white;	
 }

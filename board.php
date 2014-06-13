@@ -1,13 +1,30 @@
 <?php
 	session_start();
 	if(!isset($_SESSION['id'])) {
-		header('Location: home.php?er=2'); //tell the user to login first
+        if(isset($_GET['id']) && is_numeric($_GET['id'])) {
+            header('Location: home.php?er=2&ref_id=' . $_GET['id']); //tell the user to login first
+        }
+        else {
+		  header('Location: home.php?er=2'); //tell the user to login first
+        }
 	}
 	
 	include_once("server_side/mySQL_connection.php"); //where $bdd is set
 
     //setup for the global variable board_id
-    if(!isset($_GET['id']) || !is_numeric($_GET['id'])) { //get the last seen board
+    if(!isset($_GET['id']) || !is_numeric($_GET['id']))
+        getId();
+    else { //Check if the board specified belongs to the user
+        $answer = $bdd->prepare('SELECT id FROM boards WHERE id = :id AND user_id = :user_id');
+        $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+        if(!$data = $answer->fetch()) { //if the board does not belong to the user
+            getId();
+            //TODO Tell the user he couln'd see that board so he was redirect to his last seen board
+        }
+    }
+
+    function getId() { //get the last seen board
+        global $bdd; //php variables have a very limited scope...
         $answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
         $answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
         $data = $answer->fetch();
@@ -19,7 +36,7 @@
 <html>
 	<head>
     	<meta charset="utf-8">
-		<title>Nody Notes - Learn and never forget again</title>
+		<title>Nodynotes - Learn and never forget again</title>
         <link rel="SHORTCUT ICON" href="images/shortcut_icon.png">
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css"/>
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css"/>
@@ -27,7 +44,7 @@
         <link rel="stylesheet" type="text/css" href="styles/sidebarStyle.css"/>
         <link rel="stylesheet" type="text/css" href="styles/iconicStyle.css"/>
         <!--[if lte IE 9]>
-            <script>window.onload = function() {document.body.innerHTML = '<p>Your browser is too old for this website. Please download the latest version of Internet Explorer <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">here</a>.</p>'
+            <script>window.onload = function() {document.body.innerHTML = '<p>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">here</a>.</p>'
             };</script>
         <![endif]-->
         
@@ -38,11 +55,11 @@
     	<header>
         	<div id='head_container'>
                 <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
-                    <a id='disconnect' href="server_side/disconnect.php">Disconnect</a>
+                    <a id='head_profile' class='head_icon' href="#"  title='Profile'><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></a>
+                    <a id='logout' class='head_icon' href="server_side/disconnect.php"  title='Log out'><img data-src="images/icons/account.svg" class="iconic iconic-md" data-state="logout"></a>
                 </div>
                 <div id='head_left'>
-        		  <a id='link_home' href="home.php">Nody Notes</a>
-                    <div id="head_friends" class="head_icon"><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></div>
+                    <a id='logo' href="home.php">Nodynotes</a>
                 </div>
                 <div id='head_middle'>
                     <div id='search'>
@@ -50,7 +67,7 @@
                         <div id='search_results'>
                             <h4 id='search_noResults'>No results found</h4>
                         </div>
-                        <div id='head_search' class='head_icon'><img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md"></div>
+                        <div id='head_search' class='head_icon' title='Search'><img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md"></div>
                     </div>
                 </div>
             </div>
@@ -69,9 +86,9 @@
                     
                     <img src="images/pointer.png" id="pointer" class="pointerRight" draggable = "false">
                     <div id='changeContent'>
-                        <img data-src="images/icons/pencil.svg" id='changeContentButton' class="iconic iconic-md" title="Edit">
-                        <img data-src="images/icons/circle-check.svg" id="changeContent_change" class="iconic iconic-md" title="Apply">
-                        <img data-src="images/icons/circle-x.svg" id="changeContent_cancel" class="iconic iconic-md" title="Cancel">
+                        <div id='changeContentButton' title='Modify'><img data-src="images/icons/pencil.svg" class="iconic iconic-md" title="Edit"></div>
+                        <div id='changeContent_change' title='Apply'><img data-src="images/icons/circle-check.svg" id="changeContent_change" class="iconic iconic-md" title="Apply"></div>
+                        <div id='changeContent_cancel' title='Cancel'> <img data-src="images/icons/circle-x.svg" id="changeContent_cancel" class="iconic iconic-md" title="Cancel"></div>
                     </div>
                 </div>
                 <div id='fakeLink' class='linkBar' style="display: none; z-index: 1;"></div>

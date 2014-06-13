@@ -171,7 +171,7 @@ header {
 #signup_block form p {
     width: 346px;
     margin: 15px auto;
-    color: #666;
+    color: #999;
     text-align: left;
     padding: 5px 10px 5px 10px;
 }
@@ -297,7 +297,6 @@ header {
 }
 
 /** ICONIC STYLING **/
-
 .iconic-globe-land-mass {
     fill: #09F;
     stroke: #09F;
@@ -326,4 +325,31 @@ header {
 .iconic-fork-point-trunk-start, .iconic-fork-point-fork {
     fill: #09F;
     stroke: #09F;
+}
+
+/** ERRORS **/
+#old_ie {
+    background-color: red;
+    padding: 5px;
+    margin: 0;
+    color: white;
+}
+
+#error_connect {
+    display: block;
+    position: absolute;
+    top: 42px;
+    padding: 3px 7px;
+    color: white;
+    background: linear-gradient(#F00, #d00);
+    border: solid 2px black;
+    border-radius: 6px;
+}
+
+#error_connect img {
+    position: absolute;
+    top: -10px;
+    left: 60px;
+    width: 15px;
+	height: 10px;
 }
