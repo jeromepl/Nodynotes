@@ -10,7 +10,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Nody Notes - Learn and never forget again</title>
-        <link rel="SHORTCUT ICON" href="images/shortcut_icon.png">
+        <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/homeStyle.css">
         <script src="http://use.edgefonts.net/asap.js"></script>
 	</head>

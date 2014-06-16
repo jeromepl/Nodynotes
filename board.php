@@ -37,7 +37,7 @@
 	<head>
     	<meta charset="utf-8">
 		<title>Nodynotes - Learn and never forget again</title>
-        <link rel="SHORTCUT ICON" href="images/shortcut_icon.png">
+        <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css"/>
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css"/>
         <link rel="stylesheet" type="text/css" href="styles/headerStyle.css"/>
