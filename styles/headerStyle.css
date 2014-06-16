@@ -83,10 +83,10 @@ header svg:not(.search_resultSVG) {
 
 #logout {
     margin-right: 25px;
-}
-
-#logout:hover {
-	border-bottom: 5px #4140E1 solid;
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
 }
 
 #head_profile {
