@@ -203,7 +203,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	this.changeContent = function() {
 		changingContent = true;	
 		$('#content_title input').show().val(this.title).select();
-		this.text = br2ln(this.text);
+		this.text = br2nl(this.text);
 		$('#content_text textArea').show().val(this.text).css('height', $('#content_text p').innerHeight());
 		$('#content_title h1').hide();
 		$('#content_text p').hide();

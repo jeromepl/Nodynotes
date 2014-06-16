@@ -15,7 +15,7 @@ function moveIntoView() { //Moves the nodesArea in case the information would be
 	//if it's too low
 	var areaY = $('#nodesArea').position().top, showY = $('#showContent').position().top, showHeight = $('#showContent').outerHeight(), viewHeight = $('#nodesContainer').outerHeight();
 	var totalY = areaY + showY + showHeight;
-	if(totalY > viewHeight && showHeight < viewHeight) { //if part if the content shower is hidden and if the content shower is not higher than the page
+	if(totalY > viewHeight && showHeight < viewHeight) { //if part of the content shower is hidden and if the content shower is not higher than the page
 		$('#nodesArea').css('top', areaY - (totalY - viewHeight));
 		$('#toolbar2').css('top', $('#toolbar2').position().top - (totalY - viewHeight)); //also move the 2nd toolbar (it's placed outside of the nodesArea
 	}
@@ -137,7 +137,7 @@ function deselectTool(toolID) {
 function nl2br(str) {
 	return str.replace(/(\n)/g, '<br>');
 }
-function br2ln(str) {
+function br2nl(str) {
 	return str.replace(/(<br>)/g, '\n');
 }
 
