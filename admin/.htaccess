@@ -1,0 +1,4 @@
+AuthName "This page is for admins only. Please identify yourself."
+AuthType Basic
+AuthUserFile "/users/Jerome/Dropbox/www/Nodes/admin/.htpasswd"
+Require valid-user
