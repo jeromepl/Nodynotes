@@ -71,11 +71,11 @@
         $keyInArray = ($type == 'tag')? id_in_array($id, $elArray) : false; //if it's a tag and the node is already in the array, skip to 'else' statement
         if(!$keyInArray) {
             $elArray[] = array(); //add an element(an array) to the array
-            $current = count($elArray)-1;
+            $current = count($elArray) - 1;
             $elArray[$current]['id'] = $id;
             $elArray[$current]['board_id'] = $board_id;
-            $elArray[$current]['title'] = stripslashes(strip_tags($title)); //add the title and text to the element in the array
-            $elArray[$current]['text'] = stripslashes(strip_tags($text));
+            $elArray[$current]['title'] = strip_tags($title); //add the title and text to the element in the array
+            $elArray[$current]['text'] = strip_tags($text);
             $elArray[$current]['score'] = $score;
             if ($type == 'node' || $type == 'tag') $elArray[$current]['type'] = 'node';
             else $elArray[$current]['type'] = 'subtitle';

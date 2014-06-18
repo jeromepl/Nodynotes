@@ -17,13 +17,13 @@
 			$key = count($post_data['nodes']);
 			$post_data['nodes'][] = $key;
 			$post_data['nodes'][$key] = array();
-			$post_data['nodes'][$key]['title'] = stripslashes(strip_tags($data1['title'])); //stripslashes is the opposite of addslashes
-			$post_data['nodes'][$key]['text'] = stripslashes(strip_tags($data1['text'], '<br>')); //allow <br> tags for the text
-			$post_data['nodes'][$key]['color'] = stripslashes(strip_tags($data1['color'])); //cannot use htmlspecialchars because error with json_encode
+			$post_data['nodes'][$key]['title'] = strip_tags($data1['title']); //stripslashes is the opposite of addslashes
+			$post_data['nodes'][$key]['text'] = strip_tags($data1['text'], '<br>'); //allow <br> tags for the text
+			$post_data['nodes'][$key]['color'] = strip_tags($data1['color']); //cannot use htmlspecialchars because error with json_encode
 			$post_data['nodes'][$key]['xPos'] = $data1['xPos'];
 			$post_data['nodes'][$key]['yPos'] = $data1['yPos'];
 			$post_data['nodes'][$key]['id'] = $data1['id'];
-			$post_data['nodes'][$key]['icon'] = stripslashes(strip_tags($data1['icon']));
+			$post_data['nodes'][$key]['icon'] = strip_tags($data1['icon']);
 			$post_data['nodes'][$key]['subtitles'] = array();
 			$post_data['nodes'][$key]['tags'] = array();
 				
@@ -36,8 +36,8 @@
 				$post_data['nodes'][$key]['subtitles'][$sub_key] = array();
 				$post_data['nodes'][$key]['subtitles'][$sub_key]['id'] = $data2['id'];
 				$post_data['nodes'][$key]['subtitles'][$sub_key]['position'] = $data2['position'];
-				$post_data['nodes'][$key]['subtitles'][$sub_key]['title'] = stripslashes(strip_tags($data2['title']));
-				$post_data['nodes'][$key]['subtitles'][$sub_key]['text'] = stripslashes(strip_tags($data2['text'], '<br>'));
+				$post_data['nodes'][$key]['subtitles'][$sub_key]['title'] = strip_tags($data2['title']);
+				$post_data['nodes'][$key]['subtitles'][$sub_key]['text'] = strip_tags($data2['text'], '<br>');
 			}
 			$answer2->closeCursor();
 			
@@ -49,7 +49,7 @@
 				$post_data['nodes'][$key]['tags'][] = $sub_key;
 				$post_data['nodes'][$key]['tags'][$sub_key] = array();
 				$post_data['nodes'][$key]['tags'][$sub_key]['id'] = $data2['id'];
-				$post_data['nodes'][$key]['tags'][$sub_key]['title'] = stripslashes(strip_tags($data2['title']));
+				$post_data['nodes'][$key]['tags'][$sub_key]['title'] = strip_tags($data2['title']);
 			}
 			$answer2->closeCursor();
 			

@@ -23,7 +23,7 @@
 					$req->execute(array('boardId' => $_POST['board_id'],
 										'xPos' => $_POST['xPos'],
 										'yPos' => $_POST['yPos'],
-										'color' => addslashes($_POST['color']),
+										'color' => $_POST['color'],
 										'icon' => $_POST['icon']));
 					echo $bdd->lastInsertId();
 				}
@@ -68,7 +68,7 @@
 					$req = $bdd->prepare('INSERT INTO tags(id, node_id, title) 
 											VALUES(\'\', :nodeId, :title)');
 					$req->execute(array('nodeId' => $_POST['node_id'],
-										'title' => addslashes($_POST['title'])));
+										'title' => $_POST['title']));
 					echo $bdd->lastInsertId();
 				}
 				else echo -1;
@@ -117,8 +117,8 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET n.title = :title, n.text = :text 
 											WHERE n.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('title' => nl2br(addslashes($_POST['title'])), 
-												'text' => nl2br(addslashes($_POST['text'])),
+					$nb = $req->execute(array('title' => nl2br($_POST['title']),
+												'text' => nl2br($_POST['text']),
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
 				}		
@@ -129,8 +129,8 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET s.title = :subtitle, s.text = :text 
 											WHERE s.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('subtitle' => addslashes($_POST['subtitle']),
-												'text' => addslashes($_POST['text']),
+					$nb = $req->execute(array('subtitle' => $_POST['subtitle'],
+												'text' => $_POST['text'],
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
 				}
@@ -151,7 +151,7 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET n.color = :color 
 											WHERE n.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('color' => addslashes($_POST['color']),
+					$nb = $req->execute(array('color' => $_POST['color'],
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
 				}
@@ -160,7 +160,7 @@
 											INNER JOIN boards b ON b.id = n.board_id
 											SET n.icon = :icon
 											WHERE n.id = :id AND b.user_id = :user_id');
-					$nb = $req->execute(array('icon' => addslashes($_POST['icon']),
+					$nb = $req->execute(array('icon' => $_POST['icon'],
 												'id' => $_POST['id'],
 												'user_id' => $_SESSION['id']));
                 }

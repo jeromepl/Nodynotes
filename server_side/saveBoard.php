@@ -11,7 +11,7 @@
 			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, color_last, date_creation, date_update) 
 									VALUES(\'\', :user_id, :title, 0, 0, \'00d7dd\', NOW(), NOW())');
 			$req->execute(array('user_id' => $_SESSION['id'],
-								'title' => addslashes($_POST['title'])));
+								'title' => $_POST['title']));
 			
 			echo $bdd->lastInsertId();
 		}
@@ -22,7 +22,7 @@
 				$req = $bdd->prepare('UPDATE boards 
 										SET title = :title
 										WHERE id = :board_id AND user_id = :user_id');
-				$nb = $req->execute(array('title' => addslashes($_POST['title']),
+				$nb = $req->execute(array('title' => $_POST['title'],
 											'board_id' => $_POST['board_id'],
 											'user_id' => $_SESSION['id']));
 			}
