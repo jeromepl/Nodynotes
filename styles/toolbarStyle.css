@@ -93,6 +93,7 @@
     margin-left: -150px;
     padding: 1px 0;
     border-width: 2px;
+    text-align: center;
     font-size: 28px;
     font-weight: bold;
     cursor: text;
@@ -223,6 +224,14 @@
 }
 #tool2_img_7:hover {
 	border-bottom: 5px #7E2B02 solid;
+}
+
+#tool2_img_7 svg {
+
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
 }
 
 #colorChoices {

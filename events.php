@@ -54,23 +54,37 @@ $(function() {
         }
 
         //Save this board into the last seen board
-        $req = $bdd->prepare('UPDATE users SET last_board = :board_id WHERE id = :user_id');
+        $req = $bdd->prepare('UPDATE users
+                            SET last_board = :board_id, views = views + 1
+                            WHERE id = :user_id');
         $req->execute(array('board_id' => $_GET['id'],
 				            'user_id' => $_SESSION['id']));
+
+        //Save the date and add a view to the board
+        $req = $bdd->prepare('UPDATE boards
+                            SET date_seen = NOW(), views = views + 1
+                            WHERE id = :id AND user_id = :user_id');
+        $req->execute(array('id' => $_GET['id'],
+                            'user_id' => $_SESSION['id']));
 	?>
 	
 	titleMinWidth = $('.nodeTitle').css('width'); //width = min-width at the beginning, because no scaling occured (Used for expanding the title)
+
+    //TODO remove this when the profile page will be done
+    $(document).on('click', '#head_profile', function(e){
+       alert("We are currently working on this feature. Sorry for the inconvenience.");
+    });
 	
 	//SHOW SIDEBAR
 	var sidebarExpanded = false;
 	$(document).on('click', '#unfold_button', function(e) {
 		if(!addingBoard && selectedTool != 6) {
 			if(!sidebarExpanded) {
-				$('#sidebar').animate({left: '+=385px'}, 200);
+				$('#sidebar').css('box-shadow', '#999 2px 3px 7px').animate({left: '+=385px'}, 200);
 				sidebarExpanded = true;
 			}
 			else {
-				$('#sidebar').animate({left: '-=385px'}, 200);
+                $('#sidebar').css('box-shadow', 'none').animate({left: '-=385px'}, 200);
 				sidebarExpanded = false;
 			}
 		}
@@ -401,8 +415,8 @@ $(function() {
 		}, 20);
 	});
 	$(document).on('keyup', '#head_container input[type="text"]', function(e) {
-		mainSearch($('#head_container input[type="text"]').val());
-		if(e.which == 13) $('#head_container input[type="text"]').blur();
+        if(e.which != 38 && e.which != 40)
+            mainSearch($('#head_container input[type="text"]').val());
 	});
 	$(document).on('click', '#head_search', function(e) {
 		mainSearch($('#head_container input[type="text"]').val());
@@ -418,40 +432,61 @@ $(function() {
             $('.search_result').remove();
         }
     });
-	function mainSearch(input) { //this function hides all boards not matching the user input
+    var resultAmount = 0;
+    var curResult = 0;
+	function mainSearch(input) {
         $('#search_results').show();
 
-        input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory
+        input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory (add a + sign before each word)
 
         $.getJSON("server_side/search.php?query=" + input + "*", function(data) {
             //console.log(data);
             $('.search_result').remove();
 
-            if(data.length == 0) {
+            if(data.length == 0) { //no results
                 $('#search_noResults').show();
             }
             else {
                 $('#search_noResults').hide();
+                resultAmount = 0;
                 for(var i = 0; i < data.length; i++) {
                     var currentA = $('<a>').appendTo('#search_results').addClass('search_result');
                     if(data[i].type == 'node') {
                         $('<div>').appendTo(currentA).addClass('search_nodeResult');
                         currentA.attr('href', "board.php?id=" + data[i].board_id + "&node_id=" + data[i].id);
                     }
-                    else {
+                    else { //subtitle
                         $('<div>').appendTo(currentA).addClass('search_subtitleResult');
                         currentA.attr('href', "board.php?id=" + data[i].board_id + "&sub_id=" + data[i].id);
                     }
                     var currentDiv = $('<div>').appendTo(currentA).addClass('search_textResult');
                     $('<h3>').appendTo(currentDiv).text(data[i].title);
                     $('<p>').appendTo(currentDiv).text(data[i].text);
+                    resultAmount++;
                 }
+
+                $('.search_result:first').addClass('search_selected');
             }
 
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert(textStatus + ": " + errorThrown);
         });
 	}
+    $(document).on('keydown', '#head_container input[type="text"]', function(e) {
+        if (e.which == 13) { //enter
+            window.location.href = $('.search_selected').attr('href');
+        }
+        else if (e.which == 40 && curResult + 1 < resultAmount) { //down
+            $('.search_selected').removeClass('search_selected');
+            curResult++;
+            $('.search_result').eq(curResult).addClass('search_selected');
+        }
+        else if (e.which == 38 && curResult - 1 >= 0) { //up
+            $('.search_selected').removeClass('search_selected');
+            curResult--;
+            $('.search_result').eq(curResult).addClass('search_selected');
+        }
+    });
 	
 	//SEARCHING BOARD
 	$(document).on('mouseenter', '#board_search_img', function(e) {
@@ -491,7 +526,7 @@ $(function() {
 		else $('#board_noResults').hide();
 	}
 	
-	//ADD BOARD
+	//ADDING BOARD
 	$(document).on('mouseenter', '#add_board', function(e) {
 		$('#add_board.iconic *').css({fill: '#09F', stroke: '#09F'});
 	});

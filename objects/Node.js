@@ -243,6 +243,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 			if(this.subtitles[i].ellipsis) this.subtitles[i].ellipsis.hide();
 		}
 		this.isExpanded = true;
+        this.element.css('z-index', 2);
 		ellipsisNode = this; //save the node's reference to know which ellipsis was clicked
 	}
 	
@@ -252,6 +253,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 			if(this.subtitles[i].ellipsis) this.subtitles[i].ellipsis.show();
 		}
 		this.isExpanded = false;
+        this.element.css('z-index', 1);
 		ellipsisNode = null;
 	}
 	

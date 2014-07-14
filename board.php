@@ -19,7 +19,7 @@
         $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
         if(!$data = $answer->fetch()) { //if the board does not belong to the user
             getId();
-            //TODO Tell the user he couln'd see that board so he was redirect to his last seen board
+            //TODO Tell the user he couln'd see that board so he was redirected to his last seen board
         }
     }
 
@@ -36,13 +36,14 @@
 <html>
 	<head>
     	<meta charset="utf-8">
-		<title>Nodynotes - Learn and never forget again</title>
+        <meta name="description" content="Add or edit nodes and subtitles on this page. You will have access to them from any computer afterwards!">
+        <title>Your board - Nodynotes</title>
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
-        <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css"/>
-        <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css"/>
-        <link rel="stylesheet" type="text/css" href="styles/headerStyle.css"/>
-        <link rel="stylesheet" type="text/css" href="styles/sidebarStyle.css"/>
-        <link rel="stylesheet" type="text/css" href="styles/iconicStyle.css"/>
+        <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css">
+        <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css">
+        <link rel="stylesheet" type="text/css" href="styles/headerStyle.css">
+        <link rel="stylesheet" type="text/css" href="styles/sidebarStyle.css">
+        <link rel="stylesheet" type="text/css" href="styles/iconicStyle.css">
         <!--[if lte IE 9]>
             <script>window.onload = function() {document.body.innerHTML = '<p>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">here</a>.</p>'
             };</script>
@@ -59,11 +60,12 @@
                     <a id='logout' class='head_icon' href="server_side/disconnect.php"  title='Log out'><img data-src="images/icons/account.svg" class="iconic iconic-md" data-state="logout"></a>
                 </div>
                 <div id='head_left'>
+                    <img id='alpha' src='images/alpha.png' draggable='false'>
                     <a id='logo' href="home.php">Nodynotes</a>
                 </div>
                 <div id='head_middle'>
                     <div id='search'>
-                        <input type='text' placeholder="Find something" />
+                        <input type='text' placeholder="Find something" >
                         <div id='search_results'>
                             <h4 id='search_noResults'>No results found</h4>
                         </div>
@@ -77,7 +79,7 @@
                 <div id='showContent'>
                     <div id='content_title'>
                         <h1></h1>
-                        <input type='text' />
+                        <input type='text' >
                     </div>
                     <div id='content_text'>
                         <p></p>
@@ -87,8 +89,8 @@
                     <img src="images/pointer.png" id="pointer" class="pointerRight" draggable = "false">
                     <div id='changeContent'>
                         <div id='changeContentButton' title='Modify'><img data-src="images/icons/pencil.svg" class="iconic iconic-md" title="Edit"></div>
-                        <div id='changeContent_change' title='Apply'><img data-src="images/icons/circle-check.svg" id="changeContent_change" class="iconic iconic-md" title="Apply"></div>
-                        <div id='changeContent_cancel' title='Cancel'> <img data-src="images/icons/circle-x.svg" id="changeContent_cancel" class="iconic iconic-md" title="Cancel"></div>
+                        <div id='changeContent_change' title='Apply'><img data-src="images/icons/circle-check.svg" class="iconic iconic-md" title="Apply"></div>
+                        <div id='changeContent_cancel' title='Cancel'> <img data-src="images/icons/circle-x.svg" class="iconic iconic-md" title="Cancel"></div>
                     </div>
                 </div>
                 <div id='fakeLink' class='linkBar' style="display: none; z-index: 1;"></div>
@@ -112,7 +114,7 @@
             	<div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/icons/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
                 <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/icons/transfer.svg" class='iconic iconic-md'></div>
             	<div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/icons/tags.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_7' class="tool2_icon" title='Sublink'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
+            	<div id='tool2_img_7' class="tool2_icon" title='More'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
                 
                 <div id='colorChoices'>
                     <div class='colorBox' style='background-color: #FB001A;'></div>
@@ -133,7 +135,7 @@
 
                 <div id='tag_box'>
                 	<div id='tag_form'>
-                		<input type='text' id='tag_name' />
+                		<input type='text' id='tag_name' >
                     	<div id='add_tag'>Add tag</div>
                     </div>
                     <div id='all_tags'></div>
@@ -147,12 +149,12 @@
                 </div>
 			</div>
             <div id='board_properties'> <!-- Placed here to be centered in the nodesContainer -->
-                <input id='board_newTitle' type="text" style="display: none;" />
+                <input id='board_newTitle' type="text" style="display: none;" >
                 <?php
                     $answer = $bdd->prepare('SELECT id, title, date_creation FROM boards WHERE user_id = :user_id AND id = :id');
 				    $answer->execute(array('user_id' => $_SESSION['id'], 'id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
                     $data = $answer->fetchAll();
-                    echo "<h1>" . stripslashes(strip_tags($data[0]['title'])) . "</h1>";
+                    echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
                     echo "<h2>Author:</h2><h3>" . $_SESSION['name_first'] . " " . $_SESSION['name_last'] . "</h3><br>";
                     echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
                     echo "<h2>Link to this board:</h2><h3>localhost/Nodes/board.php?id=" . $data[0]['id'] ."</h3><br>";
@@ -180,7 +182,7 @@
                 <h2>Your boards</h2>
                 <img data-src="images/icons/plus.svg" class="iconic iconic-lg" id="add_board" title="Add Board">
                 <div id='board_search'>
-                    <input type='text' placeholder="Search boards" />
+                    <input type='text' placeholder="Search boards" >
                     <img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md" id="board_search_img">
                 </div>
                 <div id='boards'>
@@ -190,7 +192,7 @@
 						while($data = $answer->fetch()) {
 							echo '<a href="board.php?id=' . $data['id'] . '">
 									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
-									  <h3 class="nodeTitle">' . stripslashes(strip_tags($data['title'])) . '</h3>
+									  <h3 class="nodeTitle">' . strip_tags($data['title']) . '</h3>
 								  	</div>
 								</a>';
 						}
@@ -201,7 +203,7 @@
         	</div>
             <div id="add_board_box">
             	<h2>Create a new board</h2>
-            	<input id="board_title" type="text" placeholder="Board Title"/>
+            	<input id="board_title" type="text" placeholder="Board Title">
                 <div id="add_board_confirm">Create board</div>
                 <div id="add_board_cancel">Cancel</div>
             </div>

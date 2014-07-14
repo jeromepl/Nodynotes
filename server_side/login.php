@@ -8,7 +8,7 @@
 		$req = $bdd->prepare('SELECT id, name_first, name_last FROM users WHERE email = :email AND password = :password');
 		$req->execute(array(
 			'email' => $_POST['email'],
-			'password' => sha1($_POST['password']))); //TODO Need to salt passwords
+            'password' => sha1("1996j" . $_POST['password'] . "pl42")));
 		$answer = $req->fetch();
 
 		$req->closeCursor();
@@ -20,7 +20,15 @@
 			$_SESSION['id'] = $answer['id'];
 			$_SESSION['name_first'] = strip_tags($answer['name_first']);
 			$_SESSION['name_last'] = strip_tags($answer['name_last']);
-            if(isset($_GET['ref_id'])) {
+
+            //increment login count and set last ip and last login date
+            $req = $bdd->prepare('UPDATE users
+                                SET ip_last = :ip, date_last = NOW(), logins = logins + 1
+                                WHERE id = :id');
+            $req->execute(array('ip' => $_SERVER['REMOTE_ADDR'],
+                                'id' => $_SESSION['id']));
+
+            if(isset($_GET['ref_id']) && is_numeric($_GET['ref_id'])) {
                 header('Location: ../board.php?id=' . $_GET['ref_id']);
             }
             else {

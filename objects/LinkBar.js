@@ -3,7 +3,7 @@ function LinkBar(id, node1, node2) {
 	this.node1 = node1;
 	this.node2 = node2;
 	
-	this.element = $('<div>').appendTo('#nodesArea').addClass('linkBar');
+	this.element = $('<div>').appendTo('#nodesArea').addClass('linkBar').attr('id', 'linkbar' + this.id);
 	$.data(this.element[0], 'linkBar', {object: this});
 	
 	this.refreshPos  = function() {

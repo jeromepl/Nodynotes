@@ -18,13 +18,14 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++; //check if board belongs to the user
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO nodes(id, board_id, title, text, xPos, yPos, color, icon, date_creation, date_update) 
-											VALUES(\'\', :boardId, \'Title\', \'Change content...\', :xPos, :yPos, :color, :icon, NOW(), NOW())');
+					$req = $bdd->prepare('INSERT INTO nodes(id, board_id, title, text, xPos, yPos, color, icon, date_creation, date_update, ip_creation)
+											VALUES(\'\', :boardId, \'Title\', \'Change content...\', :xPos, :yPos, :color, :icon, NOW(), NOW(), :ip)');
 					$req->execute(array('boardId' => $_POST['board_id'],
 										'xPos' => $_POST['xPos'],
 										'yPos' => $_POST['yPos'],
 										'color' => $_POST['color'],
-										'icon' => $_POST['icon']));
+										'icon' => $_POST['icon'],
+                                        'ip' => $_SERVER['REMOTE_ADDR']));
 					echo $bdd->lastInsertId();
 				}
 				else echo -1;
@@ -43,10 +44,11 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO subtitles(id, node_id, title, text, position) 
-											VALUES(\'\', :nodeId, \'Subtitle\', \'Change content...\', :position)');
+					$req = $bdd->prepare('INSERT INTO subtitles(id, node_id, title, text, position, date_creation, date_update, ip_creation)
+											VALUES(\'\', :nodeId, \'Subtitle\', \'Change content...\', :position, NOW(), NOW(), :ip)');
 					$req->execute(array('nodeId' => $_POST['node_id'],
-										'position' => $_POST['pos']));
+										'position' => $_POST['pos'],
+                                        'ip' => $_SERVER['REMOTE_ADDR']));
 					echo $bdd->lastInsertId();
 				}
 				else echo -1;
@@ -65,8 +67,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO tags(id, node_id, title) 
-											VALUES(\'\', :nodeId, :title)');
+					$req = $bdd->prepare('INSERT INTO tags(id, node_id, title, date_creation)
+											VALUES(\'\', :nodeId, :title, NOW())');
 					$req->execute(array('nodeId' => $_POST['node_id'],
 										'title' => $_POST['title']));
 					echo $bdd->lastInsertId();
@@ -87,8 +89,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO linkbars(id, node1_id, node2_id) 
-											VALUES(\'\', :node1Id, :node2Id)');
+					$req = $bdd->prepare('INSERT INTO linkbars(id, node1_id, node2_id, date_creation)
+											VALUES(\'\', :node1Id, :node2Id, NOW())');
 					$req->execute(array('node1Id' => $_POST['node1_id'],
 										'node2Id' => $_POST['node2_id']));
 					echo $bdd->lastInsertId();
@@ -104,7 +106,7 @@
 							
 					$req = $bdd->prepare('UPDATE nodes n
 											INNER JOIN boards b ON b.id = n.board_id
-											SET n.xPos = :x, n.yPos = :y
+											SET n.xPos = :x, n.yPos = :y, n.date_update = NOW()
 											WHERE n.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('x' => $_POST['xPos'],
 												'y' => $_POST['yPos'],
@@ -115,7 +117,7 @@
 					
 					$req = $bdd->prepare('UPDATE nodes n
 											INNER JOIN boards b ON b.id = n.board_id
-											SET n.title = :title, n.text = :text 
+											SET n.title = :title, n.text = :text, n.date_update = NOW()
 											WHERE n.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('title' => nl2br($_POST['title']),
 												'text' => nl2br($_POST['text']),
@@ -127,7 +129,7 @@
 					$req = $bdd->prepare('UPDATE subtitles s
 											INNER JOIN nodes n ON n.id = s.node_id
 											INNER JOIN boards b ON b.id = n.board_id
-											SET s.title = :subtitle, s.text = :text 
+											SET s.title = :subtitle, s.text = :text, s.date_update = NOW()
 											WHERE s.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('subtitle' => $_POST['subtitle'],
 												'text' => $_POST['text'],
@@ -139,7 +141,7 @@
 					$req = $bdd->prepare('UPDATE subtitles s
 											INNER JOIN nodes n ON n.id = s.node_id
 											INNER JOIN boards b ON b.id = n.board_id
-											SET s.position = :position 
+											SET s.position = :position, s.date_update = NOW()
 											WHERE s.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('position' => $_POST['subtitle_position'],
 												'id' => $_POST['id'],
@@ -149,7 +151,7 @@
 					
 					$req = $bdd->prepare('UPDATE nodes n
 											INNER JOIN boards b ON b.id = n.board_id
-											SET n.color = :color 
+											SET n.color = :color, n.date_update = NOW()
 											WHERE n.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('color' => $_POST['color'],
 												'id' => $_POST['id'],
@@ -158,7 +160,7 @@
                 else if(isset($_POST['icon'])) {
                     $req = $bdd->prepare('UPDATE nodes n
 											INNER JOIN boards b ON b.id = n.board_id
-											SET n.icon = :icon
+											SET n.icon = :icon, n.date_update = NOW()
 											WHERE n.id = :id AND b.user_id = :user_id');
 					$nb = $req->execute(array('icon' => $_POST['icon'],
 												'id' => $_POST['id'],

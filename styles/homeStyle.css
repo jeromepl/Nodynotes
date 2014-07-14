@@ -11,6 +11,10 @@ body {
 	background-color: white;
 }
 
+strong { /* only used for SEO */
+    font-weight: 400;
+}
+
 .container {
     width: 980px;
     margin: auto;
@@ -52,6 +56,7 @@ header {
 }
 
 #head_container {
+    position: relative;
     padding: 5px 0;
     height: 45px;
 }
@@ -61,12 +66,26 @@ header {
     float: left;
 	color: white;
 	height: 40px;
-	padding: 0;;
+	padding: 0;
     margin: 0;
 	font-size: 42px;
 	font-weight: bold;
 	font-style: italic;
     text-shadow: 0 2px 2px #999;
+    cursor: default;
+}
+
+#alpha {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    top: 30px;
+    left: 188px;
+
+    -webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+    -o-transform: rotate(10deg);
 }
 
 #head_container form {
@@ -95,9 +114,21 @@ header {
 }
 
 #banner {
+    position: relative;
     margin-top: 40px;
-    background: url('../images/banner.png') center repeat;
+    background: url('../images/banner.png') center repeat fixed;
     height: 450px;
+}
+
+#alpha_note {
+    position: absolute;
+    text-align: center;
+    width: 980px;
+    color: #f00;
+    top: 0;
+    left: 50%;
+    margin-left: -490px;
+    font-size: 18px;
 }
 
 #banner_text {
@@ -109,7 +140,6 @@ header {
     display: table-cell;
     vertical-align: middle;
     width: 50%;
-    /*color: #020024;*/
     color: white;
 }
 
@@ -132,21 +162,18 @@ header {
     vertical-align: middle;
     text-align: center;
     width: 50%;
-    /*background-color: rgba(250, 250, 250, 0.7);
-    border-radius: 5px;*/
 }
 
 #signup_block form {
+    position: relative;
     display: inline-block;
     margin-top: 50px;
     width: 80%;
 }
 
 #signup_block input {
-    display: block;
     width: 354px;
     height: 30px;
-    margin: 8px auto 0 auto;
     border-radius: 7px;
 	padding: 3px 5px;
 	border: solid 1px #666;
@@ -171,7 +198,7 @@ header {
 #signup_block form p {
     width: 346px;
     margin: 15px auto;
-    color: #999;
+    color: #BBB;
     text-align: left;
     padding: 5px 10px 5px 10px;
 }
@@ -183,6 +210,22 @@ header {
 
 #signup_block form p a:hover {
     text-decoration: underline;
+}
+
+.input {
+    position: relative;
+    height: 38px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.input_good, .input_bad { /* the 'x' or 'check' icon */
+    display: none;
+    position: absolute;
+    width: 25px !important;
+    height: 25px !important;
+    top: 7px;
+    right: -25px;
 }
 
 #what {
@@ -265,14 +308,14 @@ header {
     background: linear-gradient(#00d30a, #02af0c);
 }
 
-#footer {
+footer {
     height: 22px;
     margin-top: 75px;
     padding-top: 5px;
     background-color: #EEE;
 }
 
-#footer h3 {
+footer h3 {
     text-align: left;
     float: left;
     margin: 0;
@@ -285,18 +328,28 @@ header {
     height: 19px;
 }
 
-#footer a {
+footer a {
     margin: 0 10px;
     text-decoration: none;
     color: black;
     font-size: 14px;
 }
 
-#footer a:hover {
+footer a:hover {
     text-decoration: underline;
 }
 
 /** ICONIC STYLING **/
+.input_good.iconic * {
+    fill: #6CC729;
+    stroke: #6CC729;
+}
+
+.input_bad.iconic * {
+    fill: #D20000;
+    stroke: #D20000;
+}
+
 .iconic-globe-land-mass {
     fill: #09F;
     stroke: #09F;
@@ -352,4 +405,20 @@ header {
     left: 60px;
     width: 15px;
 	height: 10px;
+}
+
+#error_signup {
+    text-align: center !important; /* !important because otherwise the "#signup_block form p" has priority */
+    color: white !important;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.6);
+    border-radius: 5px;
+    box-shadow: 0 0 10px white;
+}
+
+.input_error {
+    display: none;
+    padding-top: 5px;
+    color: #e30000;
+    font-weight: bold;
 }

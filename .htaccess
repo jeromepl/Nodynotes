@@ -1,5 +1,7 @@
 DirectoryIndex home.php
 AddType text/cache-manifest manifest
+RewriteEngine On
+RewriteRule ^board/([0-9]+)/?$ board.php?id=$1 [NC,L]
 
 #IN CASE OF A MAINTENANCE
 #ErrorDocument 403 /maintenance.html 
@@ -23,7 +25,6 @@ AddType text/cache-manifest manifest
 Options All -Indexes
 
 #Block bad bots
-RewriteEngine On 
 RewriteCond %{HTTP_USER_AGENT} ^BlackWidow [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Bot\ mailto:craftbot@yahoo.com [OR]
 RewriteCond %{HTTP_USER_AGENT} ^ChinaClaw [OR]

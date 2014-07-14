@@ -8,10 +8,11 @@
 		
 		if($_POST['action'] == 'insert' && isset($_POST['title'])) {
 			
-			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, color_last, date_creation, date_update) 
-									VALUES(\'\', :user_id, :title, 0, 0, \'00d7dd\', NOW(), NOW())');
+			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation)
+									VALUES(\'\', :user_id, :title, 0, 0, NOW(), NOW(), 0, :ip)');
 			$req->execute(array('user_id' => $_SESSION['id'],
-								'title' => $_POST['title']));
+								'title' => $_POST['title'],
+                                'ip' => $_SERVER['REMOTE_ADDR']));
 			
 			echo $bdd->lastInsertId();
 		}
@@ -31,7 +32,7 @@
 				&& is_numeric($_POST['board_id']) && is_numeric($_POST['xPos']) && is_numeric($_POST['yPos'])) {
 					
 				$req = $bdd->prepare('UPDATE boards
-										SET xPos = :xPos, yPos = :yPos 
+										SET xPos = :xPos, yPos = :yPos
 										WHERE id = :board_id AND user_id = :user_id');
 				$nb = $req->execute(array('xPos' => $_POST['xPos'],
 											'yPos' => $_POST['yPos'],
