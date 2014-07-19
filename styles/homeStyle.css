@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 html {
-    font-family: asap, sans-serif;
+    font-family: asap, ubuntu, sans-serif;
     font-style: normal;
 	font-weight: 400;
 }
@@ -23,11 +23,10 @@ strong { /* only used for SEO */
 
 .button {
 	background: linear-gradient(#0BF, #09F);
-	border: solid white 1px;
+	border: solid #06F 1px;
 	border-radius: 4px;
     width: 80px;
 	height: 35px;
-	line-height: 35px;
 	color: white;
 	cursor: pointer;
 	text-align: center;
@@ -42,17 +41,12 @@ strong { /* only used for SEO */
 }
 
 header {
-    height: 60px;
-    border-bottom: solid 3px #06F;
-	background-color: #09F;
+    height: 55px;
+    border-bottom: solid 5px #09F;
+    background-color: #020024;
 	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
-}
-
-#header {
-	background-color: #020024;
-	width: 100%;
-	height: 55px;
+    width: 100%;
 }
 
 #head_container {
@@ -96,6 +90,7 @@ header {
 #head_container input[type=text], #head_container input[type='password'] {
 	display: inline-block;
 	margin-right: 10px;
+    margin-top: 9px;
 	border-radius: 3px;
     border: solid 1px #AAA;
     padding: 3px 5px;
@@ -110,6 +105,8 @@ header {
 }
 
 #login {
+    position: relative;
+    top: -3px;
     text-shadow: 0 1px 1px #777;
 }
 
@@ -148,12 +145,14 @@ header {
     margin-top: 45px;
     text-align: left;
     font-size: 56px;
+    font-family: ubuntu;
     text-shadow: 1px 1px 1px #9b9b9b;
 }
 
 #intro p {
     text-align: left;
     font-size: 20px;
+    font-family: ubuntu;
     line-height: 30px;
 }
 
@@ -172,7 +171,7 @@ header {
 }
 
 #signup_block input {
-    width: 354px;
+    width: 300px;
     height: 30px;
     border-radius: 7px;
 	padding: 3px 5px;
@@ -181,13 +180,8 @@ header {
     font-size: 18px;
 }
 
-#signup_block input[name="name_first"],  #signup_block input[name="name_last"]{
-    display: inline-block;
-    width: 169px;
-}
-
 #signup {
-    width: 366px;
+    width: 312px;
     height: 44px;
     margin-top: 15px;
     border-radius: 7px;
@@ -196,11 +190,12 @@ header {
 }
 
 #signup_block form p {
-    width: 346px;
-    margin: 15px auto;
+    width: 320px;
+    margin: 15px 0 15px 30px;
     color: #BBB;
     text-align: left;
     padding: 5px 10px 5px 10px;
+    text-align: justify;
 }
 
 #signup_block form p a {
@@ -231,6 +226,7 @@ header {
 #what {
     margin-top: 80px;
     font-size: 44px;
+    font-family: ubuntu;
 }
 
 #what_description {
@@ -283,6 +279,7 @@ header {
 .feature_text h2 {
     margin: 0;
     font-size: 36px;
+    font-family: ubuntu;
 }
 
 .feature_text p {

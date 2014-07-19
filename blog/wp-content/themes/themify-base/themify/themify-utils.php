@@ -12,37 +12,37 @@
 /**
  * Create admin menu links
  */
-function themify_admin_nav() {
+function themify_base_admin_nav() {
 	$theme = wp_get_theme();
 	$theme_name = $theme->display( 'Name' );
 	$docs_name = sprintf( __( '%s Docs', 'themify' ), $theme->display( 'Name' ) );
-	add_theme_page( $theme_name, $theme_name, 'manage_options', 'themify', 'themify_page' );
-	add_theme_page( $docs_name, $docs_name, 'manage_options', 'themify_docs', 'themify_docs' );
+	add_theme_page( $theme_name, $theme_name, 'manage_options', 'themify', 'themify_base_page' );
+	add_theme_page( $docs_name, $docs_name, 'manage_options', 'themify_base_docs', 'themify_base_docs' );
 }
 
 /**
  * Themify docs admin menu entry
  */
-function themify_docs() {
+function themify_base_docs() {
 	exit;
 }
 
 /**
  * Redirect to Themify documentation page
  */
-function themify_docs_redirect() {
+function themify_base_docs_redirect() {
 	global $pagenow;
-	if ( 'themes.php' == $pagenow && isset( $_GET['page'] ) && 'themify_docs' == $_GET['page'] ) {
+	if ( 'themes.php' == $pagenow && isset( $_GET['page'] ) && 'themify_base_docs' == $_GET['page'] ) {
 		wp_redirect( 'http://themify.me/docs', 301 );
 		exit;
 	}
 }
-add_action( 'after_setup_theme', 'themify_docs_redirect' );
+add_action( 'after_setup_theme', 'themify_base_docs_redirect' );
 
 /**
  * Render settings page
  */
-function themify_page() {
+function themify_base_page() {
 	if ( !current_user_can( 'manage_options' ) ) {
 		wp_die( __( 'You do not have sufficient permissions to update this site.', 'themify' ) );
 	}
@@ -68,25 +68,25 @@ function themify_page() {
 /**
  * Render settings fields
  */
-function themify_settings_admin_init() {
+function themify_base_settings_admin_init() {
 
 	register_setting( 'themify_settings', 'themify_settings' );
 
-	add_settings_section( 'themify_main', __( 'Main Settings', 'themify' ), 'themify_settings_main', 'themify' );
+	add_settings_section( 'themify_main', __( 'Main Settings', 'themify' ), 'themify_base_settings_main', 'themify' );
 
-	$fields = themify_settings_config();
+	$fields = themify_base_settings_config();
 
 	foreach( $fields as $id => $field ) {
 		$args = isset( $field['args'] ) ? $field['args'] : array();
 		$args['field_id'] = $id;
-		add_settings_field( $id, $field['name'], 'themify_setting_field_'.$field['type'], 'themify', 'themify_main', $args );
+		add_settings_field( $id, $field['name'], 'themify_base_setting_field_'.$field['type'], 'themify', 'themify_main', $args );
 	}
 }
 
 /**
  * Section description.
  */
-function themify_settings_main() {
+function themify_base_settings_main() {
 	echo __( 'Layout and other general options', 'themify' );
 }
 
@@ -97,7 +97,7 @@ function themify_settings_main() {
  * @param string $default Default value if setting doesn't exist.
  * @return mixed|bool
  */
-function themify_get( $key = '', $default = '' ) {
+function themify_base_get( $key = '', $default = '' ) {
 	global $themify_settings;
 	if ( isset( $themify_settings[$key] ) ) {
 		return $themify_settings[$key];
@@ -108,14 +108,31 @@ function themify_get( $key = '', $default = '' ) {
 }
 
 /**
+ * Returns the entire Themify data object.
  *
+ * @uses $themify_settings Global variable that stores all the settings.
+ * @return mixed
  */
-function themify_admin_enqueue_assets() {
-	// Enqueue CSS files
-	wp_enqueue_style( 'themify-admin-styles', THEMIFY_URI . '/css/themify-ui.css' );
+function themify_base_get_data() {
+	global $themify_settings;
+	return $themify_settings;
+}
 
-	// Enqueue Javascript files
-	wp_enqueue_script( 'themify-admin-scripts', THEMIFY_URI . '/js/scripts.js', array( 'jquery' ), THEMIFY_VERSION );
+/**
+ * Load assets needed
+ */
+function themify_base_admin_enqueue_assets() {
+	// Minicolors CSS
+	wp_enqueue_style( 'themify-colorpicker', THEMIFY_BASE_URI . '/css/jquery.minicolors.css', array(), THEMIFY_VERSION );
+
+	// Admin CSS
+	wp_enqueue_style( 'themify-admin-styles', THEMIFY_BASE_URI . '/css/themify-ui.css' );
+
+	// Minicolors JS
+	wp_enqueue_script( 'themify-colorpicker-js', THEMIFY_BASE_URI . '/js/jquery.minicolors.js', array('jquery'), THEMIFY_VERSION );
+
+	// Admin JS
+	wp_enqueue_script( 'themify-admin-scripts', THEMIFY_BASE_URI . '/js/scripts.js', array( 'jquery' ), THEMIFY_VERSION );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -126,7 +143,7 @@ function themify_admin_enqueue_assets() {
  * Add Themify Settings link to admin bar
  * @since 1.0.0
  */
-function themify_admin_bar() {
+function themify_base_admin_bar() {
 	global $wp_admin_bar;
 	if ( !is_super_admin() || !is_admin_bar_showing() )
 		return;
@@ -138,51 +155,30 @@ function themify_admin_bar() {
 	));
 }
 
-/**
- * Checks if Woocommerce plugin is active and returns the proper value
- * @return bool
- * @since 1.0.0
- */
-function themify_is_woocommerce_active() {
-	$plugin = 'woocommerce/woocommerce.php';
-	$network_active = false;
-	if ( is_multisite() ) {
-		$plugins = get_site_option( 'active_sitewide_plugins' );
-		if ( isset( $plugins[$plugin] ) )
-			$network_active = true;
-	}
-	return in_array( $plugin, apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || $network_active;
-}
-
-if ( ! function_exists( 'themify_site_title' ) ) {
+if ( ! function_exists( 'themify_base_site_title' ) ) {
 	/**
 	 * Returns markup for site name
 	 * @param string $location
 	 * @return mixed|void
 	 */
-	function themify_site_title( $location = 'site-logo' ) {
+	function themify_base_site_title( $location = 'site-logo' ) {
 		$site_name = get_bloginfo( 'name' );
-		$image = get_theme_mod( $location . '_image' );
 		$html = '<h1 id="' . $location . '" class="' . $location . '">';
-		$html .= '<a href="' . apply_filters( 'themify_logo_home_url', home_url() ) . '" title="' . $site_name . '">';
-		if ( $image ) {
-			$html .= '<img src="' . $image . '" />';
-			$html .= '<span style="display:none">' . $site_name . '</span>';
-		} else {
-			$html .= '<span>' . $site_name . '</span>';
-		}
-		$html .= '</a>';
+
+		global $themify_customizer;
+		$html .= $themify_customizer->site_logo( $location );
+
 		$html .= '</h1>';
 		return apply_filters( 'themify_' . $location . '_logo_html', $html, $location );
 	}
 }
 
-if ( ! function_exists( 'themify_get_category_description' ) ) {
+if ( ! function_exists( 'themify_base_get_category_description' ) ) {
 	/**
 	 * Returns taxonomy term description.
 	 * @return string
 	 */
-	function themify_get_category_description() {
+	function themify_base_get_category_description() {
 		$description = term_description();
 		return ! empty( $description ) ? '<div class="category-description">' . $description . '</div>' : '';
 	}
@@ -194,14 +190,14 @@ if ( ! function_exists( 'themify_get_category_description' ) ) {
  * @param string $before Markup to show before pagination links.
  * @param string $after Markup to show after pagination links.
  * @param bool   $query WordPress query object to use.
- * @uses themify_get_pagenav
+ * @uses themify_base_get_pagenav
  * @since 1.0.0
  */
-function themify_pagenav( $before = '', $after = '', $query = false ) {
-	echo themify_get_pagenav( $before, $after, $query );
+function themify_base_pagenav( $before = '', $after = '', $query = false ) {
+	echo themify_base_get_pagenav( $before, $after, $query );
 }
 
-if ( ! function_exists( 'themify_get_pagenav' ) ) {
+if ( ! function_exists( 'themify_base_get_pagenav' ) ) {
 	/**
 	 * Returns page navigation.
 	 *
@@ -210,7 +206,7 @@ if ( ! function_exists( 'themify_get_pagenav' ) ) {
 	 * @param bool   $query WordPress query object to use.
 	 * @return string
 	 */
-	function themify_get_pagenav( $before = '', $after = '', $query = false ) {
+	function themify_base_get_pagenav( $before = '', $after = '', $query = false ) {
 		global $wpdb, $wp_query;
 
 		if ( false == $query ) {
@@ -281,7 +277,7 @@ if ( ! function_exists( 'themify_get_pagenav' ) ) {
  * @param bool $echo Whether to echo or return the markup.
  * @return string $html The markup and text.
  */
-function themify_the_footer_text( $block = 'one', $date_fmt = 'Y', $echo = true ) {
+function themify_base_the_footer_text( $block = 'one', $date_fmt = 'Y', $echo = true ) {
 
 	if ( 'one' == $block ) {
 		$text = '&copy; <a href="' . home_url() . '">' . get_bloginfo( 'name' ) . '</a> ' . date( $date_fmt );
@@ -289,8 +285,8 @@ function themify_the_footer_text( $block = 'one', $date_fmt = 'Y', $echo = true 
 		$text = sprintf( __( 'Powered by <a href="%s">WordPress</a> &bull; <a href="%s">Themify WordPress Themes</a>', 'themify' ), 'http://wordpress.org', 'http://themify.me' );
 	}
 
-	$html = '<div class="' . $block . '">' . apply_filters( 'themify_the_footer_text_' . $block, $text ) . '</div>';
-	$html = apply_filters( 'themify_the_footer_text', $html, $block );
+	$html = '<div class="' . $block . '">' . apply_filters( 'themify_base_the_footer_text_' . $block, $text ) . '</div>';
+	$html = apply_filters( 'themify_base_the_footer_text', $html, $block );
 
 	if ( $echo ) {
 		echo $html;
@@ -304,7 +300,7 @@ function themify_the_footer_text( $block = 'one', $date_fmt = 'Y', $echo = true 
  * @return mixed|void
  * @since 1.0.0
  */
-function themify_get_web_safe_fonts($only_names = false) {
+function themify_base_get_web_safe_fonts($only_names = false) {
 	$web_safe_font_names = array(
 		'Arial, Helvetica, sans-serif',
 		'Verdana, Geneva, sans-serif',
@@ -325,7 +321,7 @@ function themify_get_web_safe_fonts($only_names = false) {
 		$web_safe_fonts = $web_safe_font_names;
 	}
 
-	return apply_filters( 'themify_get_web_safe_fonts', $web_safe_fonts );
+	return apply_filters( 'themify_base_get_web_safe_fonts', $web_safe_fonts );
 }
 
 if ( ! function_exists( 'themify_is_touch' ) ) {
@@ -353,7 +349,7 @@ if ( ! function_exists( 'themify_is_touch' ) ) {
  * @param string $url The requested to set its scheme.
  * @return string
  */
-function themify_https_esc( $url = '' ) {
+function themify_base_https_esc( $url = '' ) {
 	if ( is_ssl() ) {
 		$url = str_replace( 'http://', 'https://', $url );
 	}
@@ -367,7 +363,7 @@ function themify_https_esc( $url = '' ) {
  * @param string $widgets_key Theme settings key to use.
  * @param string $default_set Set of widgets to create.
  */
-function themify_register_grouped_widgets( $columns = array(), $widget_attr = array(), $widgets_key = 'setting-footer_widgets', $default_set = 'footerwidget-3col' ) {
+function themify_base_register_grouped_widgets( $columns = array(), $widget_attr = array(), $widgets_key = 'setting-footer_widgets', $default_set = 'footerwidget-3col' ) {
 
 	if ( empty( $columns ) ) {
 		$columns = array(
@@ -378,7 +374,7 @@ function themify_register_grouped_widgets( $columns = array(), $widget_attr = ar
 			'none'              => 0
 		);
 	}
-	$option = themify_get( $widgets_key, $default_set );
+	$option = themify_base_get( $widgets_key, $default_set );
 
 	if ( empty( $widget_attr ) ) {
 		$widget_attr = array(
@@ -404,15 +400,15 @@ function themify_register_grouped_widgets( $columns = array(), $widget_attr = ar
 	}
 }
 
-if ( ! function_exists( 'themify_lightbox_vars_init' ) ) {
+if ( ! function_exists( 'themify_base_lightbox_vars_init' ) ) {
 	/**
 	 * Post Gallery lightbox/fullscreen and single lightbox definition
 	 *
 	 * @return array Lightbox/Fullscreen galleries initialization parameters
 	 */
-	function themify_lightbox_vars_init() {
-		$lightbox_content_images = themify_get( 'setting-lightbox_content_images' );
-		$gallery_lightbox = themify_get( 'setting-gallery_lightbox' );
+	function themify_base_lightbox_vars_init() {
+		$lightbox_content_images = themify_base_get( 'setting-lightbox_content_images' );
+		$gallery_lightbox = themify_base_get( 'setting-gallery_lightbox' );
 		$lightboxSelector = '.lightbox';
 		$overlay_args = array();
 		$file_extensions = array( 'jpg', 'gif', 'png', 'JPG', 'GIF', 'PNG', 'jpeg', 'JPEG' );
@@ -426,8 +422,8 @@ if ( ! function_exists( 'themify_lightbox_vars_init' ) ) {
 		$gallery_selector = substr( $gallery_selector, 0, - 1 );
 
 		// Include Magnific style and script
-		wp_enqueue_style( 'magnific', THEMIFY_URI . '/css/lightbox.css' );
-		wp_enqueue_script( 'magnific', THEMIFY_URI . '/js/lightbox.js', array( 'jquery' ), false, true );
+		wp_enqueue_style( 'magnific', THEMIFY_BASE_URI . '/css/lightbox.css' );
+		wp_enqueue_script( 'magnific', THEMIFY_BASE_URI . '/js/lightbox.js', array( 'jquery' ), false, true );
 
 		// Lightbox default settings
 		$overlay_args = array(
@@ -453,8 +449,8 @@ if ( ! function_exists( 'themify_lightbox_vars_init' ) ) {
 			// else if user selected fullscreen gallery
 		} elseif ( 'photoswipe' == $gallery_lightbox ) {
 			// Include fullscreen gallery style and script
-			wp_enqueue_style( 'photoswipe', THEMIFY_URI . '/css/photoswipe.css' );
-			wp_enqueue_script( 'photoswipe', THEMIFY_URI . '/js/photoswipe.js', array( 'jquery' ), false, true );
+			wp_enqueue_style( 'photoswipe', THEMIFY_BASE_URI . '/css/photoswipe.css' );
+			wp_enqueue_script( 'photoswipe', THEMIFY_BASE_URI . '/js/photoswipe.js', array( 'jquery' ), false, true );
 
 			// Parameter to handle fullscreen gallery
 			$overlay_args = array_merge( $overlay_args, array(
@@ -468,18 +464,51 @@ if ( ! function_exists( 'themify_lightbox_vars_init' ) ) {
 }
 
 /**
- * Add different CSS classes to body tag.
- * Outputs:
- * 		skin name
- * 		layout
- * @param Array
- * @return Array
- * @since 1.2.2
+ * Writes the page title according to the content viewed.
+ *
+ * @since 1.0.3
+ *
+ * @param $title
+ * @param $sep
+ * @return string
  */
-function themify_body_classes( $classes ) {
+function themify_base_wp_title( $title, $sep ) {
+	global $page, $paged;
+
+	if ( is_feed() ) {
+		return $title;
+	}
+
+	// Add the blog name
+	$title .= get_bloginfo( 'name' );
+
+	// Add the blog description for the home/front page.
+	$tagline = get_bloginfo( 'description', 'display' );
+	if ( $tagline && ( is_home() || is_front_page() ) ) {
+		$title .= " $sep $tagline";
+	}
+
+	// Add a page number if necessary:
+	if ( $paged >= 2 || $page >= 2 ) {
+		$title .= " $sep " . sprintf( __( 'Page %s', 'themify' ), max( $paged, $page ) );
+	}
+
+	return $title;
+}
+
+/**
+ * Add different CSS classes to body tag.
+ * Outputs skin name and layout.
+ *
+ * @since 1.0.3
+ *
+ * @param array
+ * @return array
+ */
+function themify_base_body_classes( $classes ) {
 
 	// Add skin name
-	if ( $skin = themify_get( 'skin' ) ) {
+	if ( $skin = themify_base_get( 'skin' ) ) {
 		$classes[] = 'skin-' . $skin;
 	} else {
 		$classes[] = 'skin-default';
@@ -523,7 +552,7 @@ function themify_body_classes( $classes ) {
 		$classes[] = 'not-ie';
 	}
 
-	$layout = themify_get_sidebar_layout();
+	$layout = themify_base_get_sidebar_layout();
 
 	// If still empty, set default
 	if ( apply_filters( 'themify_default_layout_condition', '' == $layout ) ) {
@@ -531,24 +560,24 @@ function themify_body_classes( $classes ) {
 	}
 	$classes[] = $layout;
 
-	return apply_filters( 'themify_body_classes', $classes );
+	return apply_filters( 'themify_base_body_classes', $classes );
 }
 
 /**
  * Return sidebar layout.
  * @return bool|mixed
  */
-function themify_get_sidebar_layout() {
+function themify_base_get_sidebar_layout() {
 	$layout = 'sidebar1';
 	if ( is_page() ) {
 		// It's a page
-		$layout = themify_get( 'setting-default_page_layout', 'sidebar1' );
+		$layout = themify_base_get( 'setting-default_page_layout', 'sidebar1' );
 	} elseif ( is_single() ) {
 		// It's a post
-		$layout = themify_get( 'setting-default_page_post_layout', 'sidebar1' );
+		$layout = themify_base_get( 'setting-default_page_post_layout', 'sidebar1' );
 	} else {
 		// Add default layout and post layout
-		$layout = themify_get( 'setting-default_layout' );
+		$layout = themify_base_get( 'setting-default_layout' );
 	}
 	return $layout;
 }
@@ -556,7 +585,7 @@ function themify_get_sidebar_layout() {
 /**
  * Add JavaScript files if IE version is lower than 9
  */
-function themify_ie_enhancements() {
+function themify_base_ie_enhancements() {
 	echo '
 	<!-- media-queries.js -->
 	<!--[if lt IE 9]>
@@ -565,7 +594,7 @@ function themify_ie_enhancements() {
 
 	<!-- html5.js -->
 	<!--[if lt IE 9]>
-		<script src="' . themify_https_esc( 'http://html5shim.googlecode.com/svn/trunk/html5.js' ) . '"></script>
+		<script src="' . themify_base_https_esc( 'http://html5shim.googlecode.com/svn/trunk/html5.js' ) . '"></script>
 	<![endif]-->
 	';
 }
@@ -573,18 +602,270 @@ function themify_ie_enhancements() {
 /**
  * Add viewport tag for responsive layouts
  */
-function themify_viewport_tag() {
+function themify_base_viewport_tag() {
 	echo "\n" . '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">' . "\n";
 }
 
 /**
  * Make IE behave like a standards-compliant browser
  */
-function themify_ie_standards_compliant() {
+function themify_base_ie_standards_compliant() {
 	echo '
 	<!--[if lt IE 9]>
-	<script src="' . themify_https_esc( 'http://s3.amazonaws.com/nwapi/nwmatcher/nwmatcher-1.2.5-min.js' ) . '"></script>
-	<script type="text/javascript" src="' . themify_https_esc( 'http://cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js' ) . '"></script>
+	<script src="' . themify_base_https_esc( 'http://s3.amazonaws.com/nwapi/nwmatcher/nwmatcher-1.2.5-min.js' ) . '"></script>
+	<script type="text/javascript" src="' . themify_base_https_esc( 'http://cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js' ) . '"></script>
 	<![endif]-->
 	';
+}
+
+/**
+ * Convert array key name with square bracket to valid array
+ * @param array $inputArr
+ * @return array
+ */
+function themify_base_convert_brackets_string_to_arrays( $inputArr ) {
+	$result = array();
+
+	foreach ($inputArr as $key => $val) {
+		$keyParts = preg_split('/[\[\]]+/', $key, -1, PREG_SPLIT_NO_EMPTY);
+
+		$ref = &$result;
+
+		while ($keyParts) {
+				$part = array_shift($keyParts);
+
+			if (!isset($ref[$part])) {
+				$ref[$part] = array();
+			}
+
+			$ref = &$ref[$part];
+		}
+
+		$ref = $val;
+	}
+	return $result;
+}
+
+if ( ! function_exists('themify_base_get_google_web_fonts_list') ) {
+	/**
+	 * Returns a list of Google Web Fonts
+	 * @return array
+	 * @since 1.5.6
+	 */
+	function themify_base_get_google_web_fonts_list() {
+		$google_fonts_list = array(
+			array('value' => '', 'name' => ''),
+			array(
+				'value' => '',
+				'name' => '--- '.__('Google Fonts', 'themify').' ---'
+			)
+		);
+		foreach( wp_list_pluck( themify_base_get_google_font_lists(), 'family' ) as $font ) {
+			$google_fonts_list[] = array(
+				'value' => $font,
+				'name' => $font
+			);
+		}
+		return apply_filters('themify_base_get_google_web_fonts_list', $google_fonts_list);
+	}
+}
+
+if ( ! function_exists('themify_base_get_web_safe_font_list') ) {
+	/**
+	 * Returns a list of web safe fonts
+	 * @param bool $only_names Whether to return only the array keys or the values as well
+	 * @return mixed|void
+	 * @since 1.0.0
+	 */
+	function themify_base_get_web_safe_font_list($only_names = false) {
+		$web_safe_font_names = array(
+			'Arial, Helvetica, sans-serif',
+			'Verdana, Geneva, sans-serif',
+			'Georgia, \'Times New Roman\', Times, serif',
+			'\'Times New Roman\', Times, serif',
+			'Tahoma, Geneva, sans-serif',
+			'\'Trebuchet MS\', Arial, Helvetica, sans-serif',
+			'Palatino, \'Palatino Linotype\', \'Book Antiqua\', serif',
+			'\'Lucida Sans Unicode\', \'Lucida Grande\', sans-serif'
+		);
+
+		if( ! $only_names ) {
+			$web_safe_fonts = array(
+				array('value' => 'default', 'name' => '', 'selected' => true),
+				array('value' => '', 'name' => '--- '.__('Web Safe Fonts', 'themify').' ---')
+			);
+			foreach( $web_safe_font_names as $font ) {
+				$web_safe_fonts[] = array(
+					'value' => $font,
+					'name' => str_replace( '\'', '"', $font )
+				);
+			}
+		} else {
+			$web_safe_fonts = $web_safe_font_names;
+		}
+
+		return apply_filters( 'themify_base_get_web_safe_font_list', $web_safe_fonts );
+	}
+}
+
+/**
+ * Get google font lists
+ * @return array
+ */
+function themify_base_get_google_font_lists() {
+	if( !defined('THEMIFY_GOOGLE_FONTS') ) define('THEMIFY_GOOGLE_FONTS', true);
+	if( !THEMIFY_GOOGLE_FONTS ) return;
+
+	$fonts = themify_base_grab_remote_google_fonts();
+	return $fonts;
+}
+
+/**
+ * Grab google fonts lists from api
+ * @return array
+ */
+function themify_base_grab_remote_google_fonts() {
+	$user_subsets = themify_base_get( 'setting-webfonts_subsets', array('latin') );
+	$subsets = apply_filters( 'themify_google_fonts_subsets', array_unique( array_merge( array( 'latin' ), $user_subsets ) ) );
+
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	}
+	WP_Filesystem();
+	global $wp_filesystem;
+	$fonts_file = THEMIFY_BASE_DIR . '/js/google-fonts.json';
+	if ( $wp_filesystem->exists( $fonts_file ) ) {
+		$response = $wp_filesystem->get_contents( $fonts_file );
+	} else {
+		$response = false;
+	}
+	$fonts = array();
+	if( $response !== false ) {
+		$results = json_decode( $response );
+		foreach ( $results->items as $font ) {
+			$subsets_match = true;
+
+			// Check that all specified subsets are available in this font
+			foreach ( $subsets as $subset ) {
+				if ( ! in_array( $subset, $font->subsets ) ) {
+					$subsets_match = false;
+				}
+			}
+
+			// Ok, this font supports all subsets requested by user, add it to the list
+			if ( $subsets_match ) {
+				$fonts[] = array(
+					'family' => $font->family,
+					'variant' => implode(',', $font->variants),
+					'subsets' => implode(',', $font->subsets)
+				);
+			}
+		}
+	}
+	return $fonts;
+}
+
+/**
+ * Check if given value is google fonts or web safe fonts
+ * @param string $value
+ * @return boolean
+ */
+function themify_base_is_google_fonts( $value ) {
+	global $themify_gfonts;
+	$found = false;
+	if ( sizeof( $themify_gfonts ) > 0 ) {
+		foreach ( $themify_gfonts as $font ) {
+			if ( $found ) break;
+			if ( $font['family'] == $value ) $found = true;
+		}
+	}
+	return $found;
+}
+
+/**
+ * Get selected custom css google fonts
+ * @return array
+ */
+function themify_base_get_custom_css_gfonts() {
+	$data = themify_base_get_data();
+	$fonts = array();
+	$config = array();
+	if ( is_array( $data ) ) {
+		$new_arr = array();
+		foreach ( $data as $name => $value ) {
+			$array = explode( '-', $name );
+			$path = '';
+			foreach( $array as $part ) {
+				$path .= "[$part]";
+			}
+			$new_arr[ $path ] = $value;
+		}
+		$config = themify_base_convert_brackets_string_to_arrays( $new_arr );
+		if ( isset( $config['styling'] ) && is_array( $config['styling'] ) ) {
+			foreach ( $config['styling'] as $ks => $styling ) {
+				foreach ( $styling as $element => $val ) {
+					foreach ( $val as $attribute => $v ) {
+						switch ( $attribute ) {
+							case 'font_family':
+								if ( ! empty( $v['value']['value'] ) && themify_base_is_google_fonts( $v['value']['value'] ) )
+									array_push( $fonts, $v['value']['value'] );
+								break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return $fonts;
+}
+
+/**
+ * Load google fonts library
+ */
+function themify_base_enqueue_gfonts() {
+	$fonts = themify_base_get_custom_css_gfonts();
+	$families = array();
+	$user_subsets = themify_base_get( 'setting-webfonts_subsets', array('latin') );
+	$subsets = apply_filters( 'themify_google_fonts_subsets', array_unique( array_merge( array( 'latin' ), $user_subsets ) ) );
+	$query = null;
+	$fonts = array_unique( $fonts );
+	foreach ( $fonts as $font ) {
+		$words = explode( '-', $font );
+		$variant = themify_base_get_gfont_variant( $font );
+		foreach ( $words as $key => $word ) {
+			$words[$key] = ucwords( $word );
+		}
+		array_push( $families, implode( '+', $words ) . ':' . $variant );
+	}
+	if ( ! empty( $families ) ) {
+		$query .= '?family=' . implode( '|', $families );
+		$query .= '&subset=' . implode( ',', $subsets );
+
+		// check to see if site is uses https
+		$http = ( is_ssl() ) ? 'https' : 'http';
+		$url = $http.'://fonts.googleapis.com/css';
+		$url .= $query;
+
+		wp_enqueue_style( 'themify-google-fonts', $url );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'themify_base_enqueue_gfonts' );
+
+if ( ! function_exists( 'themify_base_get_gfont_variant' ) ) {
+	/**
+	 * Get font default variant
+	 * @param $family
+	 * @return string
+	 */
+	function themify_base_get_gfont_variant( $family ) {
+		global $themify_gfonts;
+		$variant = 400;
+		foreach ($themify_gfonts as $v) {
+			if ( $v['family'] == $family ) {
+				$variant = $v['variant'];
+				break;
+			}
+		}
+		return $variant;
+	}
 }

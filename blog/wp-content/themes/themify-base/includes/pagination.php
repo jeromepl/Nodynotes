@@ -3,4 +3,4 @@
  * Partial template for pagination
  */
 
-themify_pagenav();
+themify_base_pagenav();

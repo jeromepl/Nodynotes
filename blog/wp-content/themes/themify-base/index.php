@@ -11,9 +11,9 @@
 	<div id="layout" class="pagewidth clearfix">
 
 		<!-- content -->
-		<?php themify_content_before(); //hook ?>
+		<?php themify_base_content_before(); //hook ?>
 		<div id="content" class="clearfix">
-			<?php themify_content_start(); //hook ?>
+			<?php themify_base_content_start(); //hook ?>
 
 			<?php
 			/////////////////////////////////////////////
@@ -59,7 +59,7 @@
 			?>
 			<?php if ( is_category() || is_tag() || is_tax() ): ?>
 				<h1 class="page-title"><?php single_cat_title(); ?></h1>
-				<?php echo themify_get_category_description(); ?>
+				<?php echo themify_base_get_category_description(); ?>
 			<?php endif; ?>
 
 			<?php
@@ -98,9 +98,9 @@
 				<p><?php _e( 'Sorry, nothing found.', 'themify' ); ?></p>
 
 			<?php endif; ?>
-			<?php themify_content_end(); //hook ?>
+			<?php themify_base_content_end(); //hook ?>
 		</div>
-		<?php themify_content_after(); //hook ?>
+		<?php themify_base_content_after(); //hook ?>
 		<!-- /#content -->
 
 		<?php

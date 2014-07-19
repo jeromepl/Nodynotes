@@ -265,6 +265,7 @@ function spacious_options_display_sidebar() { ?>
 					<div class="option-btn"><a class="btn support" target="_blank" href="<?php echo esc_url( 'http://themegrill.com/support-forum/' ); ?>"><?php esc_attr_e( 'Free Support' , 'spacious' ); ?></a></div>
 					<div class="option-btn"><a class="btn doc" target="_blank" href="<?php echo esc_url( 'http://themegrill.com/theme-instruction/spacious/' ); ?>"><?php esc_attr_e( 'Documentation' , 'spacious' ); ?></a></div>
 					<div class="option-btn"><a class="btn demo" target="_blank" href="<?php echo esc_url( 'http://demo.themegrill.com/spacious/' ); ?>"><?php esc_attr_e( 'View Demo' , 'spacious' ); ?></a></div>
+					<div class="option-btn"><a class="btn rate" target="_blank" href="<?php echo esc_url( 'http://wordpress.org/themes/spacious/' ); ?>"><?php esc_attr_e( 'Rate this theme' , 'spacious' ); ?></a></div>
 
 	      			<div align="center" style="padding:5px; background-color:#fafafa;border: 1px solid #CCC;margin-bottom: 10px;">
 	      				<strong><?php esc_attr_e( 'If you like our work. Buy us a beer.', 'spacious' ); ?></strong>

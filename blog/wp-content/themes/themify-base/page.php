@@ -10,10 +10,10 @@
 <!-- layout-container -->
 <div id="layout" class="pagewidth clearfix">	
 
-	<?php themify_content_before(); // hook ?>
+	<?php themify_base_content_before(); // hook ?>
 	<!-- content -->
 	<div id="content" class="clearfix">
-    	<?php themify_content_start(); // hook ?>
+    	<?php themify_base_content_start(); // hook ?>
 	
 		<?php 
 		/////////////////////////////////////////////
@@ -63,10 +63,10 @@
 			</div><!-- /.type-page -->
 		<?php endwhile; endif; ?>
         
-		<?php themify_content_end(); // hook ?>
+		<?php themify_base_content_end(); // hook ?>
 	</div>
 	<!-- /content -->
-    <?php themify_content_after(); // hook ?>
+    <?php themify_base_content_after(); // hook ?>
 
 	<?php 
 	/////////////////////////////////////////////

@@ -6,33 +6,33 @@
  */
 ?>
 
-	<?php themify_layout_after(); //hook ?>
+	<?php themify_base_layout_after(); //hook ?>
     </div>
 	<!-- /body -->
 		
 	<div id="footerwrap">
     
-    	<?php themify_footer_before(); // hook ?>
+    	<?php themify_base_footer_before(); // hook ?>
 		<footer id="footer" class="pagewidth clearfix">
-			<?php themify_footer_start(); // hook ?>	
+			<?php themify_base_footer_start(); // hook ?>
 
 			<?php get_template_part( 'includes/footer-widgets'); ?>
 	
-			<p class="back-top"><a href="#header" class="icon-up" title="Back To Top"></a></p>
+			<p class="back-top"><a href="#header" class="icon-up" title="<?php _e( 'Back To Top', 'themify' ); ?>"></a></p>
 		
 			<?php if (function_exists('wp_nav_menu')) {
 				wp_nav_menu(array('theme_location' => 'footer-nav' , 'fallback_cb' => '' , 'container'  => '' , 'menu_id' => 'footer-nav' , 'menu_class' => 'footer-nav')); 
 			} ?>
 
 			<div class="footer-text clearfix">
-				<?php themify_the_footer_text(); ?>
-				<?php themify_the_footer_text( 'two' ); ?>
+				<?php themify_base_the_footer_text(); ?>
+				<?php themify_base_the_footer_text( 'two' ); ?>
 			</div>
 			<!-- /footer-text -->
-			<?php themify_footer_end(); // hook ?>
+			<?php themify_base_footer_end(); // hook ?>
 		</footer>
 		<!-- /#footer --> 
-        <?php themify_footer_after(); // hook ?>
+        <?php themify_base_footer_after(); // hook ?>
 	</div>
 	<!-- /#footerwrap -->
 	
@@ -45,7 +45,7 @@
  */
 ?>
 
-<?php themify_body_end(); // hook ?>
+<?php themify_base_body_end(); // hook ?>
 <!-- wp_footer -->
 <?php wp_footer(); ?>
 

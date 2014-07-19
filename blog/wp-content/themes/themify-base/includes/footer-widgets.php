@@ -3,7 +3,7 @@
  * Template to load footer widgets.
  */
 
-$footer_widget_option = themify_get( 'setting-footer_widgets', 'footerwidget-3col' );
+$footer_widget_option = themify_base_get( 'setting-footer_widgets', 'footerwidget-3col' );
 
 if ( $footer_widget_option != 'none' ) :
 

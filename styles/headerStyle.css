@@ -4,18 +4,12 @@ header {
 	display: block;
 	position: relative;
 	width: 100%;
-	height: 45px;
-	border-bottom: solid 2px #06F;
-	background-color: #09F;
+	height: 40px;
+	border-bottom: solid 5px #09F;
+    background-color: #020024;
 	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
     text-align: center;
-}
-
-#head_container {
-	background-color: #020024;
-	width: 100%;
-	height: 40px;
 }
 
 #head_left {

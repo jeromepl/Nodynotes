@@ -12,13 +12,13 @@ if ( ! is_single() ) {
 }
 ?>
 
-<?php themify_post_before(); // hook ?>
+<?php themify_base_post_before(); // hook ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'clearfix' ); ?>>
 	
-	<?php themify_post_start(); // hook ?>
+	<?php themify_base_post_start(); // hook ?>
 		
-	<?php themify_before_post_image(); // Hook ?>
+	<?php themify_base_before_post_image(); // Hook ?>
 
 	<?php if ( has_post_thumbnail() ) : ?>
 		<figure class="post-image">
@@ -28,17 +28,17 @@ if ( ! is_single() ) {
 		</figure>
 	<?php endif; // has post thumbnail ?>
 
-	<?php themify_after_post_image(); // Hook ?>
+	<?php themify_base_after_post_image(); // Hook ?>
 
 	<div class="post-content">
 	
 		<time datetime="<?php the_time('o-m-d') ?>" class="post-date"><?php the_time(apply_filters('themify_loop_date', 'M j, Y')) ?></time>
 
-		<?php themify_before_post_title(); // Hook ?>
+		<?php themify_base_before_post_title(); // Hook ?>
 		<h1 class="post-title">
 			<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
 		</h1>
-		<?php themify_after_post_title(); // Hook ?>
+		<?php themify_base_after_post_title(); // Hook ?>
 
 		<?php if ( ! is_attachment() ) : ?>
 			<p class="post-meta">
@@ -57,20 +57,16 @@ if ( ! is_single() ) {
 			<!-- /.post-meta -->
 		<?php endif; ?>
 
-		<?php if ( is_single() ) : ?>
-			<?php the_content(); ?>
-		<?php else : ?>
-			<?php the_excerpt(); ?>
-		<?php endif; // single or archive ?>
+		<?php the_content(); ?>
 
 		<?php edit_post_link(__('Edit', 'themify'), '<span class="edit-button">[', ']</span>'); ?>
 		
 	</div>
 	<!-- /.post-content -->
 
-	<?php themify_post_end(); // hook ?>
+	<?php themify_base_post_end(); // hook ?>
 	
 </article>
 <!-- /.post -->
 
-<?php themify_post_after(); // hook ?>
+<?php themify_base_post_after(); // hook ?>

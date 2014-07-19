@@ -19,7 +19,7 @@ function moveIntoView() { //Moves the nodesArea in case the information would be
 		$('#nodesArea').css('top', areaY - (totalY - viewHeight));
 		$('#toolbar2').css('top', $('#toolbar2').position().top - (totalY - viewHeight)); //also move the 2nd toolbar (it's placed outside of the nodesArea
 	}
-	
+
 	//if it's too far to the left
 	var areaX = $('#nodesArea').position().left, showX = $('#showContent').position().left;
 	if(showX + areaX < 0) {
@@ -32,7 +32,7 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 													//SelectedNode and linkBar are used to add a linkBar if a node is selected when clicking the 'add' button (also optional)
 	$('#saving').stop(true, true); //stop the current animation if there is one
 	$('#saving').show();
-	
+
 	$.post("server_side/save.php", data,
 			function(answer) { //returns the number of nodes changed or the new id
 				console.log(data);
@@ -40,9 +40,9 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 				if(data.action == 'insert' && object) {
 					object.id = answer;
                     object.element.attr('id', object.element.attr('id').replace(/[0-9\-]+/, answer));
-					
+
 					//Only save link bar when the node id is known (in the case a node is added directly to another node)
-					if(data.what2Add == 'node' && selectedNode && newLinkBar) 
+					if(data.what2Add == 'node' && selectedNode && newLinkBar)
 						save({action: 'insert', what2Add: 'link', node1_id: selectedNode.id, node2_id: object.id}, newLinkBar);
 					if(data.what2Add == 'tag') {
 						$('#tags' + object.node.id + ' #tag_x_-1').attr('id', 'tag_x_' + answer); //also change the id of the tag element (actually the x-icon element)
@@ -59,12 +59,12 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 function saveBoard(data) {
 	$('#saving').stop(true, true); //stop the current animation if there is one
 	$('#saving').show();
-	
+
 	$.post("server_side/saveBoard.php", data,
 			function(answer) { //returns the number of nodes changed or the new id
 				console.log(data);
 				console.log(answer);
-				
+
 				if(data.action == 'insert') {
 					var x = $('#nodesContainer').outerWidth() / 2.2;
 					var y = $('#nodesContainer').outerHeight() / 2.6;
@@ -73,7 +73,7 @@ function saveBoard(data) {
 							window.location.href = "board.php?id=" + answer;
 						});
 				}
-				
+
 				$('#saving').delay(700).fadeOut(1000);
 			})
 		.fail(function(jqXHR, textStatus, errorThrown) { //if there is an error
@@ -84,10 +84,10 @@ function saveBoard(data) {
 function deleteLinks(node) { //delete all links connected to a specific node (cannot do this in php because need to remove html elements too)
 	for(var i = 0; i < linkBars.length; i++) {
 		if(linkBars[i].node1 === node || linkBars[i].node2 === node) {
-			
+
 			linkBars[i].element.remove();
 			save({action: 'delete', what2Del: 'link', link_id: linkBars[i].id});
-			
+
 			linkBars.splice(i, 1);
 			deleteLinks(node);
 			return;
@@ -98,12 +98,12 @@ function deleteLinks(node) { //delete all links connected to a specific node (ca
 var tool_colors = ['90F', '4140E1', '00D7DD', '2F2', 'FF0', 'FFA500']; //keys 4 and 5 are currently unused
 function selectTool(toolID) {
 	if(!changingContent && !addingBoard) { //do not select the tool if content is being changed
-		
+
 		if(selectedNode) selectedNode.deselected(); //deselect node
-		
+
         if(selectedTool == 6 && toolID == 6) toolID = 1; //If the user wants to close the board properties box by re-clicking on the tool, select the default tool
 		deselectTool(selectedTool); //deselect the previous tool
-		
+
 		var query = '#tool_img_' + toolID;
 		selectedTool = toolID;
 		$(query).addClass('activeTool').css('border-left', '5px #' + tool_colors[toolID - 1] + ' solid');
@@ -113,7 +113,7 @@ function selectTool(toolID) {
 function deselectTool(toolID) {
 	var query = '#tool_img_' + toolID;
 	$(query).removeClass('activeTool').css('border-left', 'none');
-	
+
 	if(toolID == 3 || toolID == 2) $('.node:not(.board_node)').css('cursor', 'move');
 	if(toolID == 2) {
 		$('#overlay_nodeDel').hide(); //just in case
@@ -133,7 +133,7 @@ function deselectTool(toolID) {
         }
     }
 }
-	
+
 function nl2br(str) {
 	return str.replace(/(\n)/g, '<br>');
 }

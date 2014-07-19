@@ -1,5 +1,7 @@
-README
+Themify Base
 ========================================================
+
+Themify Base is a simple minimal responsive theme which comes with many layout and customization options. You can customize every element of theme with live preview - site logo image, navigation menu, background, color, font selection with over 600+ Google Fonts, post styling, layout containers, etc.
 
 Licenses
 ___________________________________________

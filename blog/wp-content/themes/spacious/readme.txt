@@ -46,6 +46,19 @@ and we will include it within the theme from next version update.
 /**********************************************************/
 
 == CHANGE LOG == 
+= Version 1.1 =
+* Removed the extra three dots that appeared in the excerpt.
+* Scroll to top button appearance improved.
+* TG: Call to Action widget button appearance improved.
+* Some typo fix and added guidelines for Business page template widgets.
+* POT file updated.
+* Lithuanian language file added. Thanks to Mr. Edgaras A for providing us the language files.
+* Dutch language file added. Thanks to Mr. Antoine Hurkmans for providing us the language files.
+* Unnecessary code lines removed in functions.php file.
+
+= Version 1.0.9 =
+* Testimonial icon rotated.
+* Rating button added at options panel.
 
 = Version 1.0.8 = 
 * Added Spanish language file. Thanks to Francisco Marín <francisco@usuwp.es> for providing us the translation file.

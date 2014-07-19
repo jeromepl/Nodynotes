@@ -11,7 +11,7 @@
 
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 
-<title><?php wp_title(); ?></title>
+<title><?php wp_title( '|', true, 'right' ); ?></title>
 
 <?php
 /**
@@ -25,18 +25,20 @@
 </head>
 
 <body <?php body_class(); ?>>
-<?php themify_body_start(); // hook ?>
+<?php themify_base_body_start(); // hook ?>
 <div id="pagewrap">
 
 	<div id="headerwrap">
     
-		<?php themify_header_before(); // hook ?>
+		<?php themify_base_header_before(); // hook ?>
 		<header id="header" class="pagewidth">
-        <?php themify_header_start(); // hook ?>
-			<?php echo themify_site_title( 'site-logo' ); ?>
+        <?php themify_base_header_start(); // hook ?>
+			<?php echo themify_base_site_title( 'site-logo' ); ?>
 
-			<?php if ( $site_desc = get_bloginfo( 'description' ) ) : ?>
-				<h2 id="site-description" class="site-description"><?php echo $site_desc; ?></h2>
+			<?php if ( $site_desc = get_bloginfo( 'description' ) ) :
+				global $themify_customizer;
+				?>
+				<h2 id="site-description" class="site-description"><?php echo $themify_customizer->site_description(); ?></h2>
 			<?php endif; ?>
 
 			<nav>
@@ -44,7 +46,7 @@
 				<?php
 				wp_nav_menu( array(
 					'theme_location' => 'main-nav',
-					'fallback_cb'    => 'themify_default_main_nav',
+					'fallback_cb'    => 'themify_base_default_main_nav',
 					'container'      => '',
 					'menu_id'        => 'main-nav',
 					'menu_class'     => 'main-nav'
@@ -53,13 +55,13 @@
 				<!-- /#main-nav --> 
 			</nav>
 
-		<?php themify_header_end(); // hook ?>
+		<?php themify_base_header_end(); // hook ?>
 		</header>
 		<!-- /#header -->
-        <?php themify_header_after(); // hook ?>
+        <?php themify_base_header_after(); // hook ?>
 				
 	</div>
 	<!-- /#headerwrap -->
 	
 	<div id="body" class="clearfix">
-    <?php themify_layout_before(); //hook ?>
+    <?php themify_base_layout_before(); //hook ?>

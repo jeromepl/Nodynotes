@@ -2,7 +2,7 @@
 /**
  * Displays the searchform of the theme.
  *
- * @package Themeshop
+ * @package ThemeGrill
  * @subpackage Spacious
  * @since Spacious 1.0
  */

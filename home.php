@@ -13,48 +13,46 @@
 		<title>Nodynotes - Organized and free notes for everyone</title>
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/homeStyle.css">
-        <script src="http://use.edgefonts.net/asap.js"></script>
+        <script src="http://use.edgefonts.net/asap:n7,i4,n4,i7:all;ubuntu:n4,i4,n7,i7,n3,i3,n5,i5:all.js"></script>
 	</head>
     <body>
         <!--[if lte IE 9]>
             <p id='old_ie'>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie" rel="nofollow">here</a>.</p>
         <![endif]-->
         <header>
-            <div id='header'>
-                <div id='head_container' class='container'>
-                    <img id='alpha' src='images/alpha.png' draggable='false'>
-                    <h1>Nodynotes</h1>
+            <div id='head_container' class='container'>
+                <img id='alpha' src='images/alpha.png' draggable='false'>
+                <h1>Nodynotes</h1>
+                <?php
+                    if(isset($_GET['ref_id'])) {
+                        echo '<form method="post" action="server_side/login.php?ref_id=' . $_GET['ref_id'] . '">';
+                    }
+                    else {
+                        echo '<form method="post" action="server_side/login.php">';
+                    }
+                ?>
+                    <input type="text" name="email_username" placeholder="Email or username">
+                    <input type="password" name="password" placeholder="Password">
+                    <input type="submit" id="login" class="button" value="Log in">
                     <?php
-                        if(isset($_GET['ref_id'])) {
-                            echo '<form method="post" action="server_side/login.php?ref_id=' . $_GET['ref_id'] . '">';
-                        }
-                        else {
-                            echo '<form method="post" action="server_side/login.php">';
+                        if(isset($_GET['er']) && is_numeric($_GET['er']) && $_GET['er'] <= 3) {
+                            echo "<p id='error_connect'>";
+                            switch($_GET['er']) {
+                                case 1:
+                                    echo "Invalid email, username or password";
+                                    break;
+                                case 2:
+                                    echo "Please login first";
+                                    break;
+                                case 3:
+                                    echo "An error occurred while trying to log in";
+                                    break;
+                            }
+                            echo "\n" . "<img src='images/pointer-red.png' draggable='false'>";
+                            echo "</p>";
                         }
                     ?>
-                        <input type="text" name="email" placeholder="Email">
-                        <input type="password" name="password" placeholder="Password">
-                        <input type="submit" id="login" class="button" value="Log in">
-                        <?php
-                            if(isset($_GET['er']) && is_numeric($_GET['er']) && $_GET['er'] <= 3) {
-                                echo "<p id='error_connect'>";
-                                switch($_GET['er']) {
-                                    case 1:
-                                        echo "Invalid email or password";
-                                        break;
-                                    case 2:
-                                        echo "Please login first";
-                                        break;
-                                    case 3:
-                                        echo "An error occurred while trying to log in";
-                                        break;
-                                }
-                                echo "\n" . "<img src='images/pointer-red.png' draggable='false'>";
-                                echo "</p>";
-                            }
-                        ?>
-                    </form>
-                </div>
+                </form>
             </div>
         </header>
 
@@ -68,12 +66,11 @@
                 <div id='signup_block'>
                     <form method="post" action="server_side/signup.php" onsubmit="return validateForm()">
                         <div id='input1' class='input'>
-                            <input type="text" name="name_first" placeholder="First Name">
-                            <input type="text" name="name_last" placeholder="Last Name">
+                            <input type="text" name="username" placeholder="Username">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
                         </div>
-                        <div id='input_error1' class='input_error'>Is that your name? That seems odd.</div>
+                        <div id='input_error1' class='input_error'>This username is too fancy for our systems!<br>Use only 4-15 letters, numbers and underscores.</div>
                         <div id='input2' class='input'><input type="text" name="email" placeholder="Email" autocomplete="off">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
@@ -94,7 +91,10 @@
                                         echo "This email address already corresponds to an account";
                                         break;
                                     case 5:
-                                        echo "An error occured while trying to create your account. Please try again.";
+                                        echo "An error occured while trying to create your account. We're sorry :/";
+                                        break;
+                                    case 6:
+                                        echo "This username is already used by someone else!";
                                         break;
                                 }
                                 echo "</p>";
@@ -171,18 +171,7 @@
         <script>
             function validateForm() {
                 var isOk = true;
-                if(!$('#signup_block input[name="name_first"]').val().match(/^[A-Za-z\u00C0-\u017F -]+$/)) { //regex for all letters and accents
-                    $('#input1 .input_bad').show();
-                    $('#input1 .input_good').hide();
-                    $('#input_error1').show();
-                    isOk = false;
-                }
-                else {
-                    $('#input1 .input_good').show();
-                    $('#input1 .input_bad').hide();
-                    $('#input_error1').hide();
-                }
-                if(!$('#signup_block input[name="name_last"]').val().match(/^[A-Za-z\u00C0-\u017F -]+$/)) {
+                if(!$('#signup_block input[name="username"]').val().match(/^[A-Za-z0-9_]{4,15}$/)) {
                     $('#input1 .input_bad').show();
                     $('#input1 .input_good').hide();
                     $('#input_error1').show();
@@ -223,22 +212,8 @@
             }
 
             //EVENTS
-            $(document).on('blur', '#signup_block input[name="name_first"]', function(e){
-                if($('#signup_block input[name="name_last"]').val() != '') {
-                    if($(this).val().match(/^[A-Za-z\u00C0-\u017F -]+$/) && $('#signup_block input[name="name_last"]').val().match(/^[A-Za-z\u00C0-\u017F -]+$/)) { //regex for all letters and accents
-                        $('#input1 .input_good').show();
-                        $('#input1 .input_bad').hide();
-                        $('#input_error1').hide();
-                    }
-                    else {
-                        $('#input1 .input_bad').show();
-                        $('#input1 .input_good').hide();
-                        $('#input_error1').show();
-                    }
-                }
-            });
-            $(document).on('blur', '#signup_block input[name="name_last"]', function(e){
-                if($(this).val().match(/^[A-Za-z\u00C0-\u017F -]+$/) && $('#signup_block input[name="name_first"]').val().match(/^[A-Za-z\u00C0-\u017F -]+$/)) {
+            $(document).on('blur', '#signup_block input[name="username"]', function(e){
+                if($(this).val().match(/^[A-Za-z0-9_]{4,15}$/)) {
                     $('#input1 .input_good').show();
                     $('#input1 .input_bad').hide();
                     $('#input_error1').hide();
@@ -250,7 +225,7 @@
                 }
             });
             $(document).on('blur', '#signup_block input[name="email"]', function(e){
-                if($('#signup_block input[name="email"]').val().match(/^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
+                if($(this).val().match(/^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
                     $('#input2 .input_good').show();
                     $('#input2 .input_bad').hide();
                     $('#input_error2').hide();
@@ -262,7 +237,7 @@
                 }
             });
             $(document).on('blur', '#signup_block input[name="password"]', function(e){
-                if($('#signup_block input[name="password"]').val().length >= 6) {
+                if($(this).val().length >= 6) {
                     $('#input3 .input_good').show();
                     $('#input3 .input_bad').hide();
                     $('#input_error3').hide();

@@ -20,8 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'THEMIFY_VERSION', '1.0.0' );
 define( 'THEME_DIR', get_template_directory() );
 define( 'THEME_URI', get_template_directory_uri() );
-define( 'THEMIFY_DIR', THEME_DIR . '/themify' );
-define( 'THEMIFY_URI', THEME_URI . '/themify' );
+define( 'THEMIFY_BASE_DIR', THEME_DIR . '/themify' );
+define( 'THEMIFY_BASE_URI', THEME_URI . '/themify' );
+define( 'THEMIFY_NO_FRAMEWORK', true );
 
 //////////////////////////////////////////////////////////////////////////
 // Load files
@@ -30,15 +31,20 @@ $theme_includes = apply_filters( 'themify_theme_includes', array(
 	'themify/class-themify-mobile-detect.php',
 	'themify/themify-modules.php',
 	'themify/themify-utils.php',
+	'themify/customizer/class-themify-customizer.php',
+	'customizer-config.php',
 	'custom-functions.php',
 ));
 foreach ( $theme_includes as $include ) {
 	locate_template( $include, true );
 }
 
+// Initialize Customizer
+$GLOBALS['themify_customizer'] = new Themify_Customizer;
+
 // Set content width for media
 if ( ! isset( $content_width ) ) {
-	if ( 'sidebar-none' == themify_get_sidebar_layout() ) {
+	if ( 'sidebar-none' == themify_base_get_sidebar_layout() ) {
 		$content_width = 1160;
 	} else {
 		$content_width = 858;
@@ -46,11 +52,11 @@ if ( ! isset( $content_width ) ) {
 }
 
 // Setup theme
-add_action( 'after_setup_theme', 'themify_theme_setup' );
+add_action( 'after_setup_theme', 'themify_base_theme_setup' );
 /**
  * Setup everything needed in the theme.
  */
-function themify_theme_setup() {
+function themify_base_theme_setup() {
 
 	// Get theme settings
 	$GLOBALS['themify_settings'] = get_option( 'themify_settings' );
@@ -70,32 +76,28 @@ function themify_theme_setup() {
 	//////////////////////////////////////////////////////////////////////////
 
 	// Register Custom Menu Function
-	add_action( 'init', 'themify_register_custom_nav' );
+	add_action( 'init', 'themify_base_register_custom_nav' );
 
 	// Register sidebars
-	add_action( 'widgets_init', 'themify_theme_register_sidebars' );
+	add_action( 'widgets_init', 'themify_base_theme_register_sidebars' );
 
 	// Add menu item
-	add_action('wp_before_admin_bar_render', 'themify_admin_bar');
+	add_action('wp_before_admin_bar_render', 'themify_base_admin_bar');
 
 	// Add theme-specific settings
-	add_filter( 'themify_settings_config', 'themify_theme_settings_config' );
-
-	if ( current_user_can( 'edit_theme_options' ) ) {
-		new Themify_Customize;
-	}
+	add_filter( 'themify_base_settings_config', 'themify_base_theme_settings_config' );
 
 	if ( is_admin() ) {
 
 		if ( current_user_can( 'manage_options' ) ) {
 			// Themify - Admin Menu
-			add_action( 'admin_menu', 'themify_admin_nav' );
+			add_action( 'admin_menu', 'themify_base_admin_nav' );
 
 			// Initialize Settings Fields
-			add_action( 'admin_init', 'themify_settings_admin_init' );
+			add_action( 'admin_init', 'themify_base_settings_admin_init' );
 
 			// Add Javascript and CSS files
-			add_action( 'admin_enqueue_scripts', 'themify_admin_enqueue_assets' );
+			add_action( 'admin_enqueue_scripts', 'themify_base_admin_enqueue_assets' );
 		}
 
 		add_editor_style( 'style-editor.css' );
@@ -103,20 +105,23 @@ function themify_theme_setup() {
 	} else {
 
 		// Load Themify Hooks
-		require_once THEMIFY_DIR . '/themify-hooks.php';
+		require_once THEMIFY_BASE_DIR . '/themify-hooks.php';
 
 		// Register and enqueue in different moments they can be unregister/dequeue them
-		add_action( 'wp_enqueue_scripts', 'themify_theme_enqueue_scripts', 10 );
+		add_action( 'wp_enqueue_scripts', 'themify_base_theme_enqueue_scripts', 10 );
 
 		// Viewport tag for mobile devices
-		add_action( 'wp_head', 'themify_viewport_tag' );
+		add_action( 'wp_head', 'themify_base_viewport_tag' );
 
 		// IE compatibility
-		add_action( 'wp_head', 'themify_ie_enhancements' );
-		add_action( 'wp_head', 'themify_ie_standards_compliant' );
+		add_action( 'wp_head', 'themify_base_ie_enhancements' );
+		add_action( 'wp_head', 'themify_base_ie_standards_compliant' );
+
+		// WP Title
+		add_filter( 'wp_title', 'themify_base_wp_title', 10, 2 );
 
 		// CSS classes on body tag
-		add_filter( 'body_class', 'themify_body_classes' );
+		add_filter( 'body_class', 'themify_base_body_classes' );
 
 	}
 
@@ -125,7 +130,7 @@ function themify_theme_setup() {
 
 	// Initialize mobile detection
 	global $themify_mobile_detect;
-	$themify_mobile_detect = new Themify_Mobile_Detect;
+	$themify_mobile_detect = new Themify_Base_Mobile_Detect;
 }
 
 /**
@@ -133,7 +138,7 @@ function themify_theme_setup() {
  * @param array $settings
  * @return mixed
  */
-function themify_theme_settings_config( $settings ) {
+function themify_base_theme_settings_config( $settings ) {
 	$theme_settings = array(
 		// Skin definitions
 		'skin' => array(
@@ -141,7 +146,7 @@ function themify_theme_settings_config( $settings ) {
 			'type' => 'layout',
 			'args' => array(
 				'std'     => 'default',
-				'options' => themify_get_skins( array(
+				'options' => themify_base_get_skins( array(
 					'black'           => __( 'Black', 'themify' ),
 					'full-wrap'       => __( 'Full Wrap', 'themify' ),
 					'full-wrap-black' => __( 'Full Wrap Black', 'themify' ),
@@ -161,7 +166,7 @@ function themify_theme_settings_config( $settings ) {
  * @param array $skins
  * @return array
  */
-function themify_get_skins( $skins = array() ){
+function themify_base_get_skins( $skins = array() ){
 	$skins_data = array(
 		array(
 			'value' => 'default',
@@ -183,9 +188,9 @@ function themify_get_skins( $skins = array() ){
 /**
  * Enqueue Stylesheets and Scripts
  */
-function themify_theme_enqueue_scripts() {
+function themify_base_theme_enqueue_scripts() {
 	// Google Web Fonts embedding
-	wp_enqueue_style( 'themify-google-fonts', themify_https_esc('http://fonts.googleapis.com/css'). '?family=Montserrat:400,700|Open+Sans:400,300&subset=latin,latin-ext');
+	wp_enqueue_style( 'themify-google-fonts', themify_base_https_esc('http://fonts.googleapis.com/css'). '?family=Montserrat:400,700|Open+Sans:400,300&subset=latin,latin-ext');
 
 	// Themify base styling
 	wp_enqueue_style( 'themify-style', get_stylesheet_uri(), array(), wp_get_theme()->display( 'Version' ) );
@@ -194,7 +199,8 @@ function themify_theme_enqueue_scripts() {
 	wp_enqueue_style( 'themify-media-queries', THEME_URI . '/media-queries.css' );
 
 	// Skin stylsheet
-	if ( $skin = themify_get( 'skin' ) ) {
+	$skin = themify_base_get( 'skin' );
+	if ( 'default' != $skin ) {
 		wp_enqueue_style( 'themify-skin', THEME_URI . '/skins/' . $skin . '/style.css', array( 'themify-style' ) );
 	}
 	
@@ -209,11 +215,11 @@ function themify_theme_enqueue_scripts() {
 	wp_enqueue_script( 'theme-script', THEME_URI . '/js/themify.script.js', array( 'jquery' ), false, true );
 
 	// Themify Gallery
-	wp_enqueue_script( 'themify-gallery', THEMIFY_URI . '/js/themify.gallery.js', array( 'jquery' ), false, true );
+	wp_enqueue_script( 'themify-gallery', THEMIFY_BASE_URI . '/js/themify.gallery.js', array( 'jquery' ), false, true );
 
 	// Inject variable values in gallery script
 	wp_localize_script( 'theme-script', 'themifyScript', apply_filters('themify_script_vars', array(
-		  'lightbox' => themify_lightbox_vars_init(),
+		  'lightbox' => themify_base_lightbox_vars_init(),
 		  'lightboxContext' => apply_filters('themify_lightbox_context', '#pagewrap'),
 		  'isTouch' => themify_is_touch() ? 'true' : 'false',
 		  'html5placeholder' => 'yes'
@@ -233,7 +239,7 @@ function themify_theme_enqueue_scripts() {
 /**
  * Register menu areas.
  */
-function themify_register_custom_nav() {
+function themify_base_register_custom_nav() {
 	register_nav_menus( array(
 		'main-nav'   => __( 'Main Navigation', 'themify' ),
 		'footer-nav' => __( 'Footer Navigation', 'themify' ),
@@ -243,7 +249,7 @@ function themify_register_custom_nav() {
 /**
  * Default navigation callback.
  */
-function themify_default_main_nav() {
+function themify_base_default_main_nav() {
 	echo '<ul id="main-nav" class="main-nav clearfix">';
 	wp_list_pages( 'title_li=' );
 	echo '</ul>';
@@ -252,7 +258,7 @@ function themify_default_main_nav() {
 /**
  * Register sidebars.
  */
-function themify_theme_register_sidebars() {
+function themify_base_theme_register_sidebars() {
 	register_sidebar( array(
 		   'name'          => __( 'Sidebar', 'themify' ),
 		   'id'            => 'sidebar-main',
@@ -263,10 +269,10 @@ function themify_theme_register_sidebars() {
 	  ));
 
 	// Register footer widgets
-	themify_register_grouped_widgets();
+	themify_base_register_grouped_widgets();
 }
 
-if ( ! function_exists( 'themify_theme_comment' ) ) {
+if ( ! function_exists( 'themify_base_theme_comment' ) ) {
 	/**
 	 * Custom Theme Comment
 	 * @param object $comment Current comment.
@@ -274,7 +280,7 @@ if ( ! function_exists( 'themify_theme_comment' ) ) {
 	 * @param int $depth Maximum comment nesting depth.
 	 * @since 1.0.0
 	 */
-	function themify_theme_comment( $comment, $args, $depth ) {
+	function themify_base_theme_comment( $comment, $args, $depth ) {
 		$GLOBALS['comment'] = $comment;
 		?>
 
@@ -282,9 +288,9 @@ if ( ! function_exists( 'themify_theme_comment' ) ) {
 		<p class="comment-author"> <?php echo get_avatar( $comment, $size = '64' ); ?> <?php printf( '<cite>%s</cite>', get_comment_author_link() ) ?>
 			<br/>
 			<small class="comment-time"><strong>
-					<?php comment_date( apply_filters( 'themify_comment_date', 'M d, Y' ) ); ?>
+					<?php comment_date( apply_filters( 'themify_base_comment_date', 'M d, Y' ) ); ?>
 				</strong> @
-				<?php comment_time( apply_filters( 'themify_comment_time', 'H:i:s' ) ); ?>
+				<?php comment_time( apply_filters( 'themify_base_comment_time', 'H:i:s' ) ); ?>
 				<?php edit_comment_link( __( 'Edit', 'themify' ), ' [', ']' ) ?>
 			</small>
 		</p>
@@ -305,406 +311,5 @@ if ( ! function_exists( 'themify_theme_comment' ) ) {
 			) ) ) ?>
 		</p>
 	<?php
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////
-// Customization
-//////////////////////////////////////////////////////////////////////////
-
-/**
- * Themify customizer controls and settings.
- */
-class Themify_Customize {
-
-	/**
-	 * Settings to build controls in Theme Customizer
-	 * @var array
-	 */
-	var $settings = array();
-
-	/**
-	 * List of selector/property/property value to build CSS rules.
-	 * @var array
-	 */
-	var $styles = array();
-
-	/**
-	 * Initialize class
-	 */
-	function __construct() {
-
-		$this->settings = array(
-			'site-logo_image' => array(
-				'setting' => array(
-					'default' => '', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'WP_Customize_Image_Control',
-					'label'   => __( 'Site Logo', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-				),
-			),
-			'text_color' => array(
-				'setting' => array(
-					'default' => '#666', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'WP_Customize_Color_Control',
-					'label'   => __( 'Text Color', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-				),
-			),
-			'link_color' => array(
-				'setting' => array(
-					'default' => '#1f7bb6', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'WP_Customize_Color_Control',
-					'label'   => __( 'Link Color', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-				),
-			),
-			'body_font' => array(
-				'setting' => array(
-					'default' => '', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'select',
-					'label'   => __( 'Font Family', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-					'choices'  => themify_get_web_safe_fonts(),
-				),
-			),
-			'body_bg_color' => array(
-				'setting' => array(
-					'default' => '', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'WP_Customize_Color_Control',
-					'label'   => __( 'Background Color', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-				),
-			),
-			'body_bg_img' => array(
-				'setting' => array(
-					'default' => '', //Default setting/value to save
-				),
-				'control' => array(
-					'type'    => 'WP_Customize_Image_Control',
-					'label'   => __( 'Background Image', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-				),
-			),
-			'body_bg_img_repeat' => array(
-				'setting' => array(
-					'default' => 'cover',
-				),
-				'control' => array(
-					'type'    => 'select',
-					'label'   => __( 'Background Image Repeat', 'themify' ), //Admin-visible name of the control
-					'section' => 'themify_options', //ID of the section this control should render in
-					'choices'  => array(
-						'repeat' => __( 'Repeat', 'themify' ),
-						'no-repeat' => __( 'No Repeat', 'themify' ),
-					),
-				),
-			),
-		);
-
-		$this->styles = array(
-			'#site-title a' => array(
-				'prop' => 'color',
-				'key'  => 'header_textcolor',
-				'prefix'  => '#',
-			),
-			'body' => array(
-				array(
-					'prop' => 'color',
-					'key'  => 'text_color',
-				),
-				array(
-					'prop' => 'background-color',
-					'key'  => 'body_bg_color',
-				),
-				array(
-					'prop' => 'background-image',
-					'key'  => 'body_bg_img',
-					'prefix'  => 'url(',
-					'suffix'  => ')',
-				),
-				array(
-					'prop' => 'background-repeat',
-					'key'  => 'body_bg_img_repeat',
-				),
-				array(
-					'prop' => 'font-family',
-					'key'  => 'body_font',
-				),
-			),
-			'a' => array(
-				'prop' => 'color',
-				'key'  => 'link_color',
-			),
-		);
-
-		add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
-
-		// Initialize Theme Customizer
-		add_action( 'customize_register' , array( $this, 'register' ) );
-
-		// Enqueue Javascript for Theme Customizer live preview
-		add_action( 'customize_preview_init' , array( $this, 'live_preview' ) );
-
-		// Output custom styling
-		add_action( 'wp_head' , array( $this, 'generate_css' ) );
-	}
-
-	/**
-	 * Add customizer controls.
-	 * @param \WP_Customize_Manager $wp_customize
-	 */
-	function register ( $wp_customize ) {
-
-		$wp_customize->add_section( 'themify_options',
-			array(
-			     'title' => __( 'Themify Options', 'themify' ),
-			)
-		);
-		$priority = 11;
-		foreach ( $this->settings as $setting_id => $field ) {
-			if ( isset( $field['setting'] ) ) {
-				$setting = $field['setting'];
-				$wp_customize->add_setting(
-					$setting_id, // serialized solo cuando type es 'option'
-					array(
-						'default'    => $setting['default'],
-						'type'       => isset( $setting['type'] ) ? $setting['type'] : 'theme_mod',
-						'capability' => isset( $setting['capability'] ) ? $setting['capability'] : 'edit_theme_options',
-						'transport'  => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
-					)
-				);
-			}
-			if ( isset( $field['control'] ) ) {
-				$control = $field['control'];
-				$class = $control['type'];
-				if ( class_exists( $class ) ) {
-					$wp_customize->add_control( new $class( $wp_customize,
-						$setting_id . '_ctrl',
-						array(
-						     'label'    => $control['label'],
-						     'section'  => $control['section'],
-						     'settings' => isset( $control['settings'] ) ? $control['settings'] : $setting_id,
-						     'priority' => $priority,
-						)
-					));
-				} else {
-					$options = array(
-						'label'    => $control['label'],
-						'section'  => $control['section'],
-						'settings' => isset( $control['settings'] ) ? $control['settings'] : $setting_id,
-						'priority' => $priority,
-						'type'     => $class,
-					);
-					if ( 'select' == $class ) {
-						$options['choices'] = $control['choices'];
-					}
-					$wp_customize->add_control( $setting_id . '_ctrl', $options );
-				}
-			}
-			$priority++;
-		}
-
-		$wp_customize->get_setting( 'header_textcolor' )->section = 'themify_options';
-	}
-
-	/**
-	 * Generate CSS rules and output them.
-	 * @uses filter 'themify_theme_styling' over output.
-	 */
-	function generate_css() {
-		$css = '';
-		foreach ( $this->styles as $selector => $style ) {
-			if ( isset( $style[0] ) ) {
-				if ( is_array( $style[0] ) ) {
-					foreach( $style as $mstyle ) {
-						$css .= $this->build_css_rule( $selector, $mstyle['prop'], $mstyle['key'],
-							isset( $mstyle['prefix'] ) ? $mstyle['prefix'] : '',
-							isset( $mstyle['suffix'] ) ? $mstyle['suffix'] : ''
-						);
-					}
-				} else {
-					$css .= $this->build_css_rule( $selector, $style['prop'], $style['key'],
-						isset( $style['prefix'] ) ? $style['prefix'] : '',
-						isset( $style['suffix'] ) ? $style['suffix'] : ''
-					);
-				}
-			}
-		}
-		if ( '' != $css ) : ?>
-			<!--Themify Styling-->
-			<style type="text/css">
-				<?php echo apply_filters( 'themify_theme_styling', $css ); ?>
-			</style>
-			<!--/Themify Styling-->
-		<?php endif;
-	}
-
-	/**
-	 * Enqueue script for live preview.
-	 */
-	function live_preview() {
-		wp_enqueue_script( 'themify-customize',	THEMIFY_URI . '/js/themify.customize.js', array( 'jquery', 'customize-preview' ),	THEMIFY_VERSION, true );
-	}
-
-	/**
-	 * Build a CSS rule.
-	 *
-	 * @param string $selector CSS selector.
-	 * @param string $style CSS property to write.
-	 * @param string $mod_name The 'theme_mod' option to fetch.
-	 * @param string $prefix Prefix for CSS property value.
-	 * @param string $suffix Suffix for CSS property value.
-	 * @return string CSS rule: selector, property and property value. Empty if 'theme_mod' option specified is empty.
-	 */
-	function build_css_rule( $selector, $style, $mod_name, $prefix = '', $suffix = '' ) {
-		$mod = get_theme_mod( $mod_name );
-		if ( ! empty( $mod ) ) {
-			return sprintf("\n%s {\n\t%s:%s;\n}", $selector, $style, $prefix . $mod . $suffix );
-		}
-		return '';
-	}
-
-	/**
-	 * Setup theme options.
-	 * Declares custom header support.
-	 */
-	function after_setup_theme() {
-
-		// Custom header support
-		add_theme_support( 'custom-header', array(
-			// Text color and image (empty to use none).
-			'default-text-color'     => '666',
-			'default-image'          => '',
-
-			// Set height and width, with a maximum value for the width.
-			'width'                  => 978,
-			'height'                 => 170,
-			'max-width'              => 2000,
-
-			// Support flexible height and width.
-			'flex-height'            => true,
-			'flex-width'             => true,
-
-			// Random image rotation off by default.
-			'random-default'         => false,
-
-			// Callbacks for styling the header and the admin preview.
-			'wp-head-callback'       => array( $this, 'header_style' ),
-			'admin-head-callback'    => array( $this, 'admin_header_style' ),
-			'admin-preview-callback' => array( $this, 'admin_header_preview' ),
-		));
-	}
-
-	/**
-	 * Styling for Appearance > Header.
-	 */
-	function admin_header_style() {
-	?>
-		<style type="text/css">
-		.appearance_page_custom-header #headerwrap {
-			border: none;
-			position: relative;
-			padding: 1em 2.5%;
-			width: 95%;
-			height: 170px;
-			overflow: hidden;
-		}
-		#headerwrap h1,
-		#headerwrap h2 {
-			font: 12px/1.4em Arial, Helvetica, sans-serif;
-			color: #666;
-			margin: 0;
-			padding: 0;
-			position: relative;
-			z-index: 2;
-		}
-		#headerwrap h1 {
-			font-size: 36px;
-			font-weight: bold;
-		}
-		#headerwrap h1 a {
-			text-decoration: none;
-		}
-		#headerwrap h1 a:hover {
-			color: #1f7bb6;
-		}
-		#headerwrap h2 {
-			font-size: 12px;
-			margin-bottom: 24px;
-		}
-		#headerwrap img {
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 1;
-			max-width: <?php echo get_theme_support( 'custom-header', 'max-width' ); ?>px;
-		}
-		</style>
-	<?php
-	}
-
-	/**
-	 * Markup for Appearance > Header.
-	 */
-	function admin_header_preview() {
-		?>
-		<div id="headerwrap">
-			<?php
-			if ( ! display_header_text() )
-				$style = ' style="display:none;"';
-			else
-				$style = ' style="color:#' . get_header_textcolor() . ';"';
-			?>
-			<h1><a id="name"<?php echo $style; ?> onclick="return false;" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
-			<h2 id="desc"<?php echo $style; ?>><?php bloginfo( 'description' ); ?></h2>
-			<?php $header_image = get_header_image();
-			if ( ! empty( $header_image ) ) : ?>
-				<img src="<?php echo esc_url( $header_image ); ?>" class="header-image" width="<?php echo get_custom_header()->width; ?>" height="<?php echo get_custom_header()->height; ?>" alt="" />
-			<?php endif; ?>
-		</div>
-	<?php }
-
-	/**
-	 * Outputs custom styling for header image and text.
-	 */
-	function header_style() {
-		$text_color = get_header_textcolor();
-		$image = esc_url( get_header_image() );
-		if ( ( $text_color == get_theme_support( 'custom-header', 'default-text-color' ) ) && ( $image == get_theme_support( 'custom-header', 'default-image' ) ) ) {
-			return;
-		}
-		?>
-		<!-- Themify Custom Header Styling -->
-		<style type="text/css">
-			<?php if ( ! display_header_text() ) : ?>
-				#site-logo, #site-description {
-					display: none;
-				}
-			<?php else : ?>
-				.site-logo a, .site-description {
-					color: <?php echo "#$text_color"; ?>;
-				}
-			<?php endif; ?>
-
-			<?php if ( $image ) : ?>
-				#headerwrap {
-					background: url('<?php echo $image; ?>') no-repeat;
-					background-size: cover;
-				}
-			<?php endif; ?>
-		</style>
-		<!-- Themify Custom Header Styling -->
-		<?php
 	}
 }

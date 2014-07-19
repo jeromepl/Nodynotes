@@ -46,6 +46,9 @@ a.btn {
 .demo {
 	background: none repeat scroll 0 0 #F58C7A;
 }
+.rate {
+    background: none repeat scroll 0 0 #6ABEB1;
+}
 
 a.upgrade:hover {
 	background-color: #5B92E2;
@@ -61,6 +64,9 @@ a.doc:hover {
 
 a.demo:hover {
 	background-color: #F88E5A;
+}
+a.rate:hover {
+    background-color: #40BEB1;
 }
 
 .option-btn {

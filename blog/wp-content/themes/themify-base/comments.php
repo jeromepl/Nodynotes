@@ -6,13 +6,13 @@
  */
 ?>
 
-<?php themify_comment_before(); //hook ?>
+<?php themify_base_comment_before(); //hook ?>
 
 <?php if ( have_comments() || comments_open() ) : ?>
 
 	<div id="comments" class="commentwrap">
 
-		<?php themify_comment_start(); //hook ?>
+		<?php themify_base_comment_start(); //hook ?>
 
 		<?php if ( post_password_required() && have_comments() ) : ?>
 
@@ -36,7 +36,7 @@
 			<?php endif; ?>
 
 			<ol class="commentlist">
-				<?php wp_list_comments('callback=themify_theme_comment'); ?>
+				<?php wp_list_comments('callback=themify_base_theme_comment'); ?>
 			</ol>
 
 			<?php // Comment Pagination
@@ -77,11 +77,11 @@
 
 		<?php endif; // end comments_open() ?>
 
-		<?php themify_comment_end(); //hook ?>
+		<?php themify_base_comment_end(); //hook ?>
 
 	</div>
 	<!-- /.commentwrap -->
 
 <?php endif; ?>
 
-<?php themify_comment_after(); //hook ?>
+<?php themify_base_comment_after(); //hook ?>

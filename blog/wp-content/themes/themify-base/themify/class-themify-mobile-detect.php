@@ -23,8 +23,7 @@
  * @version     2.7.7
  */
 
-class Themify_Mobile_Detect
-{
+class Themify_Base_Mobile_Detect {
     /**
      * Mobile detection type.
      *

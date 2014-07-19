@@ -3,37 +3,57 @@
 	include("mySQL_connection.php"); //where $bdd is set
 	session_start(); //start session
 
-	if(isset($_POST['email']) && isset($_POST['password'])) {
+	if(isset($_POST['email_username']) && isset($_POST['password'])) {
 
-		$req = $bdd->prepare('SELECT id, name_first, name_last FROM users WHERE email = :email AND password = :password');
-		$req->execute(array(
-			'email' => $_POST['email'],
-            'password' => sha1("1996j" . $_POST['password'] . "pl42")));
-		$answer = $req->fetch();
+        if(strpos($_POST['email_username'],'@') !== false) { //The user used his email adress to connect
+            $req = $bdd->prepare('SELECT id, username FROM users WHERE email = :email AND password = :password');
+            $req->execute(array('email' => $_POST['email_username'],
+                                'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+            $answer = $req->fetch();
 
-		$req->closeCursor();
+            $req->closeCursor();
 
-		if(!$answer) {
-			header('Location: ../home.php?er=1'); //tell ther user email-password doesn't work
-		}
-		else {
-			$_SESSION['id'] = $answer['id'];
-			$_SESSION['name_first'] = strip_tags($answer['name_first']);
-			$_SESSION['name_last'] = strip_tags($answer['name_last']);
-
-            //increment login count and set last ip and last login date
-            $req = $bdd->prepare('UPDATE users
-                                SET ip_last = :ip, date_last = NOW(), logins = logins + 1
-                                WHERE id = :id');
-            $req->execute(array('ip' => $_SERVER['REMOTE_ADDR'],
-                                'id' => $_SESSION['id']));
-
-            if(isset($_GET['ref_id']) && is_numeric($_GET['ref_id'])) {
-                header('Location: ../board.php?id=' . $_GET['ref_id']);
+            if(!$answer) {
+                header('Location: ../home.php?er=1'); //tell ther user email-password doesn't work
             }
             else {
-                header('Location: ../board.php');
+                login($answer);
             }
 		}
+        else { //The user used his username to connect
+            $req = $bdd->prepare('SELECT id, username FROM users WHERE username = :username AND password = :password');
+            $req->execute(array('username' => $_POST['email_username'],
+                                'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+            $answer = $req->fetch();
+
+            $req->closeCursor();
+
+            if(!$answer) {
+                header('Location: ../home.php?er=1'); //tell ther user email-password doesn't work
+            }
+            else {
+                login($answer);
+            }
+        }
 	}
 	else header('Location: ../home.php?er=3'); //tell the user an error occured
+
+function login(&$answer) {
+    global $bdd;
+    $_SESSION['id'] = $answer['id'];
+    $_SESSION['username'] = $answer['username']; //no need to strip tags usernames since '<' and '>' cannot be used in usernames
+
+    //increment login count and set last ip and last login date
+    $req = $bdd->prepare('UPDATE users
+                                    SET ip_last = :ip, date_last = NOW(), logins = logins + 1
+                                    WHERE id = :id');
+    $req->execute(array('ip' => $_SERVER['REMOTE_ADDR'],
+                        'id' => $_SESSION['id']));
+
+    if(isset($_GET['ref_id']) && is_numeric($_GET['ref_id'])) {
+        header('Location: ../board.php?id=' . $_GET['ref_id']);
+    }
+    else {
+        header('Location: ../board.php');
+    }
+}

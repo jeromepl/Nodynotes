@@ -10,9 +10,9 @@
  * Setup general options
  * @return mixed|void
  */
-function themify_settings_config() {
+function themify_base_settings_config() {
 	$pre = 'setting-';
-	return apply_filters( 'themify_settings_config', array(
+	return apply_filters( 'themify_base_settings_config', array(
 		$pre . 'footer_widgets' => array(
 		   'name' => __( 'Footer Widgets', 'themify' ),
 		   'type' => 'layout',
@@ -135,7 +135,7 @@ function themify_settings_config() {
  *
  * @param array $args Arguments for module.
  */
-function themify_setting_field_layout( $args ) {
+function themify_base_setting_field_layout( $args ) {
 	global $themify_settings;
 	$data = $themify_settings;
 	$field_id = $args['field_id'];

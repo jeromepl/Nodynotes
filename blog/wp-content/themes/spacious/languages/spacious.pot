@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Spacious\n"
-"POT-Creation-Date: 2014-05-06 18:08+0545\n"
-"PO-Revision-Date: 2014-05-06 18:08+0545\n"
+"POT-Creation-Date: 2014-06-23 22:12+0545\n"
+"PO-Revision-Date: 2014-06-23 22:12+0545\n"
 "Last-Translator: \n"
 "Language-Team: ThemeGrill <themegrill@gmail.com>\n"
 "Language: en\n"
@@ -389,7 +389,12 @@ msgid "Business Top Sidebar"
 msgstr ""
 
 #: inc/widgets/widgets.php:53
-msgid "Shows widgets on Business Page Template Top Section. Sutiable widget: "
+msgid "Shows widgets on Business Page Template Top Section."
+msgstr ""
+
+#: inc/widgets/widgets.php:53 inc/widgets/widgets.php:87
+msgid ""
+"Suitable widget: TG: Services, TG: Call To Action Widget, TG: Featured Widget"
 msgstr ""
 
 #: inc/widgets/widgets.php:62
@@ -397,9 +402,11 @@ msgid "Business Middle Left Sidebar"
 msgstr ""
 
 #: inc/widgets/widgets.php:64
-msgid ""
-"Shows widgets on Business Page Template Middle Section Left Half. Sutiable "
-"widget: "
+msgid "Shows widgets on Business Page Template Middle Section Left Half."
+msgstr ""
+
+#: inc/widgets/widgets.php:64 inc/widgets/widgets.php:75
+msgid "Suitable widget: TG: Testimonial, TG: Featured Single Page"
 msgstr ""
 
 #: inc/widgets/widgets.php:73
@@ -407,9 +414,7 @@ msgid "Business Middle Right Sidebar"
 msgstr ""
 
 #: inc/widgets/widgets.php:75
-msgid ""
-"Shows widgets on Business Page Template Middle Section Right Half. Sutiable "
-"widget: "
+msgid "Shows widgets on Business Page Template Middle Section Right Half."
 msgstr ""
 
 #: inc/widgets/widgets.php:85
@@ -417,8 +422,7 @@ msgid "Business Bottom Sidebar"
 msgstr ""
 
 #: inc/widgets/widgets.php:87
-msgid ""
-"Shows widgets on Business Page Template Bottom Section. Sutiable widget: "
+msgid "Shows widgets on Business Page Template Bottom Section."
 msgstr ""
 
 #: inc/widgets/widgets.php:96
@@ -852,7 +856,11 @@ msgstr ""
 msgid "View Demo"
 msgstr ""
 
-#: options.php:270
+#: options.php:268
+msgid "Rate this theme"
+msgstr ""
+
+#: options.php:271
 msgid "If you like our work. Buy us a beer."
 msgstr ""
 

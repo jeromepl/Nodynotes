@@ -88,7 +88,7 @@ add_filter( 'excerpt_more', 'spacious_continue_reading' );
  * Returns a "Continue Reading" link for excerpts
  */
 function spacious_continue_reading() {
-	return '&hellip; ';
+	return '';
 }
 
 /****************************************************************************************/

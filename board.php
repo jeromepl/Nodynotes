@@ -54,23 +54,21 @@
 
 	<body>
     	<header>
-        	<div id='head_container'>
-                <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
-                    <a id='head_profile' class='head_icon' href="#"  title='Profile'><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></a>
-                    <a id='logout' class='head_icon' href="server_side/disconnect.php"  title='Log out'><img data-src="images/icons/account.svg" class="iconic iconic-md" data-state="logout"></a>
-                </div>
-                <div id='head_left'>
-                    <img id='alpha' src='images/alpha.png' draggable='false'>
-                    <a id='logo' href="home.php">Nodynotes</a>
-                </div>
-                <div id='head_middle'>
-                    <div id='search'>
-                        <input type='text' placeholder="Find something" >
-                        <div id='search_results'>
-                            <h4 id='search_noResults'>No results found</h4>
-                        </div>
-                        <div id='head_search' class='head_icon' title='Search'><img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md"></div>
+            <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
+                <a id='head_profile' class='head_icon' href="#"  title='Profile'><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></a>
+                <a id='logout' class='head_icon' href="server_side/disconnect.php"  title='Log out'><img data-src="images/icons/account.svg" class="iconic iconic-md" data-state="logout"></a>
+            </div>
+             <div id='head_left'>
+                <img id='alpha' src='images/alpha.png' draggable='false'>
+                <a id='logo' href="home.php">Nodynotes</a>
+            </div>
+             <div id='head_middle'>
+                <div id='search'>
+                    <input type='text' placeholder="Find something" >
+                    <div id='search_results'>
+                        <h4 id='search_noResults'>No results found</h4>
                     </div>
+                     <div id='head_search' class='head_icon' title='Search'><img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md"></div>
                 </div>
             </div>
         </header>
@@ -222,7 +220,7 @@
         <script src="objects/LinkBar.js"></script>
         <script src="objects/Tag.js"></script>
         
-        <script src="functions.js"></script>
+        <script src="javascript/functions.js"></script>
         
         <script>
 			//Global variables
@@ -261,6 +259,6 @@
 			
         </script>
         <?php include('events.php')?>
-        <script src='toolbar.js'></script>
+        <script src='javascript/toolbar.js'></script>
 	</body>
 </html>

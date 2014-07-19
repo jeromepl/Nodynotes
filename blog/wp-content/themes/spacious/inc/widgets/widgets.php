@@ -50,7 +50,7 @@ function spacious_widgets_init() {
 	register_sidebar( array(
 		'name' 				=> __( 'Business Top Sidebar', 'spacious' ),
 		'id' 					=> 'spacious_business_page_top_section_sidebar',
-		'description'   	=> __( 'Shows widgets on Business Page Template Top Section. Sutiable widget: ', 'spacious' ),
+		'description'   	=> __( 'Shows widgets on Business Page Template Top Section.', 'spacious' ).' '.__( 'Suitable widget: TG: Services, TG: Call To Action Widget, TG: Featured Widget', 'spacious' ),
 		'before_widget' 	=> '<section id="%1$s" class="widget %2$s clearfix">',
 		'after_widget'  	=> '</section>',
 		'before_title'  	=> '<h1 class="widget-title">',
@@ -61,7 +61,7 @@ function spacious_widgets_init() {
 	register_sidebar( array(
 		'name' 				=> __( 'Business Middle Left Sidebar', 'spacious' ),
 		'id' 					=> 'spacious_business_page_middle_section_left_half_sidebar',
-		'description'   	=> __( 'Shows widgets on Business Page Template Middle Section Left Half. Sutiable widget: ', 'spacious' ),
+		'description'   	=> __( 'Shows widgets on Business Page Template Middle Section Left Half.', 'spacious' ).' '.__( 'Suitable widget: TG: Testimonial, TG: Featured Single Page', 'spacious' ),
 		'before_widget' 	=> '<section id="%1$s" class="widget %2$s clearfix">',
 		'after_widget'  	=> '</section>',
 		'before_title'  	=> '<h1 class="widget-title">',
@@ -72,7 +72,7 @@ function spacious_widgets_init() {
 	register_sidebar( array(
 		'name' 				=> __( 'Business Middle Right Sidebar', 'spacious' ),
 		'id' 					=> 'spacious_business_page_middle_section_right_half_sidebar',
-		'description'   	=> __( 'Shows widgets on Business Page Template Middle Section Right Half. Sutiable widget: ', 'spacious' ),
+		'description'   	=> __( 'Shows widgets on Business Page Template Middle Section Right Half.', 'spacious' ).' '.__( 'Suitable widget: TG: Testimonial, TG: Featured Single Page', 'spacious' ),
 		'before_widget' 	=> '<section id="%1$s" class="widget %2$s clearfix">',
 		'after_widget'  	=> '</section>',
 		'before_title'  	=> '<h1 class="widget-title">',
@@ -84,7 +84,7 @@ function spacious_widgets_init() {
 	register_sidebar( array(
 		'name' 				=> __( 'Business Bottom Sidebar', 'spacious' ),
 		'id' 					=> 'spacious_business_page_bottom_section_sidebar',
-		'description'   	=> __( 'Shows widgets on Business Page Template Bottom Section. Sutiable widget: ', 'spacious' ),
+		'description'   	=> __( 'Shows widgets on Business Page Template Bottom Section.', 'spacious' ).' '.__( 'Suitable widget: TG: Services, TG: Call To Action Widget, TG: Featured Widget', 'spacious' ),
 		'before_widget' 	=> '<section id="%1$s" class="widget %2$s clearfix">',
 		'after_widget'  	=> '</section>',
 		'before_title'  	=> '<h1 class="widget-title">',

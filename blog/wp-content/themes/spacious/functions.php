@@ -67,7 +67,6 @@ endif;
 define( 'SPACIOUS_PARENT_DIR', get_template_directory() );
 define( 'SPACIOUS_CHILD_DIR', get_stylesheet_directory() );
 
-define( 'SPACIOUS_IMAGES_DIR', SPACIOUS_PARENT_DIR . '/images' );
 define( 'SPACIOUS_INCLUDES_DIR', SPACIOUS_PARENT_DIR. '/inc' );	
 define( 'SPACIOUS_CSS_DIR', SPACIOUS_PARENT_DIR . '/css' );
 define( 'SPACIOUS_JS_DIR', SPACIOUS_PARENT_DIR . '/js' );
@@ -77,7 +76,6 @@ define( 'SPACIOUS_ADMIN_DIR', SPACIOUS_INCLUDES_DIR . '/admin' );
 define( 'SPACIOUS_WIDGETS_DIR', SPACIOUS_INCLUDES_DIR . '/widgets' );
 
 define( 'SPACIOUS_ADMIN_IMAGES_DIR', SPACIOUS_ADMIN_DIR . '/images' );
-define( 'SPACIOUS_ADMIN_JS_DIR', SPACIOUS_ADMIN_DIR . '/js' );
 define( 'SPACIOUS_ADMIN_CSS_DIR', SPACIOUS_ADMIN_DIR . '/css' );
 
 
@@ -87,7 +85,6 @@ define( 'SPACIOUS_ADMIN_CSS_DIR', SPACIOUS_ADMIN_DIR . '/css' );
 define( 'SPACIOUS_PARENT_URL', get_template_directory_uri() );
 define( 'SPACIOUS_CHILD_URL', get_stylesheet_directory_uri() );
 
-define( 'SPACIOUS_IMAGES_URL', SPACIOUS_PARENT_URL . '/images' );
 define( 'SPACIOUS_INCLUDES_URL', SPACIOUS_PARENT_URL. '/inc' );
 define( 'SPACIOUS_CSS_URL', SPACIOUS_PARENT_URL . '/css' );
 define( 'SPACIOUS_JS_URL', SPACIOUS_PARENT_URL . '/js' );
@@ -97,7 +94,6 @@ define( 'SPACIOUS_ADMIN_URL', SPACIOUS_INCLUDES_URL . '/admin' );
 define( 'SPACIOUS_WIDGETS_URL', SPACIOUS_INCLUDES_URL . '/widgets' );
 
 define( 'SPACIOUS_ADMIN_IMAGES_URL', SPACIOUS_ADMIN_URL . '/images' );
-define( 'SPACIOUS_ADMIN_JS_URL', SPACIOUS_ADMIN_URL . '/js' );
 define( 'SPACIOUS_ADMIN_CSS_URL', SPACIOUS_ADMIN_URL . '/css' );
 
 /** Load functions */
