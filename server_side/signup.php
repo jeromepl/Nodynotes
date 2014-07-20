@@ -4,7 +4,7 @@
 
     if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])
        && preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email'])
-       && preg_match("#^[A-Za-z0-9_]{4,15}$#", $_POST['username']) && strlen($_POST['password']) >= 6) {
+       && preg_match("#^[A-Za-z0-9_.]{4,15}$#", $_POST['username']) && strlen($_POST['password']) >= 6) {
 
         if(uniqueMail($_POST['email'])) {
             if(uniqueUsername($_POST['username'])) {
@@ -36,7 +36,7 @@
                 header('Location: ../board.php?id=' . $newBoard . '&node_id=' . $newNode); //This will save the new board as the last seen one
             }
             else
-                header('Location: ../home.php?er=6') //Username already used
+                header('Location: ../home.php?er=6'); //Username already used
         }
         else
             header('Location: ../home.php?er=4'); //Email already used

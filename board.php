@@ -256,9 +256,59 @@
 			});
 
 			var board_id = <?php echo $_GET['id'] ?>;
-			
+
+            <?php
+                //Set the board area to the right place and check if the board belongs to the user
+                if (isset($_GET['node_id'])) {
+                    $answer = $bdd->prepare('SELECT n.yPos, n.xPos FROM nodes n
+                                            INNER JOIN boards b ON b.id = n.board_id
+                                            WHERE n.id = :id AND b.user_id = :user_id');
+                    $answer->execute(array('id' => $_GET['node_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                    if($data = $answer->fetch()) { //if the board belongs to the user
+                        echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                                left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                        echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
+                    }
+                    $answer->closeCursor();
+                }
+                else if (isset($_GET['sub_id'])) {
+                    $answer = $bdd->prepare('SELECT s.id, n.yPos, n.xPos FROM subtitles s
+                                            INNER JOIN nodes n ON n.id = s.node_id
+                                            INNER JOIN boards b ON b.id = n.board_id
+                                            WHERE s.id = :id AND b.user_id = :user_id');
+                    $answer->execute(array('id' => $_GET['sub_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                    if($data = $answer->fetch()) { //if the board belongs to the user
+                        echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                                left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                        echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
+                    }
+                    $answer->closeCursor();
+                }
+                else {
+                    $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id AND user_id = :user_id');
+                    $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                    if($data = $answer->fetch()) { //if the board belongs to the user
+                        echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
+                    }
+                    $answer->closeCursor();
+                }
+
+                //Save this board into the last seen board
+                $req = $bdd->prepare('UPDATE users
+                                    SET last_board = :board_id, views = views + 1
+                                    WHERE id = :user_id');
+                $req->execute(array('board_id' => $_GET['id'],
+                                    'user_id' => $_SESSION['id']));
+
+                //Save the date and add a view to the board
+                $req = $bdd->prepare('UPDATE boards
+                                    SET date_seen = NOW(), views = views + 1
+                                    WHERE id = :id AND user_id = :user_id');
+                $req->execute(array('id' => $_GET['id'],
+                            'user_id' => $_SESSION['id']));
+            ?>
         </script>
-        <?php include('events.php')?>
+        <script src="javascript/events.js"></script>
         <script src='javascript/toolbar.js'></script>
 	</body>
 </html>

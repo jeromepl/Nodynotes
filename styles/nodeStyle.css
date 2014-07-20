@@ -7,9 +7,8 @@ body {
 	margin: 0;
 	overflow: hidden; /*no scroll bar on the right*/
 	background-color: #EAEAEA;
-	/*background-color: #26252C;  /*for night? (darker background)*/
 	
-	user-select: none; /*L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
+	user-select: none; /* L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
@@ -18,7 +17,7 @@ body {
 }
 
 .iconic {
-	display: none; /*show them only when svg injected */
+	display: none; /*show them only when svg injection is done */
 }
 
 #nodesContainer {
@@ -30,11 +29,11 @@ body {
 	margin: 0;
 	padding: 0;
 	z-index: 1;
-    cursor: url('../cursors/openhand.cur'), url('C:/users/Jerome/Dropbox/www/Nodes/cursors/openhand.cur'), default;
+    cursor: url('../cursors/openhand.cur'), url('http://localhost/Nodes/cursors/openhand.cur'), default;
 }
 
 #nodesContainer:active {
-    cursor: url('../cursors/closedhand.cur'), url('C:/users/Jerome/Dropbox/www/Nodes/cursors/closedhand.cur'), default;
+    cursor: url('../cursors/closedhand.cur'), url('http://localhost/Nodes/cursors/closedhand.cur'), default;
 }
  
 #nodesArea {
@@ -47,7 +46,6 @@ body {
 	height: 70px;
 	text-align: center;
 	border: solid 2px #000;
-	/*border: solid 4px #777;*/
 	border-radius: 50%;
 	box-shadow: #666 0 0 50px;
 	z-index: 1;

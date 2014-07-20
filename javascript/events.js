@@ -1,80 +1,25 @@
-<script>
 $(function() {
 	$('#saving').hide();
 	$('#showContent').hide();
 	$('#colorChoices').hide();
-	
+
 	$('#changeContent').hide();
 	$('#changeContent_change').hide();
 	$('#changeContent_cancel').hide();
 	$('#content_title input').hide();
 	$('#content_text textArea').hide();
-	
+
 	new Board(board_id); //create the board
-	
-	//NODE CREATION
-	<?php
-		include_once("server_side/mySQL_connection.php"); //should already be included at this point
-		
-		//Session start is done in board.php, since this file is included
 
-        //Set the board area to the right place and check if the board belongs to the user
-        if (isset($_GET['node_id'])) {
-            $answer = $bdd->prepare('SELECT n.yPos, n.xPos FROM nodes n
-                                    INNER JOIN boards b ON b.id = n.board_id
-                                    WHERE n.id = :id AND b.user_id = :user_id');
-            $answer->execute(array('id' => $_GET['node_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-            if($data = $answer->fetch()) { //if the board belongs to the user
-                echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
-                    left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
-                echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
-            }
-            $answer->closeCursor();
-        }
-        else if (isset($_GET['sub_id'])) {
-            $answer = $bdd->prepare('SELECT s.id, n.yPos, n.xPos FROM subtitles s
-                                    INNER JOIN nodes n ON n.id = s.node_id
-                                    INNER JOIN boards b ON b.id = n.board_id
-                                    WHERE s.id = :id AND b.user_id = :user_id');
-            $answer->execute(array('id' => $_GET['sub_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-            if($data = $answer->fetch()) { //if the board belongs to the user
-                echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
-                    left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
-                echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
-            }
-            $answer->closeCursor();
-        }
-        else {
-            $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id AND user_id = :user_id');
-            $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-            if($data = $answer->fetch()) { //if the board belongs to the user
-                echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
-            }
-            $answer->closeCursor();
-        }
+	//position the board
 
-        //Save this board into the last seen board
-        $req = $bdd->prepare('UPDATE users
-                            SET last_board = :board_id, views = views + 1
-                            WHERE id = :user_id');
-        $req->execute(array('board_id' => $_GET['id'],
-				            'user_id' => $_SESSION['id']));
-
-        //Save the date and add a view to the board
-        $req = $bdd->prepare('UPDATE boards
-                            SET date_seen = NOW(), views = views + 1
-                            WHERE id = :id AND user_id = :user_id');
-        $req->execute(array('id' => $_GET['id'],
-                            'user_id' => $_SESSION['id']));
-	?>
-	
 	titleMinWidth = $('.nodeTitle').css('width'); //width = min-width at the beginning, because no scaling occured (Used for expanding the title)
 
     //TODO remove this when the profile page will be done
     $(document).on('click', '#head_profile', function(e){
        alert("We are currently working on this feature. Sorry for the inconvenience.");
     });
-	
+
 	//SHOW SIDEBAR
 	var sidebarExpanded = false;
 	$(document).on('click', '#unfold_button', function(e) {
@@ -89,7 +34,7 @@ $(function() {
 			}
 		}
 	});
-	
+
 	//MOVING THE NODES AREA
 	var moving = false;
 	var moveInfo = {};
@@ -103,14 +48,14 @@ $(function() {
 				moveInfo.startX = e.clientX;
 				moveInfo.offsetTop = e.clientY - $('#nodesArea')[0].offsetTop;
 				moveInfo.offsetLeft = e.clientX - $('#nodesArea')[0].offsetLeft;
-				
+
 				area_startPositionX = e.clientX;
 				area_startPositionY = e.clientY;
-				
+
 				tool_initTop = $('#toolbar2').position().top;
 				tool_initLeft = $('#toolbar2').position().left;
 			}
-		}	
+		}
 	});
 	$(document).on('mouseup', function(e) {
 		if(moving) {
@@ -125,56 +70,56 @@ $(function() {
 	$(document).on('mousemove', function(e) {
 		if(moving) {
 			$('#nodesArea').css({top: e.clientY - moveInfo.offsetTop, left: e.clientX - moveInfo.offsetLeft});
-			
+
 			var movedY = e.clientY - moveInfo.startY;
 			var movedX = e.clientX - moveInfo.startX;
 			$('#toolbar2').css({top: (tool_initTop + movedY), left: (tool_initLeft + movedX)}); //move the toolbar #2 too (it's placed outside of the nodes area)
 		}
 	});
-	
+
 	//MOVING THE NODES
 	var moveStartPositionX = 0, moveStartPositionY = 0;
 	var mouseDownNode = null;
 	$(document).on('mousedown', '.node:not(.board_node)', function(e) {
 		if(selectedTool == 1 && !changingContent && !addingBoard) {
 			var node = $.data(this, 'node').object;
-			
+
 			var tar = $(e.target);
 			if(tar.hasClass('subtitle') || tar.parents('.subtitle').length) return; //an ellipsis also has the subtitle class
-			
+
 			mouseDownNode = node;
 			node.element.css('z-index', '2');
 			node.moveInfo.offsetTop = e.clientY - node.element[0].offsetTop;
 			node.moveInfo.offsetLeft = e.clientX - node.element[0].offsetLeft;
-			
+
 			moveStartPositionX = e.clientX;
 			moveStartPositionY = e.clientY;
 		}
-    });	
+    });
 	$(document).on('mouseup', function(e) {
 		var moveEndPositionX = e.clientX;
 		var moveEndPositionY = e.clientY;
 		if(mouseDownNode && !mouseDownNode.changingTitle) {
 			mouseDownNode.element.css('z-index', '1');
 			if(Math.abs(moveEndPositionX - moveStartPositionX) + Math.abs(moveEndPositionY - moveStartPositionY) >= 2) { //don't save when only clicking the node
-				save({action: 'update', xPos: mouseDownNode.element.position().left + mouseDownNode.addedVal.left, 
+				save({action: 'update', xPos: mouseDownNode.element.position().left + mouseDownNode.addedVal.left,
 					yPos: mouseDownNode.element.position().top + mouseDownNode.addedVal.top, id: mouseDownNode.id});
 			}
-			
+
 			mouseDownNode = null;
 		}
-    });	
+    });
 	$(document).on('mousemove', function(e) {
 		if(mouseDownNode) { //if it's not null
 			mouseDownNode.element.css({top: (e.clientY - mouseDownNode.moveInfo.offsetTop), left: (e.clientX - mouseDownNode.moveInfo.offsetLeft)});
 			refreshLinkBars(mouseDownNode);
-			
+
 			if(mouseDownNode.isSelected) mouseDownNode.deselected(); //stop showing content if dragged
-			
+
 			mouseDownNode.scale(1.1);
 		}
     });
-	
+
 	//MOVING SUBTITLES
 	var mouseDownSub = null
 	var sub_startPos;
@@ -185,26 +130,26 @@ $(function() {
 			subtitle.element.css('z-index', '2');
 			subtitle.moveInfo.offsetTop = e.clientY - subtitle.element[0].offsetTop;
 			subtitle.moveInfo.offsetLeft = e.clientX - subtitle.element[0].offsetLeft;
-			
+
 			sub_startPos = subtitle.position;
 		}
-    });	
+    });
 	$(document).on('mouseup', function(e) {
 		if(mouseDownSub) { //if it's not null
 			mouseDownSub.mouseDown = false;
 			mouseDownSub.element.css('z-index', '1');
-			
+
 			//update the new position to the subtitle element
 			mouseDownSub.element.css({top: mouseDownSub.top, left: mouseDownSub.left});
 			if(mouseDownSub.node.isScaled) mouseDownSub.node.scale(1.1); //reset scale so that subtitles are correctly placed
-			
+
 			if(sub_startPos != mouseDownSub.position) save({action: 'update', subtitle_position: mouseDownSub.position, id: mouseDownSub.id}); //save only if moved
-			
+
 			mouseDownSub = null;
 		}
-    });	
+    });
 	$(document).on('mousemove', function(e) {
-		if(mouseDownSub && !mouseDownSub.isChanging) {			
+		if(mouseDownSub && !mouseDownSub.isChanging) {
 			var displacement = mouseDownSub.node.scaleFactor * 25/2; //25px is the height between 2 subtitles
 			if(mouseDownSub.top - (e.clientY - mouseDownSub.moveInfo.offsetTop) >= displacement) {
 				mouseDownSub.moveSubtitle(true); //called everytime the subtitle is moved by "displacement" pixels, because the subtitle.top is changed in the moveSubtitle method
@@ -214,12 +159,12 @@ $(function() {
 				mouseDownSub.moveSubtitle(false);
 				if(mouseDownSub.node.isScaled) mouseDownSub.node.scale(1.1); //reset scale so that subtitles are correctly placed
 			}
-			
+
 			mouseDownSub.element.css({top: (e.clientY - mouseDownSub.moveInfo.offsetTop),
 				left: (e.clientX - mouseDownSub.moveInfo.offsetLeft) }); //update the subtitle's position
 		}
     });
-	
+
 	//SHOWING CONTENT (both nodes and subtitles)
 	var lastClickTime = 0;
 	var clickedInsideContent = false; //used to know if the content must be hidden (hide it if not clicked inside content)
@@ -232,10 +177,10 @@ $(function() {
 				clickedInsideContent = true;
 				return;
 			}
-			
+
 			content_clickStartPositionX = e.clientX; //used when dragging the background
 			content_clickStartPositionY = e.clientY;
-			
+
 			clickedInsideContent = false;
 		}
 	});
@@ -247,63 +192,63 @@ $(function() {
 		var clickedOnNewNode = false;
 		var tar = $(e.target);
 		//HIDING CONTENT SHOWER
-		if(Math.abs(content_clickEndPositionX - content_clickStartPositionX) + 
+		if(Math.abs(content_clickEndPositionX - content_clickStartPositionX) +
 			Math.abs(content_clickEndPositionY - content_clickStartPositionY) <= 2 //case where node is moved handled in 'moving nodes'
 			&& clickTime - lastClickTime >= 400) { //avoid hiding the content shower when double clicking
-			
+
 			if(selectedNode) { //if it's not null
 				if(tar[0] === $('#showContent')[0] || tar.parents('#showContent').length || tar[0] === $('#toolbar')[0] || tar.parents('#toolbar').length
 					|| tar[0] === $('#toolbar2')[0] || tar.parents('#toolbar2').length || tar.is('header') || tar.parents('header').length || clickedInsideContent) return; //if mousedown happened inside the content shower or header
-				
+
 				var parentNode = tar.parents('.node:not(board_node)');
 				if((parentNode.length && (tar.hasClass('subtitle') && !tar.hasClass('ellipsis') || tar.parents('.subtitle:not(.ellipsis)').length)) ||
-					(parentNode.length && ($.data(parentNode[0], 'node').object !== selectedNode || selectedType == 'subtitle')) || 
+					(parentNode.length && ($.data(parentNode[0], 'node').object !== selectedNode || selectedType == 'subtitle')) ||
 					(tar.hasClass('node') && !tar.hasClass('board_node') && ($.data(tar[0], 'node').object !== selectedNode || selectedType == 'subtitle'))) { //to know if clicked on new node
-					
+
 					clickedOnNewNode = true;
 				}
-				
+
 				selectedNode.deselected();
-				
+
 				if(!clickedOnNewNode) return; //if no node has been clicked to hide the content shower, don't show it again, so stop function
 			}
 		}
-		
+
 		//SHOWING CONTENT SHOWER
 		//if "return" hasn't been called, ANOTHER NODE HAS BEEN CLICKED (or simply a new one), so find the one clicked on
 		if(tar.hasClass('ellipsis') || tar.parents('.ellipsis').length) return; //do not select a node if clicking on ellipsis
-		if(Math.abs(content_clickEndPositionX - content_clickStartPositionX) + 
+		if(Math.abs(content_clickEndPositionX - content_clickStartPositionX) +
 			Math.abs(content_clickEndPositionY - content_clickStartPositionY) <= 2) { //if the user moves the node, don't show content
-			
+
 			var tarParent = tar.parents('.node');
 			var tarParentSub = tar.parents('.subtitle:not(.ellipsis)');
 			if(tar.hasClass('subtitle') && !tar.hasClass('ellipsis')) {
 				$.data(tar[0], 'subtitle').object.selected();
 				moveIntoView();
-				
+
 				lastClickTime = clickTime;
 			}
 			else if(tarParentSub.length) {
 				$.data(tarParentSub[0], 'subtitle').object.selected();
 				moveIntoView();
-				
+
 				lastClickTime = clickTime;
 			}
 			else if(tar.hasClass('node') && !tar.hasClass('board_node')) {
 				$.data(tar[0], 'node').object.selected();
 				moveIntoView();
-				
+
 				lastClickTime = clickTime;
 			}
 			else if(tarParent.length && !tar.parents('.board_node').length) {
 				$.data(tarParent[0], 'node').object.selected();
 				moveIntoView();
-				
+
 				lastClickTime = clickTime;
 			}
 		}
 	});
-	
+
 	//CHANGING CONTENT
 	// var changingContent is setted outside of everything to be accessible by the toolbar
 	$(document).on('mouseenter', '#showContent', function(e) {
@@ -320,7 +265,7 @@ $(function() {
 	$(document).on('dblclick', '.node:not(.board_node)', function(e) {
 		if(selectedTool == 1 && !addingBoard && !changingContent) {
 			var node = $.data(this, 'node').object;
-			
+
 			var tar = $(e.target);
 			var tarParent = tar.parents('.subtitle');
 			if(tar.hasClass('subtitle') && !tar.hasClass('ellipsis')) { //if a subtitle is double clicked
@@ -330,7 +275,7 @@ $(function() {
 			else if(tarParent.length) {
 				$.data(tarParent[0], 'subtitle').object.changeContent();
 				moveIntoView();
-			}	
+			}
 			else { //it's on a node
 				$.data(this, 'node').object.changeContent();
 				moveIntoView();
@@ -347,24 +292,24 @@ $(function() {
 		else if(changeContentType == 'node') $.data($('#showContent')[0], 'node').object.setContent(false);
 		moveIntoView();
 	});
-	
+
 	//SCALING NODES AND SHOWING TITLE
 	$(document).on('mouseenter', '.node:not(.board_node)', function(e) {
 		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
-			var node = $.data(this, 'node').object;	
-			
+			var node = $.data(this, 'node').object;
+
 			var tar = $(e.target);
 			if(tar.hasClass('subtitle') || tar.parents('.subtitle').length) return;
-			
+
 			node.scale(1.1);
 		}
-    });	
+    });
 	$(document).on('mouseleave', '.node:not(.board_node)', function(e) {
 		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
 			$.data(this, 'node').object.resetScale(); //reset scale also retracts the title
 		}
     });
-	
+
 	//SHOWING SUBTITLES' TITLES
 	$(document).on('mouseenter', '.subtitle:not(.ellipsis)', function(e) {
 		if(selectedTool != 2 && !changingContent && !addingBoard && selectedTool != 6) {
@@ -377,7 +322,7 @@ $(function() {
 			if(!subtitle.node.isSelected) subtitle.hideSubtitle();
 		}
 	});
-	
+
 	//EXPANDING SUBTITLES
 	var sub_clickStartPositionX, sub_clickStartPositionY;
 	$(document).on('click', '.ellipsis', function(e) { //SHOW
@@ -393,39 +338,39 @@ $(function() {
 	$(document).on('mouseup', function(e) { //HIDE
 		var sub_clickEndPositionX = e.clientX;
 		var sub_clickEndPositionY = e.clientY;
-		
-		if(ellipsisClicked && ellipsisNode && Math.abs(sub_clickEndPositionX - sub_clickStartPositionX) + Math.abs(sub_clickEndPositionY - sub_clickStartPositionY) <= 2) {			
+
+		if(ellipsisClicked && ellipsisNode && Math.abs(sub_clickEndPositionX - sub_clickStartPositionX) + Math.abs(sub_clickEndPositionY - sub_clickStartPositionY) <= 2) {
 			var tar = $(e.target);
 			var tarParent = tar.parents('.node:not(board_node)');
-			
+
 			if(tar.hasClass('node')  && !tar.hasClass('board_node') && tar[0] === ellipsisNode.element[0]) return;
 			else if(tarParent.length && tarParent[0] === ellipsisNode.element[0]) return;
 			if(tar[0] === $('#toolbar')[0] || tar.parents('#toolbar').length || tar[0] === $('#toolbar2')[0] || tar.parents('#toolbar2').length) return; //avoid hiding subtitles when clicking on toolbars
 			if(tar[0] === $('#overlay_subDelSingle')[0]) return; //don't hide if deleting subtitle
-			
+
 			ellipsisClicked = false;
 			ellipsisNode.retractSubtitles();
 		}
 	});
 
     //SEARCHING EVERYTHING
-	$(document).on('focusin', '#head_container input[type="text"]', function(e) {
+	$(document).on('focusin', 'header input[type="text"]', function(e) {
 		setTimeout(function() { //a timeout needs to be set because something in chrome and IE was deselecting it right after selecting it
-			$('#head_container input[type="text"]').select();
+			$('header input[type="text"]').select();
 		}, 20);
 	});
-	$(document).on('keyup', '#head_container input[type="text"]', function(e) {
+	$(document).on('keyup', 'header input[type="text"]', function(e) {
         if(e.which != 38 && e.which != 40)
-            mainSearch($('#head_container input[type="text"]').val());
+            mainSearch($('header input[type="text"]').val());
 	});
 	$(document).on('click', '#head_search', function(e) {
-		mainSearch($('#head_container input[type="text"]').val());
+		mainSearch($('header input[type="text"]').val());
 	});
     $(document).on('click', function(e) {
         var tar = $(e.target);
         if(!tar.is('#search_results') && !tar.parents('#search_results').length &&
-          !tar.is('#search input') && !tar.parents('#search input').length &&
-          !tar.is('#head_search') && !tar.parents('#head_search').length) {
+            !tar.is('#search input') && !tar.parents('#search input').length &&
+            !tar.is('#head_search') && !tar.parents('#head_search').length) {
 
             $('#search_results').hide();
             $('#search input').val('');
@@ -440,7 +385,7 @@ $(function() {
         input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory (add a + sign before each word)
 
         $.getJSON("server_side/search.php?query=" + input + "*", function(data) {
-            //console.log(data);
+            console.log(data);
             $('.search_result').remove();
 
             if(data.length == 0) { //no results
@@ -472,7 +417,7 @@ $(function() {
             alert(textStatus + ": " + errorThrown);
         });
 	}
-    $(document).on('keydown', '#head_container input[type="text"]', function(e) {
+    $(document).on('keydown', 'header input[type="text"]', function(e) {
         if (e.which == 13) { //enter
             window.location.href = $('.search_selected').attr('href');
         }
@@ -487,7 +432,7 @@ $(function() {
             $('.search_result').eq(curResult).addClass('search_selected');
         }
     });
-	
+
 	//SEARCHING BOARD
 	$(document).on('mouseenter', '#board_search_img', function(e) {
 		$('#board_search_img.iconic *').css({fill: '#09F', stroke: '#09F'});
@@ -502,7 +447,7 @@ $(function() {
 	});
 	$(document).on('keyup', '#board_chooser input[type="text"]', function(e) {
 		search_hideBoards($('#board_chooser input[type="text"]').val());
-		if(e.which == 13) $('#board_chooser input[type="text"]').blur(); 
+		if(e.which == 13) $('#board_chooser input[type="text"]').blur();
 	});
 	$(document).on('click', '#board_search_img', function(e) {
 		search_hideBoards($('#board_chooser input[type="text"]').val());
@@ -521,11 +466,11 @@ $(function() {
 				smtgShown = true;
 			}
 		}
-		
+
 		if(!smtgShown) $('#board_noResults').show();
 		else $('#board_noResults').hide();
 	}
-	
+
 	//ADDING BOARD
 	$(document).on('mouseenter', '#add_board', function(e) {
 		$('#add_board.iconic *').css({fill: '#09F', stroke: '#09F'});
@@ -538,7 +483,7 @@ $(function() {
 		$('#nodesContainer').css('opacity', '0.5');
 		$('#board_title').focus();
 		addingBoard = true;
-		
+
 		if(sidebarExpanded) {
 			$('#sidebar').animate({left: '-=385px'}, 200);
 			sidebarExpanded = false;
@@ -557,4 +502,3 @@ $(function() {
 		addingBoard = false;
 	});
 });
-</script>

@@ -70,12 +70,14 @@
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
                         </div>
-                        <div id='input_error1' class='input_error'>This username is too fancy for our systems!<br>Use only 4-15 letters, numbers and underscores.</div>
+                        <div id='input_error1' class='input_error'>This username is too fancy for our systems!<br>Use 4-15 letters, numbers, underscores and periods</div>
+                        <div id='input_error1b' class='input_error'>Someone acquired this username before you! :O</div>
                         <div id='input2' class='input'><input type="text" name="email" placeholder="Email" autocomplete="off">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
                         </div>
                         <div id='input_error2' class='input_error'>This does not look like an email address!</div>
+                        <div id='input_error2b' class='input_error'>Is someone using the same email address as you?</div>
                         <div id='input3' class='input'><input type="password" name="password" placeholder="Password" autocomplete="off">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
@@ -88,7 +90,7 @@
                                 echo "<p id='error_signup'>";
                                 switch($_GET['er']) {
                                     case 4:
-                                        echo "This email address already corresponds to an account";
+                                        echo "This email address is already used in another account";
                                         break;
                                     case 5:
                                         echo "An error occured while trying to create your account. We're sorry :/";
@@ -168,86 +170,6 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
         <script src="plugins/animatescroll.min.js"></script>
-        <script>
-            function validateForm() {
-                var isOk = true;
-                if(!$('#signup_block input[name="username"]').val().match(/^[A-Za-z0-9_]{4,15}$/)) {
-                    $('#input1 .input_bad').show();
-                    $('#input1 .input_good').hide();
-                    $('#input_error1').show();
-                    isOk = false;
-                }
-                else {
-                    $('#input1 .input_good').show();
-                    $('#input1 .input_bad').hide();
-                    $('#input_error1').hide();
-                }
-                if(!$('#signup_block input[name="email"]').val().match(/^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
-                    $('#input2 .input_bad').show();
-                    $('#input2 .input_good').hide();
-                    $('#input_error2').show();
-                    isOk = false;
-                }
-                else {
-                    $('#input2 .input_good').show();
-                    $('#input2 .input_bad').hide();
-                    $('#input_error2').hide();
-                }
-                if($('#signup_block input[name="password"]').val().length < 6) {
-                    $('#input3 .input_bad').show();
-                    $('#input3 .input_good').hide();
-                    $('#input_error3').show();
-                    isOk = false;
-                }
-                else {
-                    $('#input3 .input_good').show();
-                    $('#input3 .input_bad').hide();
-                    $('#input_error3').hide();
-                }
-
-                if(isOk)
-                    return true;
-                else
-                    return false;
-            }
-
-            //EVENTS
-            $(document).on('blur', '#signup_block input[name="username"]', function(e){
-                if($(this).val().match(/^[A-Za-z0-9_]{4,15}$/)) {
-                    $('#input1 .input_good').show();
-                    $('#input1 .input_bad').hide();
-                    $('#input_error1').hide();
-                }
-                else {
-                    $('#input1 .input_bad').show();
-                    $('#input1 .input_good').hide();
-                    $('#input_error1').show();
-                }
-            });
-            $(document).on('blur', '#signup_block input[name="email"]', function(e){
-                if($(this).val().match(/^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
-                    $('#input2 .input_good').show();
-                    $('#input2 .input_bad').hide();
-                    $('#input_error2').hide();
-                }
-                else {
-                    $('#input2 .input_bad').show();
-                    $('#input2 .input_good').hide();
-                    $('#input_error2').show();
-                }
-            });
-            $(document).on('blur', '#signup_block input[name="password"]', function(e){
-                if($(this).val().length >= 6) {
-                    $('#input3 .input_good').show();
-                    $('#input3 .input_bad').hide();
-                    $('#input_error3').hide();
-                }
-                else {
-                    $('#input3 .input_bad').show();
-                    $('#input3 .input_good').hide();
-                    $('#input_error3').show();
-                }
-            });
-        </script>
+        <script src="javascript/home.js"></script>
     </body>
 </html>
