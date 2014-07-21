@@ -15,11 +15,16 @@
     if(!isset($_GET['id']) || !is_numeric($_GET['id']))
         getId();
     else { //Check if the board specified belongs to the user
-        $answer = $bdd->prepare('SELECT id FROM boards WHERE id = :id AND user_id = :user_id');
-        $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+        $answer = $bdd->prepare('SELECT b.id
+                                FROM access a
+                                RIGHT JOIN boards b ON b.id = a.board_id
+                                WHERE b.id = :id AND (a.user_id = :user_id OR b.user_id = :user_id2)');
+        $answer->execute(array('id' => $_GET['id'],
+                               'user_id' => $_SESSION['id'],
+                               'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
         if(!$data = $answer->fetch()) { //if the board does not belong to the user
             getId();
-            //TODO Tell the user he couln'd see that board so he was redirected to his last seen board
+            header('Location: board.php?id=' . $_GET['id']);
         }
     }
 
@@ -28,7 +33,6 @@
         $answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
         $answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
         $data = $answer->fetch();
-
         $_GET['id'] = $data['last_board'];
     }
 ?>
@@ -153,7 +157,7 @@
 				    $answer->execute(array('user_id' => $_SESSION['id'], 'id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
                     $data = $answer->fetchAll();
                     echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
-                    echo "<h2>Author:</h2><h3>" . $_SESSION['name_first'] . " " . $_SESSION['name_last'] . "</h3><br>";
+                    echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
                     echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
                     echo "<h2>Link to this board:</h2><h3>localhost/Nodes/board.php?id=" . $data[0]['id'] ."</h3><br>";
                     $answer->closeCursor();
@@ -185,8 +189,11 @@
                 </div>
                 <div id='boards'>
                 	<?php 
-						$answer = $bdd->prepare('SELECT id, title FROM boards WHERE user_id = :user_id');
-						$answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                        $answer = $bdd->prepare('SELECT b.id, b.title
+                                                FROM access a
+                                                RIGHT JOIN boards b ON b.id = a.board_id
+                                                WHERE a.user_id = :user_id OR b.user_id = :user_id2 ORDER BY b.date_creation');
+                        $answer->execute(array('user_id' => $_SESSION['id'], 'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
 						while($data = $answer->fetch()) {
 							echo '<a href="board.php?id=' . $data['id'] . '">
 									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
