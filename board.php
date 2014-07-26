@@ -38,7 +38,7 @@
                 $answer->closeCursor();
 
                 $_GET['id'] = $data['last_board'];
-                header('Location: ' . $baseUrl . 'board/' . $_GET['id']);
+                header('Location: ' . $baseUrl . 'boards/' . $_GET['id']);
             }
         }
         else if($_SESSION['id'] != 0)
@@ -51,7 +51,7 @@
     	<meta charset="utf-8">
         <meta name="description" content="Add or edit nodes and subtitles on this page. You will have access to them from any computer afterwards!">
         <title>Your board - Nodynotes</title>
-        <base href="http://localhost/Nodes/">
+        <!--<base href="http://localhost/Nodes/">-->
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css">
@@ -179,7 +179,7 @@
                     echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
                     echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
                     echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
-                    echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/board/" . $data[0]['id'] ."</h3><br>";
+                    echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/boards/" . $data[0]['id'] ."</h3><br>";
                     $answer->closeCursor();
                 ?>
                 <div id='board_changetitle' class='property_button'>Change Title</div>
@@ -190,7 +190,7 @@
     	<section id='toolbar'>
         	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
-        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/link.svg" class='iconic iconic-lg' data-state="intact"></div>
+        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/route.svg" class='iconic iconic-lg' data-state="intact"></div>
             <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
             <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
@@ -215,7 +215,7 @@
                                                 WHERE a.user_id = :user_id OR b.user_id = :user_id2 ORDER BY b.date_creation');
                         $answer->execute(array('user_id' => $_SESSION['id'], 'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
 						while($data = $answer->fetch()) {
-							echo '<a href="board/' . $data['id'] . '">
+							echo '<a href="boards/' . $data['id'] . '">
 									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
 									  <h3 class="nodeTitle">' . strip_tags($data['title']) . '</h3>
 								  	</div>

@@ -1,13 +1,13 @@
 DirectoryIndex home.php
 AddType text/cache-manifest manifest
 RewriteEngine On
-RewriteRule ^board/([0-9]+)/?$ board.php?id=$1 [NC,L]
+RewriteRule ^boards/([0-9]+)/?$ board.php?id=$1 [NC,L]
 
 #IN CASE OF A MAINTENANCE
 #ErrorDocument 403 /maintenance.html 
 #deny from all 
 #allow from 66.131.69.37
-#<Files maintenance.html>
+#<Files maintenance.html> #TODO
 #    allow from all
 #</Files>
 

@@ -1,13 +1,18 @@
 @charset "utf-8";
 
-/* Body */
-body .iconic * {
+/* Toolbar 1 (Right side) */
+#toolbar .iconic * {
 	fill: #020024;
     stroke: #020024;
 }
-body .iconic-property-accent {
-	fill: #09F;
-	stroke: #09F;
+#toolbar .iconic-property-accent {
+	fill: #06F;
+	stroke: #06F;
+}
+
+#toolbar .iconic-route-point { /* Route icon */
+    fill: #06F;
+    stroke: #06F;
 }
 
 /* Header */

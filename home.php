@@ -8,7 +8,7 @@
         $data = $req->fetch();
         $req->closeCursor();
 
-        header('Location: board/' . $data['last_board']);
+        header('Location: boards/' . $data['last_board']);
 	}
 ?>
 
