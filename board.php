@@ -51,7 +51,7 @@
     	<meta charset="utf-8">
         <meta name="description" content="Add or edit nodes and subtitles on this page. You will have access to them from any computer afterwards!">
         <title>Your board - Nodynotes</title>
-        <!--<base href="http://localhost/Nodes/">-->
+        <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css">
