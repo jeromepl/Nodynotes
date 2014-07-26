@@ -5,9 +5,8 @@ header {
 	position: relative;
 	width: 100%;
 	height: 40px;
-	border-bottom: solid 5px #09F;
+	border-bottom: solid 4px #09F;
     background-color: #020024;
-	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
     text-align: center;
 }
@@ -104,6 +103,39 @@ header svg:not(.search_resultSVG) {
 	border-bottom: 5px #00D7DD solid;
 }
 
+#head_right input[type='text'], #head_right input[type='password'] {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 9px;
+    border-radius: 3px;
+    border: solid 1px #AAA;
+    padding: 3px 5px;
+    height: 18px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+}
+
+#head_right input[type='text']:focus, #head_right input[type='password']:focus {
+    box-shadow: #09F 0 0 12px;
+}
+
+#login {
+    margin-right: 15px;
+    background: linear-gradient(#0BF, #09F);
+    border: solid #06F 1px;
+    border-radius: 4px;
+    width: 80px;
+    height: 30px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-family: asap;
+    font-size: 17px;
+    font-weight: bold;
+    text-shadow: 0 1px 1px #777;
+}
+
 #search {
     display: inline-block;
     margin-left: -350px;
@@ -111,7 +143,7 @@ header svg:not(.search_resultSVG) {
     text-align: center;
 }
 
-header input {
+#head_middle input {
 	border: none;
 	outline: none;
 	padding: 3px 5px;
@@ -119,7 +151,7 @@ header input {
 	width: 220px;
 }
 
-header input:focus {
+#head_middle input:focus {
 	box-shadow: #09F 0 0 12px;
 }
 

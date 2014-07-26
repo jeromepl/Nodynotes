@@ -1,7 +1,14 @@
 <?php	
     session_start();
+    include_once("server_side/mySQL_connection.php");
+
 	if(isset($_SESSION['id'])) {
-		header('Location: board.php');
+        $req = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
+        $req->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+        $data = $req->fetch();
+        $req->closeCursor();
+
+        header('Location: board/' . $data['last_board']);
 	}
 ?>
 
@@ -11,6 +18,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="description" content="Save your knowledge and thoughts in an organized fashion. Never forget anything again.">
 		<title>Nodynotes - Organized and free notes for everyone</title>
+        <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/homeStyle.css">
         <script src="http://use.edgefonts.net/asap:n7,i4,n4,i7:all;ubuntu:n4,i4,n7,i7,n3,i3,n5,i5:all.js"></script>
@@ -39,7 +47,7 @@
                             echo "<p id='error_connect'>";
                             switch($_GET['er']) {
                                 case 1:
-                                    echo "Invalid email, username or password";
+                                    echo "Invalid email/username or password";
                                     break;
                                 case 2:
                                     echo "Please login first";
@@ -154,7 +162,7 @@
             </div>
         </section>
 
-<div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now!</a></div>
+        <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now!</a></div>
         
         <footer>
             <div class='container'>

@@ -1,39 +1,48 @@
 <?php
 	session_start();
+    $baseUrl = 'http://localhost/Nodes/'; //TODO try if it would work without any base url
+    $isConnected = false; //to know if it's an anonymous person viewing a public board or a connected one
+
 	if(!isset($_SESSION['id'])) {
-        if(isset($_GET['id']) && is_numeric($_GET['id'])) {
-            header('Location: home.php?er=2&ref_id=' . $_GET['id']); //tell the user to login first
-        }
-        else {
-		  header('Location: home.php?er=2'); //tell the user to login first
-        }
+        $_SESSION['id'] = 0; //Set the id to 0 so that public boards can be accessed without logging in
 	}
 	
-	include_once("server_side/mySQL_connection.php"); //where $bdd is set
+    include_once("server_side/mySQL_connection.php"); //where $bdd is set
 
     //setup for the global variable board_id
-    if(!isset($_GET['id']) || !is_numeric($_GET['id']))
-        getId();
+    if(!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        if($_SESSION['id'] == 0) {//user not logged in
+            session_destroy();
+            header('Location: ' . $baseUrl . '?er=2'); //tell the user to login first
+        }
+        else
+            header('Location: ' . $baseUrl . 'errors/404.html'); //TODO create the 404 page
+    }
     else { //Check if the board specified belongs to the user
         $answer = $bdd->prepare('SELECT b.id
                                 FROM access a
                                 RIGHT JOIN boards b ON b.id = a.board_id
-                                WHERE b.id = :id AND (a.user_id = :user_id OR b.user_id = :user_id2)');
+                                WHERE b.id = :id AND (a.user_id = :user_id OR b.user_id = :user_id2 OR b.public = \'T\')');
         $answer->execute(array('id' => $_GET['id'],
                                'user_id' => $_SESSION['id'],
                                'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-        if(!$data = $answer->fetch()) { //if the board does not belong to the user
-            getId();
-            header('Location: board.php?id=' . $_GET['id']);
-        }
-    }
+        if(!$data = $answer->fetch()) { //if the board does not belong to the user and is not public
+            if($_SESSION['id'] == 0) { //user not logged in
+                session_destroy();
+                header('Location: ' . $baseUrl . '?er=2&ref_id=' . $_GET['id']); //tell the user to login first
+            }
+            else { //get the user's last seen board since he can't see this one
+                $answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
+                $answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                $data = $answer->fetch();
+                $answer->closeCursor();
 
-    function getId() { //get the last seen board
-        global $bdd; //php variables have a very limited scope...
-        $answer = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
-        $answer->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-        $data = $answer->fetch();
-        $_GET['id'] = $data['last_board'];
+                $_GET['id'] = $data['last_board'];
+                header('Location: ' . $baseUrl . 'board/' . $_GET['id']);
+            }
+        }
+        else if($_SESSION['id'] != 0)
+            $isConnected = true;
     }
 ?>
 <!DOCTYPE html>
@@ -42,6 +51,7 @@
     	<meta charset="utf-8">
         <meta name="description" content="Add or edit nodes and subtitles on this page. You will have access to them from any computer afterwards!">
         <title>Your board - Nodynotes</title>
+        <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css">
@@ -59,8 +69,18 @@
 	<body>
     	<header>
             <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
-                <a id='head_profile' class='head_icon' href="#"  title='Profile'><img data-src="images/icons/person.svg" class="iconic iconic-md" data-gender="genderless"></a>
-                <a id='logout' class='head_icon' href="server_side/disconnect.php"  title='Log out'><img data-src="images/icons/account.svg" class="iconic iconic-md" data-state="logout"></a>
+                <?php
+                    if($isConnected) { //Show profile and disconnect buttons
+                        echo "<a id='head_profile' class='head_icon' href='#'  title='Profile'><img data-src='images/icons/person.svg' class='iconic iconic-md' data-gender='genderless'></a>";
+                        echo "<a id='logout' class='head_icon' href='server_side/disconnect.php'  title='Log out'><img data-src='images/icons/account.svg' class='iconic iconic-md' data-state='logout'></a>";
+                    }
+                    else { //show login form
+                        echo "<form method='post' action='server_side/login.php?ref_id=" . $_GET['id'] . "'>";
+                        echo "<input type='text' name='email_username' placeholder='Email or username'>";
+                        echo "<input type='password' name='password' placeholder='Password'>";
+                        echo "<input type='submit' id='login' value='Log in'>";
+                    }
+                ?>
             </div>
              <div id='head_left'>
                 <img id='alpha' src='images/alpha.png' draggable='false'>
@@ -76,7 +96,7 @@
                 </div>
             </div>
         </header>
-        <div id='nodesContainer'>
+        <section id='nodesContainer'>
             <div id='nodesArea'>
                 <div id='showContent'>
                     <div id='content_title'>
@@ -159,24 +179,24 @@
                     echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
                     echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
                     echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
-                    echo "<h2>Link to this board:</h2><h3>localhost/Nodes/board.php?id=" . $data[0]['id'] ."</h3><br>";
+                    echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/board/" . $data[0]['id'] ."</h3><br>";
                     $answer->closeCursor();
                 ?>
                 <div id='board_changetitle' class='property_button'>Change Title</div>
                 <div id='board_delete' class='property_button'>Delete Board</div>
                 <img id='properties_close' data-src="images/icons/x.svg" title='Close window' class='iconic iconic-sm'>
             </div>
-        </div>
-    	<div id='toolbar'>
+        </section>
+    	<section id='toolbar'>
         	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
         	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/link.svg" class='iconic iconic-lg' data-state="intact"></div>
             <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
             <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
-        </div>
+        </section>
         
-        <div id='sidebar'>
+        <section id='sidebar'>
         	<div id='unfold_button'>
         		<span></span><h1>Boards</h1>
             </div>
@@ -195,7 +215,7 @@
                                                 WHERE a.user_id = :user_id OR b.user_id = :user_id2 ORDER BY b.date_creation');
                         $answer->execute(array('user_id' => $_SESSION['id'], 'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
 						while($data = $answer->fetch()) {
-							echo '<a href="board.php?id=' . $data['id'] . '">
+							echo '<a href="board/' . $data['id'] . '">
 									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
 									  <h3 class="nodeTitle">' . strip_tags($data['title']) . '</h3>
 								  	</div>
@@ -212,7 +232,7 @@
                 <div id="add_board_confirm">Create board</div>
                 <div id="add_board_cancel">Cancel</div>
             </div>
-        </div>
+        </section>
     	<div id='saving'>
         	<p><i>Saving</i></p>
             <img src="images/ajax-loader.gif" alt="Loading" draggable="false">
@@ -221,11 +241,11 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
         
-        <script src="objects/Board.js"></script>
-        <script src="objects/Node.js"></script>
-        <script src="objects/Subtitle.js"></script>
-        <script src="objects/LinkBar.js"></script>
-        <script src="objects/Tag.js"></script>
+        <script src="javascript/objects/Board.js"></script>
+        <script src="javascript/objects/Node.js"></script>
+        <script src="javascript/objects/Subtitle.js"></script>
+        <script src="javascript/objects/LinkBar.js"></script>
+        <script src="javascript/objects/Tag.js"></script>
         
         <script src="javascript/functions.js"></script>
         
@@ -265,38 +285,38 @@
 			var board_id = <?php echo $_GET['id'] ?>;
 
             <?php
-                //Set the board area to the right place and check if the board belongs to the user
+                //Set the board area to the right place
                 if (isset($_GET['node_id'])) {
                     $answer = $bdd->prepare('SELECT n.yPos, n.xPos FROM nodes n
                                             INNER JOIN boards b ON b.id = n.board_id
-                                            WHERE n.id = :id AND b.user_id = :user_id');
-                    $answer->execute(array('id' => $_GET['node_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-                    if($data = $answer->fetch()) { //if the board belongs to the user
-                        echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
-                                left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
-                        echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
-                    }
+                                            WHERE n.id = :id');
+                    $answer->execute(array('id' => $_GET['node_id'])) or die(print_r($bdd->errorInfo()));
+                    $data = $answer->fetch();
+                    echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                            left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                    echo "\tsearchedFor = '#node" . $_GET['node_id'] . "';";
+
                     $answer->closeCursor();
                 }
                 else if (isset($_GET['sub_id'])) {
                     $answer = $bdd->prepare('SELECT s.id, n.yPos, n.xPos FROM subtitles s
                                             INNER JOIN nodes n ON n.id = s.node_id
                                             INNER JOIN boards b ON b.id = n.board_id
-                                            WHERE s.id = :id AND b.user_id = :user_id');
-                    $answer->execute(array('id' => $_GET['sub_id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-                    if($data = $answer->fetch()) { //if the board belongs to the user
-                        echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
-                                left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
-                        echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
-                    }
+                                            WHERE s.id = :id');
+                    $answer->execute(array('id' => $_GET['sub_id'])) or die(print_r($bdd->errorInfo()));
+                    $data = $answer->fetch();
+                    echo "\n\t$('#nodesArea').css({top: $('#nodesContainer').outerHeight() / 2.6 - " . $data['yPos'] . ",
+                            left: $('#nodesContainer').outerWidth() / 2.2 - " . $data['xPos'] . "});\n";
+                    echo "\tsearchedFor = '#subtitle" . $_GET['sub_id'] . "';";
+
                     $answer->closeCursor();
                 }
                 else {
-                    $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id AND user_id = :user_id');
-                    $answer->execute(array('id' => $_GET['id'], 'user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-                    if($data = $answer->fetch()) { //if the board belongs to the user
-                        echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
-                    }
+                    $answer = $bdd->prepare('SELECT yPos, xPos FROM boards WHERE id = :id'); //Board is placed where the creator last saw it
+                    $answer->execute(array('id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
+                    $data = $answer->fetch();
+                    echo "\n\t$('#nodesArea').css({top: " . $data['yPos'] . ", left: " . $data['xPos'] . "});\n";
+
                     $answer->closeCursor();
                 }
 
@@ -310,9 +330,8 @@
                 //Save the date and add a view to the board
                 $req = $bdd->prepare('UPDATE boards
                                     SET date_seen = NOW(), views = views + 1
-                                    WHERE id = :id AND user_id = :user_id');
-                $req->execute(array('id' => $_GET['id'],
-                            'user_id' => $_SESSION['id']));
+                                    WHERE id = :id'); //not checking user id for public boards to count correctly views
+                $req->execute(array('id' => $_GET['id']));
             ?>
         </script>
         <script src="javascript/events.js"></script>

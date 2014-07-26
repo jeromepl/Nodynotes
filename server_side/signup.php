@@ -1,6 +1,6 @@
 <?php
-    include_once('../server_side/mySQL_connection.php');
     session_start();
+    include_once('../server_side/mySQL_connection.php');
 
     if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])
        && preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email'])
@@ -33,22 +33,23 @@
                                     'ip' => $_SERVER['REMOTE_ADDR']));
                 $newNode = $bdd->lastInsertId();
 
-                header('Location: ../board.php?id=' . $newBoard . '&node_id=' . $newNode); //This will save the new board as the last seen one
+                header('Location: ../board.php/' . $newBoard . '&node_id=' . $newNode); //This will save the new board as the last seen one
             }
             else
-                header('Location: ../home.php?er=6'); //Username already used
+                header('Location: ../?er=6'); //Username already used
         }
         else
-            header('Location: ../home.php?er=4'); //Email already used
+            header('Location: ../?er=4'); //Email already used
     }
     else
-        header('Location: ../home.php?er=5');
+        header('Location: ../?er=5');
 
     function uniqueMail($email) { //verify if the email is not used by another user
         global $bdd;
         $answer = $bdd->prepare('SELECT COUNT(id) FROM users WHERE email = :email');
         $answer->execute(array('email' => $email)) or die(print_r($bdd->errorInfo()));
         $data = $answer->fetch()[0];
+        $answer->closeCursor();
         if($data != 0)
             return false;
         else
@@ -60,6 +61,7 @@
         $answer = $bdd->prepare('SELECT COUNT(id) FROM users WHERE username = :username');
         $answer->execute(array('username' => $username)) or die(print_r($bdd->errorInfo()));
         $data = $answer->fetch()[0];
+        $answer->closeCursor();
         if($data != 0)
             return false;
         else

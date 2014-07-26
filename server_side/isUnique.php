@@ -18,6 +18,7 @@ function uniqueMail($email) { //verify if the email is not used by another user
     $answer = $bdd->prepare('SELECT COUNT(id) FROM users WHERE email = :email');
     $answer->execute(array('email' => $email)) or die(print_r($bdd->errorInfo()));
     $data = $answer->fetch()[0];
+    $answer->closeCursor();
     if($data != 0)
         echo 'false';
     else
@@ -29,6 +30,7 @@ function uniqueUsername($username) { //verify if the username is not used by ano
     $answer = $bdd->prepare('SELECT COUNT(id) FROM users WHERE username = :username');
     $answer->execute(array('username' => $username)) or die(print_r($bdd->errorInfo()));
     $data = $answer->fetch()[0];
+    $answer->closeCursor();
     if($data != 0)
         echo 'false';
     else

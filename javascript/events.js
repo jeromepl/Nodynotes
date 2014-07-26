@@ -11,8 +11,6 @@ $(function() {
 
 	new Board(board_id); //create the board
 
-	//position the board
-
 	titleMinWidth = $('.nodeTitle').css('width'); //width = min-width at the beginning, because no scaling occured (Used for expanding the title)
 
     //TODO remove this when the profile page will be done
@@ -354,17 +352,17 @@ $(function() {
 	});
 
     //SEARCHING EVERYTHING
-	$(document).on('focusin', 'header input[type="text"]', function(e) {
+    $(document).on('focusin', '#head_middle input[type="text"]', function(e) {
 		setTimeout(function() { //a timeout needs to be set because something in chrome and IE was deselecting it right after selecting it
-			$('header input[type="text"]').select();
+			$('#head_middle input[type="text"]').select();
 		}, 20);
 	});
-	$(document).on('keyup', 'header input[type="text"]', function(e) {
+    $(document).on('keyup', '#head_middle input[type="text"]', function(e) {
         if(e.which != 38 && e.which != 40)
-            mainSearch($('header input[type="text"]').val());
+            mainSearch($('#head_middle input[type="text"]').val());
 	});
 	$(document).on('click', '#head_search', function(e) {
-		mainSearch($('header input[type="text"]').val());
+        mainSearch($('#head_middle input[type="text"]').val());
 	});
     $(document).on('click', function(e) {
         var tar = $(e.target);
@@ -417,7 +415,7 @@ $(function() {
             alert(textStatus + ": " + errorThrown);
         });
 	}
-    $(document).on('keydown', 'header input[type="text"]', function(e) {
+    $(document).on('keydown', '#head_middle input[type="text"]', function(e) {
         if (e.which == 13) { //enter
             window.location.href = $('.search_selected').attr('href');
         }

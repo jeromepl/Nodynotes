@@ -87,7 +87,7 @@ header {
     padding-top: 5px;
 }
 
-#head_container input[type=text], #head_container input[type='password'] {
+#head_container input[type='text'], #head_container input[type='password'] {
 	display: inline-block;
 	margin-right: 10px;
     margin-top: 9px;
@@ -100,7 +100,7 @@ header {
 	outline: none;
 }
 
-#head_container input[type=text]:focus, #head_container input[type='password']:focus {
+#head_container input[type='text']:focus, #head_container input[type='password']:focus {
 	box-shadow: #09F 0 0 12px;
 }
 

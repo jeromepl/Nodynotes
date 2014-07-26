@@ -14,7 +14,7 @@
             $req->closeCursor();
 
             if(!$answer) {
-                header('Location: ../home.php?er=1'); //tell ther user email-password doesn't work
+                header('Location: ../?er=1'); //tell ther user email-password doesn't work
             }
             else {
                 login($answer);
@@ -29,14 +29,14 @@
             $req->closeCursor();
 
             if(!$answer) {
-                header('Location: ../home.php?er=1'); //tell ther user email-password doesn't work
+                header('Location: ../?er=1'); //tell ther user email-password doesn't work
             }
             else {
                 login($answer);
             }
         }
 	}
-	else header('Location: ../home.php?er=3'); //tell the user an error occured
+	else header('Location: ../?er=3'); //tell the user an error occured
 
 function login(&$answer) {
     global $bdd;
@@ -51,9 +51,15 @@ function login(&$answer) {
                         'id' => $_SESSION['id']));
 
     if(isset($_GET['ref_id']) && is_numeric($_GET['ref_id'])) {
-        header('Location: ../board.php?id=' . $_GET['ref_id']);
+        header('Location: ../board/' . $_GET['ref_id']);
     }
     else {
-        header('Location: ../board.php');
+
+        $req = $bdd->prepare('SELECT last_board FROM users WHERE id = :user_id');
+        $req->execute(array('user_id' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+        $data = $req->fetch();
+        $req->closeCursor();
+
+        header('Location: ../board/' . $data['last_board']);
     }
 }
