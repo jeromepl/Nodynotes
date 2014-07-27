@@ -70,7 +70,7 @@ function saveBoard(data) {
 					var y = $('#nodesContainer').outerHeight() / 2.6;
 					$.post("server_side/save.php", {action: 'insert', what2Add: 'node', board_id: answer, xPos: x, yPos: y, color: '00d7dd', icon: 'none'},
 						function(answer2) {
-							window.location.href = "board.php?id=" + answer;
+							window.location.href = "boards/" + answer;
 						});
 				}
 
