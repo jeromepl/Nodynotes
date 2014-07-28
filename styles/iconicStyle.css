@@ -1,11 +1,21 @@
 @charset "utf-8";
 
+/* Header */
+header .iconic * {
+    fill: white;
+    stroke: white;
+}
+header .iconic-property-accent {
+    fill: #09F;
+    stroke: #09F;
+}
+
 /* Toolbar 1 (Right side) */
-#toolbar .iconic * {
+#toolbar .iconic *, #toolbar2 .iconic * {
 	fill: #020024;
     stroke: #020024;
 }
-#toolbar .iconic-property-accent {
+#toolbar .iconic-property-accent, #toolbar2 .iconic-property-accent {
 	fill: #06F;
 	stroke: #06F;
 }
@@ -15,14 +25,14 @@
     stroke: #06F;
 }
 
-/* Header */
-header .iconic * {
-	fill: white;
-	stroke: white;
+/* Toolbar 2 */
+#toolbar2 .iconic * {
+    fill: #020024;
+    stroke: #020024;
 }
-header .iconic-property-accent {
-	fill: #09F;
-	stroke: #09F;
+#toolbar2 .iconic-property-accent {
+    fill: #09F;
+    stroke: #09F;
 }
 
 /* Change content circle buttons */
