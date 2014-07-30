@@ -26,7 +26,9 @@
         $answer->execute(array('id' => $_GET['id'],
                                'user_id' => $_SESSION['id'],
                                'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
-        if(!$data = $answer->fetch()) { //if the board does not belong to the user and is not public
+        $data = $answer->fetch();
+        $answer->closeCursor();
+        if(!$data) { //if the board does not belong to the user and is not public
             if($_SESSION['id'] == 0) { //user not logged in
                 session_destroy();
                 header('Location: ' . $baseUrl . '?er=2&ref_id=' . $_GET['id']); //tell the user to login first

@@ -123,8 +123,8 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 
 	this.selected = function() {
 		$('#showContent').show();
-		$('#showContent p').html(this.text); //html so that <br> tags are not removed
-		$('#showContent h1').text(this.title);
+		$('#showContent p').html(this.text);
+		$('#showContent h1').html(this.title);
         $('#tool2_img_2').attr('title', 'Delete Node');
 
 		/*if(this.element.position().left + $('#nodesArea').position().left > $('#showContent').outerWidth() + 30) {*/ // to show the content shower to the right or left of the element
@@ -202,8 +202,9 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 
 	this.changeContent = function() {
 		changingContent = true;
+        this.title = activateHtml(this.title);
 		$('#content_title input').show().val(this.title).select();
-		this.text = br2nl(this.text);
+        this.text = activateHtml(br2nl(this.text));
 		$('#content_text textArea').show().val(this.text).css('height', $('#content_text p').innerHeight());
 		$('#content_title h1').hide();
 		$('#content_text p').hide();
@@ -219,14 +220,14 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	this.setContent = function(saveIt) {
 		changingContent = false;
 		if(saveIt) {
-			this.title = $('#content_title input').val().replace(/(<([^>]+)>)/ig,"");
-			this.text = nl2br($('#content_text textarea').val());
-			this.titleElement.text(this.title);
+            this.title = escapeHtml($('#content_title input').val());
+            this.text = nl2br(escapeHtml($('#content_text textarea').val()));
+			this.titleElement.html(this.title);
 			$('#showContent p').html(this.text);
-			$('#showContent h1').text(this.title);
+			$('#showContent h1').html(this.title);
 
-			save({action: 'update', title: this.title, text: this.text, id: this.id});
-		}
+            save({action: 'update', title: activateHtml(this.title), text: activateHtml(this.text), id: this.id});
+        }
 		$('#content_title input').hide();
 		$('#content_text textArea').hide();
 		$('#content_title h1').show();

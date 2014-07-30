@@ -1,3 +1,41 @@
+// BANNER BACKGROUND ANIMATION
+$(document).ready(function() {
+    var $banner = $('#banner');
+
+    function animBackground() {
+        $banner.animate({
+            backgroundPositionX: '-=200px',
+            backgroundPositionY: '-=150px'
+        }, 6000, 'linear', function() {
+            animBackground(); //loop
+        });
+    }
+
+    animBackground(); //start the loop
+});
+
+// Automatic Scroll from banner to "what is nodynotes"
+var isScrolling = false;
+$('header, #banner').mousewheel(function(e) {
+    e.preventDefault();
+    if(e.deltaY < 0 && !isScrolling) {
+        isScrolling = true;
+        $('#what').animatescroll({easing: 'easeInOutCirc', scrollSpeed: 1400, padding: 40, onScrollEnd: function() {
+            isScrolling = false;
+        }});
+    }
+});
+$(window).mousewheel(function(e) {
+    if(e.deltaY > 0 && $('#banner').position().top + $('#banner').outerHeight() + 70 > $(window).scrollTop() && !isScrolling) {
+        e.preventDefault();
+        isScrolling = true;
+        $('header').animatescroll({easing: 'easeInOutCirc', scrollSpeed: 1400, onScrollEnd: function() {
+            isScrolling = false;
+        }});
+    }
+});
+
+// FORM VALIDATION AND EVENTS
 function validateForm() {
     var isOk = true;
     if(!$('#signup_block input[name="username"]').val().match(/^[A-Za-z0-9_]{4,15}$/)) {

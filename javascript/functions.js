@@ -141,6 +141,13 @@ function br2nl(str) {
 	return str.replace(/(<br>)/g, '\n');
 }
 
+function escapeHtml(text) {
+    return text.replace(/&/g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function activateHtml(text) {
+    return text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp/g, "&");
+}
+
 function componentToHex(c) { //for the colorToHex function
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;

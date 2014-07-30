@@ -18,7 +18,7 @@ function Subtitle(id, position, title, text, node) {
 	else this.left = this.xPos[4];
 
 	this.top = -25 + this.position * 25;
-	this.element = $('<h4>').appendTo(this.node.element).addClass('subtitle').text(this.title).css({top: this.top * this.node.scaleFactor, left: this.left}).attr('id', 'subtitle' + this.id);
+	this.element = $('<h4>').appendTo(this.node.element).addClass('subtitle').html(this.title).css({top: this.top * this.node.scaleFactor, left: this.left}).attr('id', 'subtitle' + this.id);
 	$.data(this.element[0], 'subtitle', {object: this}); //save the object's reference to be able to act on it in event listeners
 
 	this.paddingTop = this.element.css('padding-top');
@@ -35,8 +35,8 @@ function Subtitle(id, position, title, text, node) {
 		this.node.selected();
 		this.isSelected = true;
 		//show the new title and text corresponding to the subtitle
-		$('#showContent p').html(this.text); //html so that <br> tags are not removed
-		$('#showContent h1').text(this.title);
+		$('#showContent p').html(this.text);
+		$('#showContent h1').html(this.title);
         $('#tool2_img_2').attr('title', 'Delete Subtitle');
 
 		this.element.css('border', 'solid 2px #09F');
@@ -49,8 +49,9 @@ function Subtitle(id, position, title, text, node) {
 	this.changeContent = function() {
 		changingContent = true;
 		this.isChanging = true;
+        this.title = activateHtml(this.title);
 		$('#content_title input').show().val(this.title).select();
-		this.text = br2nl(this.text);
+        this.text = activateHtml(br2nl(this.text));
 		$('#content_text textArea').show().val(this.text).css('height', $('#content_text p').innerHeight());
 		$('#content_title h1').hide();
 		$('#content_text p').hide();
@@ -67,13 +68,13 @@ function Subtitle(id, position, title, text, node) {
 		changingContent = false;
 		this.isChanging = false;
 		if(saveIt) {
-			this.title = $('#content_title input').val().replace(/(<([^>]+)>)/ig,"");
-			this.text = nl2br($('#content_text textarea').val());
-			this.element.text(this.title);
+            this.title = escapeHtml($('#content_title input').val());
+            this.text = nl2br(escapeHtml($('#content_text textarea').val()));
+			this.element.html(this.title);
 			$('#showContent p').html(this.text);
-			$('#showContent h1').text(this.title);
+			$('#showContent h1').html(this.title);
 
-			save({action: 'update', subtitle: this.title, text: this.text, id: this.id});
+			save({action: 'update', subtitle: activateHtml(this.title), text: activateHtml(this.text), id: this.id});
 		}
 		$('#content_title input').hide();
 		$('#content_text textArea').hide();

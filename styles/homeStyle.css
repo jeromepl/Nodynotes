@@ -4,11 +4,13 @@ html {
     font-family: asap, ubuntu, sans-serif;
     font-style: normal;
 	font-weight: 400;
+    min-height: 100%;
 }
 
 body {
     margin: 0;
 	background-color: white;
+    min-height: 100%;
 }
 
 strong { /* only used for SEO */
@@ -42,8 +44,7 @@ strong { /* only used for SEO */
 
 header {
     height: 55px;
-    border-bottom: solid 5px #09F;
-    background-color: #020024;
+    background-color: white;
 	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
     width: 100%;
@@ -58,7 +59,7 @@ header {
 #head_container h1 {
 	display: inline-block;
     float: left;
-	color: white;
+    color: #020024;
 	height: 40px;
 	padding: 0;
     margin: 0;
@@ -70,16 +71,12 @@ header {
 }
 
 #alpha {
-    position: absolute;
-    width: 45px;
-    height: 45px;
-    top: 30px;
-    left: 188px;
-
-    -webkit-transform: rotate(10deg);
-    -moz-transform: rotate(10deg);
-    -ms-transform: rotate(10deg);
-    -o-transform: rotate(10deg);
+    position: relative;
+    bottom: -5px;
+    left: -6px;
+    font-family: arial;
+    font-size: 32px;
+    color: #05c147;
 }
 
 #head_container form {
@@ -96,25 +93,30 @@ header {
     padding: 3px 5px;
 	height: 20px;
     font-size: 14px;
-	border: none;
 	outline: none;
 }
 
 #head_container input[type='text']:focus, #head_container input[type='password']:focus {
-	box-shadow: #09F 0 0 12px;
+    box-shadow: #09F 0 0 5px;
 }
 
 #login {
     position: relative;
     top: -3px;
     text-shadow: 0 1px 1px #777;
+    border-radius: 2px;
+    background: #09F;
+}
+
+#login:hover {
+    background: #038eeb;
 }
 
 #banner {
     position: relative;
-    margin-top: 40px;
-    background: url('../images/banner.png') center repeat fixed;
-    height: 450px;
+    background: url('../images/banner.png') repeat;
+    height: 100vh;
+    min-height: 570px;
 }
 
 #alpha_note {
@@ -223,6 +225,25 @@ header {
     right: 5px;
 }
 
+#what_link {
+    position: absolute;
+    text-align: center;
+    padding-top: 10px;
+    height: 30px;
+    bottom: 90px;
+    width: 240px;
+    left: 50%;
+    margin-left: -120px;
+    font-size: 20px;
+    background: #09F;
+    border-radius: 0;
+    border: 1px solid white;
+}
+
+#what_link:hover {
+    background: #038eeb;
+}
+
 #what {
     margin-top: 80px;
     font-size: 44px;
@@ -294,15 +315,21 @@ header {
     padding-top: 5px;
     margin-top: 30px;
     font-size: 28px;
-    border-radius: 8px;
-    border: solid 1px black;
-    background: linear-gradient(#00e00a, #02be0c);
+    background: #09F;
+    border-radius: 2px;
+    border: 1px solid #020024;
     text-decoration: none;
     text-shadow: 0 1px 2px #333;
 }
 
 #backToTop:hover {
-    background: linear-gradient(#00d30a, #02af0c);
+    background: #038eeb;
+}
+
+#backToTop span {
+    position: relative;
+    bottom: 5px;
+    font-size: 14px;
 }
 
 footer {

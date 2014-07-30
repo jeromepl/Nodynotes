@@ -29,8 +29,7 @@
         <![endif]-->
         <header>
             <div id='head_container' class='container'>
-                <img id='alpha' src='images/alpha.png' draggable='false'>
-                <h1>Nodynotes</h1>
+                <h1>Nodynotes <span id='alpha'>&#x3b1</span></h1>
                 <?php
                     if(isset($_GET['ref_id'])) {
                         echo '<form method="post" action="server_side/login.php?ref_id=' . $_GET['ref_id'] . '">';
@@ -113,6 +112,7 @@
                     </form>
                 </div>
             </div>
+            <a id='what_link' onclick="$('#what').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400, padding:40});" class='button'>What is Nodynotes? <span style="font-size: 12px;">&#x25BC</span></a>
         </section>
 
         <section class='container'>
@@ -162,7 +162,7 @@
             </div>
         </section>
 
-        <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now!</a></div>
+        <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now! <span>&#x25B2</span></a></div>
         
         <footer>
             <div class='container'>
@@ -170,7 +170,7 @@
                 <div id='links'>
                     <a href="blog/">Blog</a>
                     <a href="#">Legal Stuff</a>
-                    <a href="#">Contact us</a>
+                    <a href="mailto:nodynotes@gmail.com" target="_blanck">Contact us</a>
                 </div>
             </div>
         </footer>
@@ -178,6 +178,8 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
         <script src="plugins/animatescroll.min.js"></script>
+        <script src="plugins/bgpos.js"></script>
+        <script src="plugins/jquery.mousewheel.js"></script>
         <script src="javascript/home.js"></script>
     </body>
 </html>
