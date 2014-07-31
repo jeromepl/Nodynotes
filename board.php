@@ -85,8 +85,7 @@
                 ?>
             </div>
              <div id='head_left'>
-                <img id='alpha' src='images/alpha.png' draggable='false'>
-                <a id='logo' href="home.php">Nodynotes</a>
+                <a id='logo' href="">Nodynotes <span id='alpha'>&#x3b1</span></a>
             </div>
              <div id='head_middle'>
                 <div id='search'>
