@@ -1,7 +1,7 @@
 DirectoryIndex home.php
 AddType text/cache-manifest manifest
 RewriteEngine On
-RewriteRule ^boards/([0-9]+)/?$ board.php?id=$1 [NC,L]
+RewriteRule ^boards/([0-9]+)(?:/?(.*))? board.php?id=$1&$2 [NC,L]
 
 #IN CASE OF A MAINTENANCE
 #ErrorDocument 403 /maintenance.html 

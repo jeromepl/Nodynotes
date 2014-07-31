@@ -57,9 +57,7 @@ function save(data, object, selectedNode, newLinkBar) { //object is optional (us
 }
 
 function saveBoard(data) {
-	$('#saving').stop(true, true); //stop the current animation if there is one
-	$('#saving').show();
-
+	//no animation for boards related saves
 	$.post("server_side/saveBoard.php", data,
 			function(answer) { //returns the number of nodes changed or the new id
 				console.log(data);
@@ -70,11 +68,9 @@ function saveBoard(data) {
 					var y = $('#nodesContainer').outerHeight() / 2.6;
 					$.post("server_side/save.php", {action: 'insert', what2Add: 'node', board_id: answer, xPos: x, yPos: y, color: '00d7dd', icon: 'none'},
 						function(answer2) {
-							window.location.href = "boards/" + answer;
+							window.location.href = "boards/" + answer + "?node_id=" + answer2;
 						});
 				}
-
-				$('#saving').delay(700).fadeOut(1000);
 			})
 		.fail(function(jqXHR, textStatus, errorThrown) { //if there is an error
 			alert("An error occured while trying to save. Please check your internet connection and try again later.");

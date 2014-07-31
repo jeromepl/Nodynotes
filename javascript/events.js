@@ -396,11 +396,11 @@ $(function() {
                     var currentA = $('<a>').appendTo('#search_results').addClass('search_result');
                     if(data[i].type == 'node') {
                         $('<div>').appendTo(currentA).addClass('search_nodeResult');
-                        currentA.attr('href', "board.php?id=" + data[i].board_id + "&node_id=" + data[i].id);
+                        currentA.attr('href', "boards/" + data[i].board_id + "/node_id=" + data[i].id);
                     }
                     else { //subtitle
                         $('<div>').appendTo(currentA).addClass('search_subtitleResult');
-                        currentA.attr('href', "board.php?id=" + data[i].board_id + "&sub_id=" + data[i].id);
+                        currentA.attr('href', "boards/" + data[i].board_id + "/sub_id=" + data[i].id);
                     }
                     var currentDiv = $('<div>').appendTo(currentA).addClass('search_textResult');
                     $('<h3>').appendTo(currentDiv).text(data[i].title);
