@@ -20,7 +20,11 @@ header .iconic-property-accent {
 	stroke: #06F;
 }
 
-#toolbar .iconic-route-point { /* Route icon */
+#toolbar .iconic-connections-dot-center { /* Connections icon */
+    fill: #020024;
+    stroke: #020024;
+}
+#toolbar .iconic-connections-line { /* Connections icon */
     fill: #06F;
     stroke: #06F;
 }

@@ -192,7 +192,7 @@
     	<section id='toolbar'>
         	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
-        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/route.svg" class='iconic iconic-lg' data-state="intact"></div>
+        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/connections.svg" class='iconic iconic-lg' data-state="intact"></div>
             <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
             <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
             <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
