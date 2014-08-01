@@ -144,7 +144,7 @@
                     <h2>Organized</h2>
                     <p>No more messy notes on pieces of paper. Your notes will always be <strong>clean</strong> and well organized in a <strong>beautiful</strong> and colored tree <strong>diagram</strong></p>
                 </div>
-                <div class='feature_icon'><img data-src="images/icons/fork.svg" class="iconic iconic-lg"></div>
+                <div class='feature_icon'><img data-src="images/icons/connections.svg" class="iconic iconic-lg"></div>
             </div>
             <div class='feature feature_left'>
                 <div class='feature_icon'><img data-src="images/icons/globe.svg" class="iconic iconic-lg"></div>
