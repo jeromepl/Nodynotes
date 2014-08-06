@@ -17,7 +17,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="description" content="Save your knowledge and thoughts in an organized fashion. Never forget anything again.">
-		<title>Nodynotes - Organized and free notes for everyone</title>
+		<title>Nodynotes - Your thoughts, organized</title>
         <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/homeStyle.css">

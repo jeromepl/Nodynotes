@@ -6,13 +6,14 @@
 	
 	if(isset($_POST['action'])) {
 		
-		if($_POST['action'] == 'insert' && isset($_POST['title'])) {
+		if($_POST['action'] == 'insert' && isset($_POST['title']) && isset($_POST['public'])) {
 			
-			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation)
-									VALUES(\'\', :user_id, :title, 0, 0, NOW(), NOW(), 0, :ip)');
+			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation, public)
+									VALUES(\'\', :user_id, :title, 0, 0, NOW(), NOW(), 0, :ip, :public)');
 			$req->execute(array('user_id' => $_SESSION['id'],
 								'title' => $_POST['title'],
-                                'ip' => $_SERVER['REMOTE_ADDR']));
+                                'ip' => $_SERVER['REMOTE_ADDR'],
+                                'public' => $_POST['public']));
 			
 			echo $bdd->lastInsertId();
 		}

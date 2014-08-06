@@ -22,7 +22,7 @@ define('DB_NAME', 'blog');
 define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'H0T_Gu!t@r3');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');

@@ -2,6 +2,8 @@
 	session_start();
     $baseUrl = 'http://localhost/Nodes/'; //TODO try if it would work without any base url
     $isConnected = false; //to know if it's an anonymous person viewing a public board or a connected one
+    $isPublic = false;
+    $isCreator = false;
 
 	if(!isset($_SESSION['id'])) {
         $_SESSION['id'] = 0; //Set the id to 0 so that public boards can be accessed without logging in
@@ -9,7 +11,6 @@
 	
     include_once("server_side/mySQL_connection.php"); //where $bdd is set
 
-    //setup for the global variable board_id
     if(!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         if($_SESSION['id'] == 0) {//user not logged in
             session_destroy();
@@ -19,7 +20,7 @@
             header('Location: ' . $baseUrl . 'errors/404.html'); //TODO create the 404 page
     }
     else { //Check if the board specified belongs to the user
-        $answer = $bdd->prepare('SELECT b.id
+        $answer = $bdd->prepare('SELECT b.user_id, b.public
                                 FROM access a
                                 RIGHT JOIN boards b ON b.id = a.board_id
                                 WHERE b.id = :id AND (a.user_id = :user_id OR b.user_id = :user_id2 OR b.public = \'T\')');
@@ -40,11 +41,18 @@
                 $answer->closeCursor();
 
                 $_GET['id'] = $data['last_board'];
-                header('Location: ' . $baseUrl . 'boards/' . $_GET['id']);
+                header('Location: ' . $baseUrl . 'boards/' . $_GET['id']); //TODO tell the user he was redirected because he did not have the right to see the board
             }
         }
-        else if($_SESSION['id'] != 0)
-            $isConnected = true;
+        else { //If you get there that means the user has passed all verifications and can see the board
+            if($data['public'] == 'T')
+                $isPublic = true;
+            if($_SESSION['id'] != 0) {
+                $isConnected = true;
+                if($data['user_id'] == $_SESSION['id'])
+                    $isCreator = true;
+            }
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -72,20 +80,19 @@
     	<header>
             <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
                 <?php
-                    if($isConnected) { //Show profile and disconnect buttons
-                        echo "<a id='head_profile' class='head_icon' href='#'  title='Profile'><img data-src='images/icons/person.svg' class='iconic iconic-md' data-gender='genderless'></a>";
-                        echo "<a id='logout' class='head_icon' href='server_side/disconnect.php'  title='Log out'><img data-src='images/icons/account.svg' class='iconic iconic-md' data-state='logout'></a>";
-                    }
-                    else { //show login form
-                        echo "<form method='post' action='server_side/login.php?ref_id=" . $_GET['id'] . "'>";
-                        echo "<input type='text' name='email_username' placeholder='Email or username'>";
-                        echo "<input type='password' name='password' placeholder='Password'>";
-                        echo "<input type='submit' id='login' value='Log in'>";
-                    }
-                ?>
+                    if($isConnected) { //Show profile and disconnect buttons ?>
+                        <a id='head_profile' class='head_icon' href='#'  title='Profile'><img data-src='images/icons/person.svg' class='iconic iconic-md' data-gender='genderless'></a>
+                        <a id='logout' class='head_icon' href='server_side/disconnect.php'  title='Log out'><img data-src='images/icons/account.svg' class='iconic iconic-md' data-state='logout'></a>
+                <?php }
+                    else { //show login form ?>
+                        <form method='post' action='server_side/login.php?ref_id=<?php echo $_GET['id'];?>'>
+                        <input type='text' name='email_username' placeholder='Email or username'>
+                        <input type='password' name='password' placeholder='Password'>
+                        <input type='submit' id='login' value='Log in'>
+                <?php } ?>
             </div>
              <div id='head_left'>
-                <a id='logo' href="">Nodynotes <span id='alpha'>&#x3b1</span></a>
+                <h1 id='logo' href="#">Nodynotes <span id='alpha'>&#x3b1</span></h1>
             </div>
              <div id='head_middle'>
                 <div id='search'>
@@ -110,93 +117,103 @@
                     </div>
                     
                     <img src="images/pointer.png" id="pointer" class="pointerRight" draggable = "false">
-                    <div id='changeContent'>
-                        <div id='changeContentButton' title='Modify'><img data-src="images/icons/pencil.svg" class="iconic iconic-md" title="Edit"></div>
-                        <div id='changeContent_change' title='Apply'><img data-src="images/icons/circle-check.svg" class="iconic iconic-md" title="Apply"></div>
-                        <div id='changeContent_cancel' title='Cancel'> <img data-src="images/icons/circle-x.svg" class="iconic iconic-md" title="Cancel"></div>
+                    <?php if(!$isPublic || $isCreator) { ?>
+                        <div id='changeContent'>
+                            <div id='changeContentButton' title='Modify'><img data-src="images/icons/pencil.svg" class="iconic iconic-md" title="Edit"></div>
+                            <div id='changeContent_change' title='Apply'><img data-src="images/icons/circle-check.svg" class="iconic iconic-md" title="Apply"></div>
+                            <div id='changeContent_cancel' title='Cancel'> <img data-src="images/icons/circle-x.svg" class="iconic iconic-md" title="Cancel"></div>
+                        </div>
+                    <?php } ?>
+                </div>
+                <?php if(!$isPublic || $isCreator) { ?>
+                    <div id='fakeLink' class='linkBar' style="display: none; z-index: 1;"></div>
+                    <div id='overlay_linkDel' style="display: none; z-index: 1;"></div>
+                    <div id='overlay_nodeDel'>
+                	   <div id='overlay_titleDel'></div>
+                        <!-- Up to 5 subtitles -->
+                        <div class='overlay_subDel'></div>
+                        <div class='overlay_subDel'></div>
+                   	    <div class='overlay_subDel'></div>
+                        <div class='overlay_subDel'></div>
+                        <div class='overlay_subDel'></div>
                     </div>
-                </div>
-                <div id='fakeLink' class='linkBar' style="display: none; z-index: 1;"></div>
-                <div id='overlay_linkDel' style="display: none; z-index: 1;"></div>
-                <div id='overlay_nodeDel'>
-                	<div id='overlay_titleDel'></div>
-                    <!-- Up to 5 subtitles -->
-                    <div class='overlay_subDel'></div>
-                    <div class='overlay_subDel'></div>
-                   	<div class='overlay_subDel'></div>
-                    <div class='overlay_subDel'></div>
-                    <div class='overlay_subDel'></div>
-                </div>
-                <div id='overlay_subDelSingle' class='overlay_subDel'></div>
+                    <div id='overlay_subDelSingle' class='overlay_subDel'></div>
+                <?php } ?>
             </div>
-            <div id='toolbar2'>
-                <!-- Everything is placed in a div, otherwise the border is not correctly shown with the SVGs -->
-            	<div id='tool2_img_1' class="tool2_icon" title='Add Subtitle'><img data-src="images/icons/plus.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_2' class="tool2_icon" title='Delete Node'><img data-src="images/icons/x.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_3' class="tool2_icon" title='Change Color'><img data-src="images/icons/brush.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/icons/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
-                <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/icons/transfer.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/icons/tags.svg" class='iconic iconic-md'></div>
-            	<div id='tool2_img_7' class="tool2_icon" title='More'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
+                <div id='toolbar2' <?php if($isPublic && !$isCreator) { ?> style="width:0;height:0;border:none;display:none;" <?php } ?>>
+                    <?php if(!$isPublic || $isCreator) { //leave the toolbar2, but empty to avoid errors?>
+                    <!-- Everything is placed in a div, otherwise the border is not correctly shown with the SVGs -->
+                    <div id='tool2_img_1' class="tool2_icon" title='Add Subtitle'><img data-src="images/icons/plus.svg" class='iconic iconic-md'></div>
+            	    <div id='tool2_img_2' class="tool2_icon" title='Delete Node'><img data-src="images/icons/x.svg" class='iconic iconic-md'></div>
+            	    <div id='tool2_img_3' class="tool2_icon" title='Change Color'><img data-src="images/icons/brush.svg" class='iconic iconic-md'></div>
+            	    <div id='tool2_img_4' class="tool2_icon" title='Change Icon'><img data-src="images/icons/image.svg" class='iconic iconic-md' data-orientation="landscape"></div>
+                    <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/icons/transfer.svg" class='iconic iconic-md'></div>
+            	    <div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/icons/tags.svg" class='iconic iconic-md'></div>
+            	    <div id='tool2_img_7' class="tool2_icon" title='More'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
                 
-                <div id='colorChoices'>
-                    <div class='colorBox' style='background-color: #FB001A;'></div>
-                    <div class='colorBox' style='background-color: #E500D9;'></div>
-                    <div class='colorBox' style='background-color: #90F;'></div>
-                    <div class='colorBox' style='background-color: #4140E1;'></div>
-                    <div class='colorBox' style='background-color: #00D7DD;'></div>
-                    <div class='colorBox' style='background-color: #2F2;'></div>
-                    <div class='colorBox' style='background-color: #FF0;'></div>
-                    <div class='colorBox' style='background-color: #FFA500;'></div>
-                    <div class='colorBox' style='background-color: #7E2B02;'></div>
-                    <div class='colorBox' style='background-color: #FFF;'></div>
-                    <div class='colorBox' style='background-color: #555;'></div>
-                    <div class='colorBox' style='background-color: #000;'></div>
+                    <div id='colorChoices'>
+                        <div class='colorBox' style='background-color: #FB001A;'></div>
+                        <div class='colorBox' style='background-color: #E500D9;'></div>
+                        <div class='colorBox' style='background-color: #90F;'></div>
+                        <div class='colorBox' style='background-color: #4140E1;'></div>
+                        <div class='colorBox' style='background-color: #00D7DD;'></div>
+                        <div class='colorBox' style='background-color: #2F2;'></div>
+                        <div class='colorBox' style='background-color: #FF0;'></div>
+                        <div class='colorBox' style='background-color: #FFA500;'></div>
+                        <div class='colorBox' style='background-color: #7E2B02;'></div>
+                        <div class='colorBox' style='background-color: #FFF;'></div>
+                        <div class='colorBox' style='background-color: #555;'></div>
+                        <div class='colorBox' style='background-color: #000;'></div>
                     
-                    <img src="images/pointer-grey.png" draggable = "false">
-                </div>
-
-                <div id='tag_box'>
-                	<div id='tag_form'>
-                		<input type='text' id='tag_name' >
-                    	<div id='add_tag'>Add tag</div>
+                        <img src="images/pointer-grey.png" draggable = "false">
                     </div>
-                    <div id='all_tags'></div>
-                    <img src="images/pointer-grey.png" draggable = "false">
+            <?php }  //leave the tags to avoid errors during board loading?>
+            <div id='tag_box'>
+                <div id='tag_form'>
+                    <input type='text' id='tag_name' >
+                    <div id='add_tag'>Add tag</div>
                 </div>
-
-                <div id='icon_box'>
-                    <h2>Icons:</h2>
-                    <div id='all_icons'></div>
-                    <img src="images/pointer-grey.png" draggable = "false">
-                </div>
-			</div>
-            <div id='board_properties'> <!-- Placed here to be centered in the nodesContainer -->
-                <input id='board_newTitle' type="text" style="display: none;" >
-                <?php
-                    $answer = $bdd->prepare('SELECT id, title, date_creation FROM boards WHERE user_id = :user_id AND id = :id');
-				    $answer->execute(array('user_id' => $_SESSION['id'], 'id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
-                    $data = $answer->fetchAll();
-                    echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
-                    echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
-                    echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
-                    echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/boards/" . $data[0]['id'] ."</h3><br>";
-                    $answer->closeCursor();
-                ?>
-                <div id='board_changetitle' class='property_button'>Change Title</div>
-                <div id='board_delete' class='property_button'>Delete Board</div>
-                <img id='properties_close' data-src="images/icons/x.svg" title='Close window' class='iconic iconic-sm'>
+                <div id='all_tags'></div>
+                <img src="images/pointer-grey.png" draggable = "false">
             </div>
+            <?php if(!$isPublic || $isCreator) { ?>
+                    <div id='icon_box'>
+                        <h2>Icons:</h2>
+                        <div id='all_icons'></div>
+                        <img src="images/pointer-grey.png" draggable = "false">
+                    </div>
+            <?php } ?>
+            </div>
+
+            <?php if(!$isPublic || $isCreator) { ?>
+                <div id='board_properties'> <!-- Placed here to be centered in the nodesContainer -->
+                    <input id='board_newTitle' type="text" style="display: none;" >
+                    <?php
+                        $answer = $bdd->prepare('SELECT id, title, date_creation FROM boards WHERE user_id = :user_id AND id = :id');
+				        $answer->execute(array('user_id' => $_SESSION['id'], 'id' => $_GET['id'])) or die(print_r($bdd->errorInfo()));
+                        $data = $answer->fetchAll();
+                        echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
+                        echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
+                        echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
+                        echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/boards/" . $data[0]['id'] ."</h3><br>";
+                        $answer->closeCursor();
+                    ?>
+                    <div id='board_changetitle' class='property_button'>Change Title</div>
+                    <div id='board_delete' class='property_button'>Delete Board</div>
+                    <img id='properties_close' data-src="images/icons/x.svg" title='Close window' class='iconic iconic-sm'>
+                </div>
+            <?php } ?>
         </section>
-    	<section id='toolbar'>
-        	<div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
-            <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
-        	<div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/connections.svg" class='iconic iconic-lg' data-state="intact"></div>
-            <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
-            <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
-            <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
-        </section>
-        
+        <?php if(!$isPublic || $isCreator) { ?>
+    	    <section id='toolbar'>
+        	    <div id='tool_img_1' class="tool_icon" title='Move/Select tool'><img data-src="images/icons/move.svg" class='iconic iconic-lg'></div>
+                <div id='tool_img_2' class="tool_icon" title='Delete tool'><img data-src="images/icons/x.svg" class='iconic iconic-lg'></div>
+        	    <div id='tool_img_3' class="tool_icon" title='Link tool'><img data-src="images/icons/connections.svg" class='iconic iconic-lg' data-state="intact"></div>
+                <div id='tool_img_4' class="tool_icon" title='Add node'><img data-src="images/icons/plus.svg" class='iconic iconic-lg'></div>
+                <div id='tool_img_5' class="tool_icon" title='Undo'><img data-src="images/icons/action.svg" class='iconic iconic-lg' data-state="undo"></div>
+                <div id='tool_img_6' class="tool_icon" title='Board properties'><img data-src="images/icons/list.svg" class="iconic iconic-lg"></div>
+            </section>
+        <?php } ?>
         <section id='sidebar'>
         	<div id='unfold_button'>
         		<span></span><h1>Boards</h1>
@@ -225,19 +242,26 @@
                         $answer->closeCursor();
 					?>
                     <h4 id="board_noResults">No results found</h4>
+                    <?php if(!$isConnected) { ?><h4>Login to see your boards</h4> <?php } ?>
            		</div>
         	</div>
-            <div id="add_board_box">
-            	<h2>Create a new board</h2>
-            	<input id="board_title" type="text" placeholder="Board Title">
-                <div id="add_board_confirm">Create board</div>
-                <div id="add_board_cancel">Cancel</div>
-            </div>
+            <?php if($isConnected) { ?>
+                <div id="add_board_box">
+                    <h2>Create a new board</h2>
+                    <input id="board_title" type="text" placeholder="Board Title">
+                    <div id="add_board_confirm">Create board</div>
+                    <div id="add_board_cancel">Cancel</div>
+                    <input type="radio" name="public" value="F" checked="true">Private
+                    <input type="radio" name="public" value="T">Public
+                </div>
+            <?php } ?>
         </section>
-    	<div id='saving'>
-        	<p><i>Saving</i></p>
-            <img src="images/ajax-loader.gif" alt="Loading" draggable="false">
-        </div>
+        <?php if(!$isPublic || $isCreator) { ?>
+    	    <div id='saving'>
+        	   <p><i>Saving</i></p>
+                <img src="images/ajax-loader.gif" alt="Loading" draggable="false">
+            </div>
+        <?php } ?>
         
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
@@ -249,6 +273,9 @@
         <script src="javascript/objects/Tag.js"></script>
         
         <script src="javascript/functions.js"></script>
+        <?php if(!$isPublic || $isCreator) { ?>
+            <script src="javascript/save.js"></script>
+        <?php } ?>
         
         <script>
 			//Global variables
@@ -336,6 +363,9 @@
             ?>
         </script>
         <script src="javascript/events.js"></script>
-        <script src='javascript/toolbar.js'></script>
+        <?php if(!$isPublic || $isCreator) { ?>
+            <script src='javascript/events-for-creator.js'></script>
+            <script src='javascript/toolbar.js'></script>
+        <?php } ?>
 	</body>
 </html>

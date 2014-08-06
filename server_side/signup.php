@@ -21,8 +21,8 @@
                 $_SESSION['username'] = $_POST['username']; //no need to strip tags usernames since '<' and '>' cannot be used in usernames
 
                 //Create a demo board
-                $req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation)
-									   VALUES(\'\', :user_id, \'Demo\', 0, 0, NOW(), NOW(), 0, :ip)');
+                $req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation, public)
+									   VALUES(\'\', :user_id, \'Demo\', 0, 0, NOW(), NOW(), 0, :ip, \'F\')');
                 $req->execute(array('user_id' => $_SESSION['id'],
                                     'ip' => $_SERVER['REMOTE_ADDR']));
                 $newBoard = $bdd->lastInsertId();

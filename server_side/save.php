@@ -226,7 +226,7 @@
 				$nb = $req->execute(array('id' => $_POST['tag_id'],
 											'user_id' => $_SESSION['id']));
 			}
-			
-			echo $nb;
 		}
 	}
+
+    echo $nb;
