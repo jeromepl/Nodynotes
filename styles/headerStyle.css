@@ -35,7 +35,7 @@ header {
 	font-size: 28px;
 	font-weight: bold;
 	font-style: italic;
-	cursor: pointer;
+	cursor: default;
 	border-radius: 4px 4px 0 0;
 	text-decoration: none;
     text-shadow: 0 2px 2px #999;
@@ -48,10 +48,6 @@ header {
     font-family: arial;
     font-size: 24px;
     color: #05c147;
-}
-
-header a:hover {
-	background-color: rgba(100, 100, 100, 0.15);
 }
 
 header svg:not(.search_resultSVG) {

@@ -363,7 +363,9 @@
             ?>
         </script>
         <script src="javascript/events.js"></script>
-        <?php if(!$isPublic || $isCreator) { ?>
+        <?php if($isConnected) { ?>
+            <script src="javascript/events-connected.js"></script>
+        <?php } if(!$isPublic || $isCreator) { ?>
             <script src='javascript/events-for-creator.js'></script>
             <script src='javascript/toolbar.js'></script>
         <?php } ?>
