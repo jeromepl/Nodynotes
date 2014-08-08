@@ -30,6 +30,7 @@
 				}
 				else echo -1;
 				$answer->closeCursor();
+                return;
 			}
 			else if($_POST['what2Add'] == 'subtitle' && isset($_POST['node_id']) && is_numeric($_POST['node_id'])
 				&& isset($_POST['pos']) && is_numeric($_POST['pos'])) {
@@ -53,6 +54,7 @@
 				}
 				else echo -1;
 				$answer->closeCursor();
+                return;
 			}
 			else if($_POST['what2Add'] == 'tag' && isset($_POST['node_id']) && is_numeric($_POST['node_id'])
 				&& isset($_POST['title'])) {
@@ -75,6 +77,7 @@
 				}
 				else echo -1;
 				$answer->closeCursor();
+                return;
 			}
 			else if($_POST['what2Add'] == 'link' && isset($_POST['node1_id']) && is_numeric($_POST['node1_id'])
 				&& isset($_POST['node2_id']) && is_numeric($_POST['node2_id'])) {
@@ -97,6 +100,7 @@
 				}
 				else echo -1;
 				$answer->closeCursor();
+                return;
 			}
 		}
 		

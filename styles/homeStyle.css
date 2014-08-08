@@ -4,13 +4,11 @@ html {
     font-family: asap, ubuntu, sans-serif;
     font-style: normal;
 	font-weight: 400;
-    min-height: 100%;
 }
 
 body {
     margin: 0;
 	background-color: white;
-    min-height: 100%;
 }
 
 strong { /* only used for SEO */
@@ -48,12 +46,6 @@ header {
 	box-shadow: 0 5px 5px #CCC;
 	z-index: 10;
     width: 100%;
-}
-
-#head_container {
-    position: relative;
-    padding: 5px 0;
-    height: 45px;
 }
 
 #head_container h1 {
@@ -415,20 +407,21 @@ footer a:hover {
 #error_connect {
     display: block;
     position: absolute;
-    top: 42px;
+    top: 36px;
     padding: 3px 7px;
     color: white;
     background: linear-gradient(#F00, #d00);
     border: solid 2px black;
     border-radius: 6px;
+    z-index: 2;
 }
 
 #error_connect img {
     position: absolute;
-    top: -10px;
+    top: -8px;
     left: 60px;
     width: 15px;
-	height: 10px;
+	height: 8px;
 }
 
 #error_signup {

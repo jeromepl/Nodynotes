@@ -1,0 +1,129 @@
+@charset "utf-8";
+
+html {
+    font-family: asap, ubuntu, sans-serif;
+    font-style: normal;
+	font-weight: 400;
+}
+
+body {
+    margin: 0;
+	background-color: white;
+}
+
+header {
+    height: 40px;
+    width: 100%;
+    background-color: #020024;
+    border-bottom: solid 4px #09F;
+}
+
+.container {
+    width: 980px;
+    margin: auto;
+}
+
+#logo {
+	display: inline-block;
+    float: left;
+	color: white;
+	padding: 5px 15px;
+	margin: 0;
+	margin-right: 20px;
+	vertical-align: middle;
+	font-size: 28px;
+	font-weight: bold;
+	font-style: italic;
+	cursor: pointer;
+	border-radius: 4px 4px 0 0;
+	text-decoration: none;
+    text-shadow: 0 2px 1px #777;
+}
+
+#alpha {
+    position: relative;
+    bottom: -5px;
+    left: -6px;
+    font-family: arial;
+    font-size: 24px;
+    color: #05c147;
+}
+
+#title {
+    font-family: ubuntu;
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+    text-decoration: underline;
+}
+
+nav {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    font-family: ubuntu;
+    font-size: 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+#all_text {
+    display: inline-block;
+    width: 70%;
+    border-left: solid 1px black;
+    padding-left: 40px;
+}
+
+.arrow_head {
+    font-family: arial;
+    font-size: 14px;
+    margin-right: 3px;
+    padding-bottom: 2px;
+}
+
+#all_text h2 span:not(.arrow_head){
+    font-family: ubuntu;
+    text-decoration: underline;
+}
+
+#all_text h3 {
+    font-family: ubuntu;
+}
+
+footer {
+    height: 22px;
+    margin-top: 45px;
+    padding-top: 5px;
+    background-color: #EEE;
+}
+
+footer h3 {
+    text-align: left;
+    float: left;
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+#links {
+    float: right;
+    height: 19px;
+}
+
+footer a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

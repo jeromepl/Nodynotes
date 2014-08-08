@@ -16,6 +16,8 @@
                                 'public' => $_POST['public']));
 			
 			echo $bdd->lastInsertId();
+            $answer->closeCursor();
+            return;
 		}
 		
 		else if($_POST['action'] == 'update') {
@@ -42,6 +44,7 @@
 			}
 			
 			echo $nb;
+            return
 		}
 		
 		else if($_POST['action'] == 'delete' && isset($_POST['board_id']) && is_numeric($_POST['board_id'])) {
@@ -81,5 +84,6 @@
 								'user_id' => $_SESSION['id']));					
 									
 			echo $nb;
+            return;
 		}
 	}

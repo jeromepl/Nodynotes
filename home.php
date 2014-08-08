@@ -169,7 +169,7 @@
                 <h3>©Nodynotes 2014</h3>
                 <div id='links'>
                     <a href="blog/">Blog</a>
-                    <a href="#">Legal Stuff</a>
+                    <a href="policies.html">Legal Stuff</a>
                     <a href="mailto:nodynotes@gmail.com" target="_blanck">Contact us</a>
                 </div>
             </div>

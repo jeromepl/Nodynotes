@@ -32,7 +32,7 @@ $(function() {
         input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory (add a + sign before each word)
 
         $.getJSON("server_side/search.php?query=" + input + "*", function(data) {
-            console.log(data);
+            //console.log(data);
             $('.search_result').remove();
 
             if(data.length == 0) { //no results
