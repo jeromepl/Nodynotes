@@ -130,10 +130,10 @@
 	display: none;
 	position: fixed;
 	width: 420px;
-	height: 100px;
+	height: 150px;
 	top: 50%;
 	left: 50%;
-	margin-top: -50px; /* 100/2 */
+	margin-top: -75px; /* 150/2 */
 	margin-left: -210px; /* 420/2 */
 	border: solid 2px #020024;
 	border-radius: 7px;
@@ -162,7 +162,7 @@
 	box-shadow: 0 0 2px black;
 }
 
-#add_board_box div {
+#add_board_confirm, #add_board_cancel {
 	display: inline-block;
 	font-size: 16px;
 	text-align: center;
@@ -194,10 +194,39 @@
 	background: linear-gradient(#E52, #C22);
 }
 
-#add_board_box div:hover {
+#add_board_confirm:hover, #add_board_cancel:hover {
 	box-shadow: 0 1px 1px #999;
 }
 
-#add_board_box div:active {
+#add_board_confirm:active, #add_board_cancel:active {
 	box-shadow: none;
+}
+
+#choose_public {
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#choose_public label {
+    font-weight: bold;
+}
+
+#add_board_box input[name=public] {
+    margin-right: 10px;
+}
+
+#add_board_box input[value=T] {
+    margin-left: 20px;
+}
+
+#choose_public p {
+    margin: 0;
+    margin-top: 7px;
+    font-size: 15px;
+    font-style: italic;
+}
+
+#text_public {
+    display: none;
 }

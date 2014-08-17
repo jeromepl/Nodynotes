@@ -17,9 +17,11 @@ $(function() {
     $(document).on('click', '#head_profile', function(e){
        alert("We are currently working on this feature. Sorry for the inconvenience.");
     });
+    $(document).on('click', '#head_friends', function(e){
+       alert("We are currently working on this feature. Sorry for the inconvenience.");
+    });
 
 	//SHOW SIDEBAR
-	var sidebarExpanded = false;
 	$(document).on('click', '#unfold_button', function(e) {
 		if(!addingBoard && selectedTool != 6) {
 			if(!sidebarExpanded) {

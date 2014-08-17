@@ -12,7 +12,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	this.tags = [];
 	this.moveInfo = {}; // Info about the movement of the node (setted in the mousedown/mouseup/mousemove events)
 
-	this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos, left: xPos, background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
+	this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
 	$.data(this.element[0], 'node', {object: this}); //save the object's reference to be able to act on it in event listeners
 
 	this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);
@@ -149,7 +149,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 		$('.node:not(.board_node)').css('opacity', '0.6');
 		$('.linkBar').css('opacity', '0.3');
 		this.element.css('opacity', '1');
-		this.element.css('z-index', '2');
+		this.element.css('z-index', '3');
 
 		var distLeft = this.element.position().left + this.element.outerWidth() / 2 - $('#toolbar2').outerWidth() / 2 + $('#nodesArea').position().left;
 		var distTop = this.element.position().top - 100 + $('#nodesArea').position().top;
@@ -244,7 +244,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 			if(this.subtitles[i].ellipsis) this.subtitles[i].ellipsis.hide();
 		}
 		this.isExpanded = true;
-        this.element.css('z-index', 2);
+        this.element.css('z-index', 3);
 		ellipsisNode = this; //save the node's reference to know which ellipsis was clicked
 	}
 

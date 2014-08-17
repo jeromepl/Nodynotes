@@ -136,6 +136,14 @@ $(function() {
 			sidebarExpanded = false;
 		}
 	});
+    $(document).on("click", "input[name='public']", function() {
+        $("#text_private, #text_public").hide();
+
+        if($(this).val() == 'F') //If its private
+            $("#text_private").show();
+        else
+            $("#text_public").show();
+    });
 	$(document).on('click', '#add_board_confirm', function(e) {
         if($('#board_title').val() != '') saveBoard({action: 'insert', title: $('#board_title').val(), public: $('input[name=public]:checked').val()});
 	});
@@ -146,6 +154,12 @@ $(function() {
 		$('#board_title').val('');
 		$('#add_board_box').hide();
 		$('#nodesContainer').css('opacity', '1');
+
+        $('#add_board_box input[value=T]').prop('checked', false); //reset the radio buttons
+        $('#add_board_box input[value=F]').prop('checked', true);
+        $("#text_public").hide();
+        $("#text_private").show();
+
 		addingBoard = false;
 	});
 });

@@ -4,6 +4,7 @@ header {
 	display: block;
 	position: relative;
 	width: 100%;
+    min-width: 980px;
 	height: 40px;
 	border-bottom: solid 4px #09F;
     background-color: #020024;
@@ -61,6 +62,7 @@ header svg:not(.search_resultSVG) {
 
 .head_icon {
 	display: inline-block;
+    margin-right: 15px;
 	border-radius: 5px;
 	cursor: pointer;
 	vertical-align: middle;
@@ -69,9 +71,10 @@ header svg:not(.search_resultSVG) {
 
 .head_icon:hover {
 	box-shadow: 0 3px 5px #AAA;
+    border-bottom: 5px #09F solid;
 }
 
-.header_icon:active {
+.head_icon:active {
 	box-shadow: 0 0 0 #AAA;
 }
 
@@ -88,11 +91,27 @@ header svg:not(.search_resultSVG) {
 }
 
 #head_profile {
-	margin-right: 25px;
+    margin-right: 20px;
 }
 
 #head_profile:hover {
-	border-bottom: 5px #00D7DD solid;
+	border-bottom: 5px #4140E1 solid;
+}
+
+#head_friends {
+    height: 40px;
+    overflow: hidden;
+    padding: 0 7px;
+}
+
+#head_friends svg {
+    width: 45px !important;
+	height: 45px !important;
+    padding: 0;
+}
+
+#head_friends:hover {
+    border-bottom: 5px #00D7DD solid;
 }
 
 #head_right input[type='text'], #head_right input[type='password'] {

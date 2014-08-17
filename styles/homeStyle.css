@@ -54,6 +54,7 @@ header {
     color: #020024;
 	height: 40px;
 	padding: 0;
+    padding-top: 5px;
     margin: 0;
 	font-size: 42px;
 	font-weight: bold;
@@ -73,7 +74,7 @@ header {
 
 #head_container form {
     float: right;
-    padding-top: 5px;
+    padding-top: 10px;
 }
 
 #head_container input[type='text'], #head_container input[type='password'] {

@@ -79,13 +79,15 @@
                         </div>
                         <div id='input_error1' class='input_error'>This username is too fancy for our systems!<br>Use 4-15 letters, numbers, underscores and periods</div>
                         <div id='input_error1b' class='input_error'>Someone acquired this username before you! :O</div>
-                        <div id='input2' class='input'><input type="text" name="email" placeholder="Email" autocomplete="off">
+                        <div id='input2' class='input'>
+                            <input type="text" name="email" placeholder="Email" autocomplete="off">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
                         </div>
                         <div id='input_error2' class='input_error'>This does not look like an email address!</div>
                         <div id='input_error2b' class='input_error'>Is someone using the same email address as you?</div>
-                        <div id='input3' class='input'><input type="password" name="password" placeholder="Password" autocomplete="off">
+                        <div id='input3' class='input'>
+                            <input type="password" name="password" placeholder="Password" autocomplete="off">
                             <img data-src="images/icons/check.svg" class="iconic iconic-sm input_good">
                             <img data-src="images/icons/x.svg" class="iconic iconic-sm input_bad">
                         </div>

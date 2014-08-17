@@ -81,7 +81,8 @@
             <div id='head_right'> <!-- Head right must go first to prevent display anomalies due to the float functionality -->
                 <?php
                     if($isConnected) { //Show profile and disconnect buttons ?>
-                        <a id='head_profile' class='head_icon' href='#'  title='Profile'><img data-src='images/icons/person.svg' class='iconic iconic-md' data-gender='genderless'></a>
+                        <div id='head_friends' class='head_icon' title='Friends'><img data-src='images/icons/people.svg' class='iconic iconic-md'></div>
+                        <a id='head_profile' class='head_icon' href='#' title='Profile'><img data-src='images/icons/person.svg' class='iconic iconic-md' data-gender='genderless'></a>
                         <a id='logout' class='head_icon' href='server_side/disconnect.php'  title='Log out'><img data-src='images/icons/account.svg' class='iconic iconic-md' data-state='logout'></a>
                 <?php }
                     else { //show login form ?>
@@ -251,8 +252,12 @@
                     <input id="board_title" type="text" placeholder="Board Title">
                     <div id="add_board_confirm">Create board</div>
                     <div id="add_board_cancel">Cancel</div>
-                    <input type="radio" name="public" value="F" checked="true">Private
-                    <input type="radio" name="public" value="T">Public
+                    <div id="choose_public">
+                        <label><input type="radio" name="public" value="F" checked="true">Private</label>
+                        <label><input type="radio" name="public" value="T">Public</label>
+                        <p id="text_private">Only you and who you choose will be able to see this board!</p>
+                        <p id="text_public">Everyone will be able to see this board. It might even become super popular!</p>
+                    </div>
                 </div>
             <?php } ?>
         </section>
@@ -285,6 +290,7 @@
 			var changeContentType = 'node';
 			var selectedType = 'node';
 			var colorChanging = false;
+            var sidebarExpanded = false;
 			var addingBoard = false;
 			var tagsOpen = false;
             var iconsOpen = false;

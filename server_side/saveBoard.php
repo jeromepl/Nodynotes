@@ -16,7 +16,7 @@
                                 'public' => $_POST['public']));
 			
 			echo $bdd->lastInsertId();
-            $answer->closeCursor();
+            $req->closeCursor();
             return;
 		}
 		
@@ -44,7 +44,7 @@
 			}
 			
 			echo $nb;
-            return
+            return;
 		}
 		
 		else if($_POST['action'] == 'delete' && isset($_POST['board_id']) && is_numeric($_POST['board_id'])) {

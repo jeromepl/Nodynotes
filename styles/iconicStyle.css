@@ -9,6 +9,10 @@ header .iconic-property-accent {
     fill: #09F;
     stroke: #09F;
 }
+#head_friends .iconic-property-accent {
+    fill: white;
+    stroke: white;
+}
 
 /* Toolbar 1 (Right side) */
 #toolbar .iconic *, #toolbar2 .iconic * {
@@ -19,7 +23,10 @@ header .iconic-property-accent {
 	fill: #06F;
 	stroke: #06F;
 }
-
+#toolbar .iconic-action-undo * {
+    fill: #c1c1d0;
+    stroke: #c1c1d0;
+}
 #toolbar .iconic-connections-dot-center { /* Connections icon */
     fill: #020024;
     stroke: #020024;
