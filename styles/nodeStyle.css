@@ -29,11 +29,11 @@ body {
 	margin: 0;
 	padding: 0;
 	z-index: 1;
-    cursor: url('../cursors/openhand.cur'), url('http://localhost/Nodes/cursors/openhand.cur'), default;
+    cursor: url('../cursors/openhand.cur'), default;
 }
 
 #nodesContainer:active {
-    cursor: url('../cursors/closedhand.cur'), url('http://localhost/Nodes/cursors/closedhand.cur'), default;
+    cursor: url('../cursors/closedhand.cur'), default;
 }
  
 #nodesArea {

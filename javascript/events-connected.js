@@ -52,8 +52,8 @@ $(function() {
                         currentA.attr('href', "boards/" + data[i].board_id + "/sub_id=" + data[i].id);
                     }
                     var currentDiv = $('<div>').appendTo(currentA).addClass('search_textResult');
-                    $('<h3>').appendTo(currentDiv).text(data[i].title);
-                    $('<p>').appendTo(currentDiv).text(data[i].text);
+                    $('<h3>').appendTo(currentDiv).html(data[i].title);
+                    $('<p>').appendTo(currentDiv).html(data[i].text);
                     resultAmount++;
                 }
 

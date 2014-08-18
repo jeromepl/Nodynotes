@@ -74,8 +74,8 @@
             $current = count($elArray) - 1;
             $elArray[$current]['id'] = $id;
             $elArray[$current]['board_id'] = $board_id;
-            $elArray[$current]['title'] = strip_tags($title); //add the title and text to the element in the array
-            $elArray[$current]['text'] = strip_tags($text);
+            $elArray[$current]['title'] = escapeHtml($title); //add the title and text to the element in the array
+            $elArray[$current]['text'] = escapeHtml($text, true);
             $elArray[$current]['score'] = $score;
             if ($type == 'node' || $type == 'tag') $elArray[$current]['type'] = 'node';
             else $elArray[$current]['type'] = 'subtitle';
@@ -131,6 +131,14 @@
             }
         }
         return null;
+    }
+
+    function escapeHtml($text, $keepBR = false) { //instead of htmlspecialchars since this last one also changes the single and double quotes ' and " ($keepBR is optional)
+        $text = str_replace(">", "&gt;", str_replace("<", "&lt;", str_replace("&", "&amp", $text)));
+        if($keepBR)
+            return str_replace("&lt;br&gt;", "<br>", $text); //keep the <br> tags intact for proper display
+        else
+            return $text;
     }
 		
 	//NOTE If splitting words is ever necessary: $words = preg_split("#\\s+#", $_GET['query'], NULL, PREG_SPLIT_NO_EMPTY);
