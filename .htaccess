@@ -1,6 +1,9 @@
 DirectoryIndex home.php
 AddType text/cache-manifest manifest
-RewriteEngine On
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^nodynotes.com[NC]
+RewriteRule ^(.*)$ http://www.nodynotes.com/$1 [R=301,NC]
 RewriteRule ^boards/([0-9]+)(?:/?(.*))? board.php?id=$1&$2 [NC,L]
 
 #IN CASE OF A MAINTENANCE
@@ -13,10 +16,6 @@ RewriteRule ^boards/([0-9]+)(?:/?(.*))? board.php?id=$1&$2 [NC,L]
 
 #Prevent viewing of .htaccess and .htpasswd files
 <Files .htaccess>
-    order allow,deny
-    deny from all
-</Files>
-<Files .htpasswd>
     order allow,deny
     deny from all
 </Files>

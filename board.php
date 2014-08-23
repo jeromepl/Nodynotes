@@ -60,6 +60,7 @@
 	<head>
     	<meta charset="utf-8">
         <meta name="description" content="Add or edit nodes and subtitles on this page. You will have access to them from any computer afterwards!">
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
         <title>Your board - Nodynotes</title>
         <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">

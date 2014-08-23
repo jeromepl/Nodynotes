@@ -21,6 +21,13 @@ $(function() {
        alert("We are currently working on this feature. Sorry for the inconvenience.");
     });
 
+    //Prevent scrolling in all direction for mobile devices
+    $(document).on('touchmove', function(e) {
+        var tar = $(e.target);
+        if(tar[0] != $('#all_icons')[0] && !tar.parents('#all_icons').length || tar[0] != $('#board_chooser')[0] && !tar.parents('#board_chooser').length) //Still need to scroll if in the tag box or sidebar
+    	   e.preventDefault();
+    });
+
 	//SHOW SIDEBAR
 	$(document).on('click', '#unfold_button', function(e) {
 		if(!addingBoard && selectedTool != 6) {
@@ -40,7 +47,10 @@ $(function() {
 	var moveInfo = {};
 	var area_startPositionX = 0, area_startPositionY = 0;
 	var tool_initTop = 0, tool_initLeft = 0;
-	$(document).on('mousedown', function(e) {
+	$(document).on('mousedown touchstart', function(e) {
+        if (e.type == 'touchstart') //touch support
+            e = e.originalEvent.changedTouches[0];
+
 		if(!addingBoard && selectedTool != 6) {
 			if(e.target === $('#nodesContainer')[0] || $(e.target).hasClass('linkBar')) { //clicked on background or a link bar
 				moving = true;
@@ -57,8 +67,11 @@ $(function() {
 			}
 		}
 	});
-	$(document).on('mouseup', function(e) {
-		if(moving) {
+	$(document).on('mouseup touchend', function(e) {
+		if (e.type == 'touchend') //touch support
+            e = e.originalEvent.changedTouches[0];
+
+        if(moving) {
 			moving = false;
 			var area_endPositionX = e.clientX;
 			var area_endPositionY = e.clientY;
@@ -67,7 +80,10 @@ $(function() {
 			}
 		}
 	});
-	$(document).on('mousemove', function(e) {
+	$(document).on('mousemove touchmove', function(e) {
+        if (e.type == 'touchmove') //touch support
+            e = e.originalEvent.changedTouches[0];
+
 		if(moving) {
 			$('#nodesArea').css({top: e.clientY - moveInfo.offsetTop, left: e.clientX - moveInfo.offsetLeft});
 
