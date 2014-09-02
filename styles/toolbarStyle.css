@@ -148,10 +148,6 @@
     font-style: italic;
 }
 
-#text_public_prop {
-    display: none;
-}
-
 .property_button {
     display: inline-block;
     margin: 15px 20px;

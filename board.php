@@ -203,8 +203,8 @@
                     <div id="choose_public_prop">
                         <label><input type="radio" name="public_prop" value="F" <?php if(!$isPublic) { echo "checked='true'"; }?>>Private</label>
                         <label><input type="radio" name="public_prop" value="T" <?php if($isPublic) { echo "checked='true'"; }?>>Public</label>
-                        <p id="text_private_prop">Only you and who you choose will be able to see this board!</p>
-                        <p id="text_public_prop">Everyone will be able to see this board. It might even become super popular!</p>
+                        <p id="text_private_prop" <?php if($isPublic) { echo "style='display: none;'"; }?>>Only you and who you choose will be able to see this board!</p>
+                        <p id="text_public_prop" <?php if(!$isPublic) { echo "style='display: none;'"; }?>>Everyone will be able to see this board. It might even become super popular!</p>
                     </div>
                     <div id='board_changetitle' class='property_button'>Change Title</div>
                     <div id='board_delete' class='property_button'>Delete Board</div>
