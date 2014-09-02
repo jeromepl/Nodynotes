@@ -33,7 +33,7 @@
                                     'ip' => $_SERVER['REMOTE_ADDR']));
                 $newNode = $bdd->lastInsertId();
 
-                header('Location: ../boards/' . $newBoard . '&node_id=' . $newNode); //This will save the new board as the last seen one
+                header('Location: ../board/' . $newBoard . '&node_id=' . $newNode); //This will save the new board as the last seen one
             }
             else
                 header('Location: ../?er=6'); //Username already used

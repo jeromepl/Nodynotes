@@ -4,7 +4,7 @@
 	
 	$nb = 0;
 	
-	if(isset($_POST['action'])) {
+	if(isset($_POST['action']) && isset($_SESSION['id']) && is_numeric($_SESSION['id'])) {
 		
 		if($_POST['action'] == 'insert' && isset($_POST['title']) && isset($_POST['public'])) {
 			
@@ -42,6 +42,15 @@
 											'board_id' => $_POST['board_id'],
 											'user_id' => $_SESSION['id']));
 			}
+
+            else if(isset($_POST['public']) && ($_POST['public'] == 'T' || $_POST['public'] == 'F')) {
+                $req = $bdd->prepare('UPDATE boards
+										SET public = :public
+										WHERE id = :board_id AND user_id = :user_id');
+				$nb = $req->execute(array('public' => $_POST['public'],
+											'board_id' => $_POST['board_id'],
+											'user_id' => $_SESSION['id']));
+            }
 			
 			echo $nb;
             return;

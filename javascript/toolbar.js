@@ -237,6 +237,11 @@ $(function() {
     //BOARD PROPERTIES EVENTS
     $(document).on('click', '#properties_close', function(e) {
         selectTool(6); //this will deselect the property tool and select the move tool since the property tool is already selected
+
+        $('#board_properties input[value=T]').prop('checked', false); //reset the radio buttons
+        $('#board_properties input[value=F]').prop('checked', true);
+        $("#text_public_prop").hide();
+        $("#text_private_prop").show();
     });
     $(document).on('click', '#board_changetitle', function(e) {
         if($('#board_properties h1').is(':visible')) {
@@ -259,6 +264,17 @@ $(function() {
             saveBoard({action: 'update', board_id: board_id, title: newTitle});
         }
     }
+    $(document).on("click", "input[name='public_prop']", function() {
+        $("#text_private_prop, #text_public_prop").hide();
+
+        if($(this).val() == 'F') //If its private
+            $("#text_private_prop").show();
+        else
+            $("#text_public_prop").show();
+
+        //saving
+        saveBoard({action: 'update', board_id: board_id, public: $(this).val()})
+    });
     $(document).on('click', '#board_delete', function(e) {
         //TODO redirect to another board after deleting this one and verify if this is last user's board
         /*var del = confirm("Are you sure you want to delete this board? This action can't be undone!");

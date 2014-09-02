@@ -31,7 +31,7 @@ $(function() {
 
         input = '+' + (input.trim()).replace(/\W+/g, ' +'); //make every word mandatory (add a + sign before each word)
 
-        $.getJSON("server_side/search.php?query=" + input + "*", function(data) {
+        $.getJSON("server_side/search-temp.php?query=" + input + "*", function(data) {
             //console.log(data);
             $('.search_result').remove();
 
@@ -45,11 +45,11 @@ $(function() {
                     var currentA = $('<a>').appendTo('#search_results').addClass('search_result');
                     if(data[i].type == 'node') {
                         $('<div>').appendTo(currentA).addClass('search_nodeResult');
-                        currentA.attr('href', "boards/" + data[i].board_id + "/node_id=" + data[i].id);
+                        currentA.attr('href', "board/" + data[i].board_id + "/node_id=" + data[i].id);
                     }
                     else { //subtitle
                         $('<div>').appendTo(currentA).addClass('search_subtitleResult');
-                        currentA.attr('href', "boards/" + data[i].board_id + "/sub_id=" + data[i].id);
+                        currentA.attr('href', "board/" + data[i].board_id + "/sub_id=" + data[i].id);
                     }
                     var currentDiv = $('<div>').appendTo(currentA).addClass('search_textResult');
                     $('<h3>').appendTo(currentDiv).html(data[i].title);
@@ -136,19 +136,19 @@ $(function() {
 			sidebarExpanded = false;
 		}
 	});
-    $(document).on("click", "input[name='public']", function() {
-        $("#text_private, #text_public").hide();
+    $(document).on("click", "input[name='public_add']", function() {
+        $("#text_private_add, #text_public_add").hide();
 
         if($(this).val() == 'F') //If its private
-            $("#text_private").show();
+            $("#text_private_add").show();
         else
-            $("#text_public").show();
+            $("#text_public_add").show();
     });
 	$(document).on('click', '#add_board_confirm', function(e) {
-        if($('#board_title').val() != '') saveBoard({action: 'insert', title: $('#board_title').val(), public: $('input[name=public]:checked').val()});
+        if($('#board_title').val() != '') saveBoard({action: 'insert', title: $('#board_title').val(), public: $('input[name=public_add]:checked').val()});
 	});
 	$(document).on('keydown', function(e) {
-        if(e.which == 13 && $('#board_title').is(':focus') && $('#board_title').val() != '') saveBoard({action: 'insert', title: $('#board_title').val(), public: $('input[name=public]:checked').val()});
+        if(e.which == 13 && $('#board_title').is(':focus') && $('#board_title').val() != '') saveBoard({action: 'insert', title: $('#board_title').val(), public: $('input[name=public_add]:checked').val()});
 	});
 	$(document).on('click', '#add_board_cancel', function(e) {
 		$('#board_title').val('');
@@ -157,8 +157,8 @@ $(function() {
 
         $('#add_board_box input[value=T]').prop('checked', false); //reset the radio buttons
         $('#add_board_box input[value=F]').prop('checked', true);
-        $("#text_public").hide();
-        $("#text_private").show();
+        $("#text_public_add").hide();
+        $("#text_private_add").show();
 
 		addingBoard = false;
 	});

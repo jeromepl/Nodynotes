@@ -197,9 +197,15 @@
                         echo "<h1>" . strip_tags($data[0]['title']) . "</h1>";
                         echo "<h2>Author:</h2><h3>" . $_SESSION['username'] . "</h3><br>";
                         echo "<h2>Created on:</h2><h3>" . $data[0]['date_creation'] . "</h3><br>";
-                        echo "<h2>Link to this board:</h2><h3>http://localhost/Nodes/boards/" . $data[0]['id'] ."</h3><br>";
+                        echo "<h2>Link to this board:</h2><h3>http://www.nodynotes.com/board/" . $data[0]['id'] ."</h3><br>";
                         $answer->closeCursor();
                     ?>
+                    <div id="choose_public_prop">
+                        <label><input type="radio" name="public_prop" value="F" <?php if(!$isPublic) { echo "checked='true'"; }?>>Private</label>
+                        <label><input type="radio" name="public_prop" value="T" <?php if($isPublic) { echo "checked='true'"; }?>>Public</label>
+                        <p id="text_private_prop">Only you and who you choose will be able to see this board!</p>
+                        <p id="text_public_prop">Everyone will be able to see this board. It might even become super popular!</p>
+                    </div>
                     <div id='board_changetitle' class='property_button'>Change Title</div>
                     <div id='board_delete' class='property_button'>Delete Board</div>
                     <img id='properties_close' data-src="images/icons/x.svg" title='Close window' class='iconic iconic-sm'>
@@ -235,7 +241,7 @@
                                                 WHERE a.user_id = :user_id OR b.user_id = :user_id2 ORDER BY b.date_creation');
                         $answer->execute(array('user_id' => $_SESSION['id'], 'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
 						while($data = $answer->fetch()) {
-							echo '<a href="boards/' . $data['id'] . '">
+							echo '<a href="board/' . $data['id'] . '">
 									<div id="board_node' . $data['id'] . '" class="node board_node" style="background: radial-gradient(#999 40%, #CCC 65%);">
 									  <h3 class="nodeTitle">' . strip_tags($data['title']) . '</h3>
 								  	</div>
@@ -253,11 +259,11 @@
                     <input id="board_title" type="text" placeholder="Board Title">
                     <div id="add_board_confirm">Create board</div>
                     <div id="add_board_cancel">Cancel</div>
-                    <div id="choose_public">
-                        <label><input type="radio" name="public" value="F" checked="true">Private</label>
-                        <label><input type="radio" name="public" value="T">Public</label>
-                        <p id="text_private">Only you and who you choose will be able to see this board!</p>
-                        <p id="text_public">Everyone will be able to see this board. It might even become super popular!</p>
+                    <div id="choose_public_add">
+                        <label><input type="radio" name="public_add" value="F" checked="true">Private</label>
+                        <label><input type="radio" name="public_add" value="T">Public</label>
+                        <p id="text_private_add">Only you and who you choose will be able to see this board!</p>
+                        <p id="text_public_add">Everyone will be able to see this board. It might even become super popular!</p>
                     </div>
                 </div>
             <?php } ?>

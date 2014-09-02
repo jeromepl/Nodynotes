@@ -202,31 +202,31 @@
 	box-shadow: none;
 }
 
-#choose_public {
+#choose_public_add {
     width: 100%;
     text-align: center;
     margin-top: 5px;
 }
 
-#choose_public label {
+#choose_public_add label {
     font-weight: bold;
 }
 
-#add_board_box input[name=public] {
+#choose_public_add input {
     margin-right: 10px;
 }
 
-#add_board_box input[value=T] {
+#choose_public_add input[value=T] {
     margin-left: 20px;
 }
 
-#choose_public p {
+#choose_public_add p {
     margin: 0;
     margin-top: 7px;
     font-size: 15px;
     font-style: italic;
 }
 
-#text_public {
+#text_public_add {
     display: none;
 }

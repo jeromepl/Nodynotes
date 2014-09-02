@@ -51,7 +51,7 @@ function login(&$answer) {
                         'id' => $_SESSION['id']));
 
     if(isset($_GET['ref_id']) && is_numeric($_GET['ref_id'])) {
-        header('Location: ../boards/' . $_GET['ref_id']);
+        header('Location: ../board/' . $_GET['ref_id']);
     }
     else {
 
@@ -60,6 +60,6 @@ function login(&$answer) {
         $data = $req->fetch();
         $req->closeCursor();
 
-        header('Location: ../boards/' . $data['last_board']);
+        header('Location: ../board/' . $data['last_board']);
     }
 }
