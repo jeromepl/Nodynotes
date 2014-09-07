@@ -29,7 +29,7 @@
         <![endif]-->
         <header>
             <div id='head_container'>
-                <h1>Nodynotes <span id='alpha'>&#x3b1</span></h1>
+                <h1>Nodynotes <span id='alpha'>&#x3b1;</span></h1>
                 <?php
                     if(isset($_GET['ref_id'])) {
                         echo '<form method="post" action="server_side/login.php?ref_id=' . $_GET['ref_id'] . '">';
@@ -172,7 +172,7 @@
                 <div id='links'>
                     <a href="blog/">Blog</a>
                     <a href="policies.html">Legal Stuff</a>
-                    <a href="mailto:nodynotes@gmail.com" target="_blanck">Contact us</a>
+                    <a href="mailto:nodynotes@gmail.com">Contact us</a>
                 </div>
             </div>
         </footer>
