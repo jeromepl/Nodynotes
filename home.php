@@ -28,7 +28,7 @@
             <p id='old_ie'>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie" rel="nofollow">here</a>.</p>
         <![endif]-->
         <header>
-            <div id='head_container' class='container'>
+            <div id='head_container'>
                 <h1>Nodynotes <span id='alpha'>&#x3b1</span></h1>
                 <?php
                     if(isset($_GET['ref_id'])) {
@@ -93,7 +93,7 @@
                         </div>
                         <div id='input_error3' class='input_error'>You wanna get your account stolen or what?? Your password should be at least 6 characters long!</div>
                         <button type="submit" id="signup" class="button">Sign up to Nodynotes!</button>
-                        <p>By clicking "Sign up to Nodynotes", you agree to our <a href="#">terms of service</a> and <a href="#">privacy policy</a>.</p>
+                        <p>By clicking "Sign up to Nodynotes", you agree to our <a href="policies.html">terms of service</a> and <a href="policies.html#privacy">privacy policy</a>.</p>
                         <?php
                             if(isset($_GET['er']) && is_numeric($_GET['er']) && $_GET['er'] > 3) {
                                 echo "<p id='error_signup'>";

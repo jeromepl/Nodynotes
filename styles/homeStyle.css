@@ -9,6 +9,7 @@ html {
 body {
     margin: 0;
 	background-color: white;
+    width: 100%;
 }
 
 strong { /* only used for SEO */
@@ -19,6 +20,12 @@ strong { /* only used for SEO */
     width: 980px;
     margin: auto;
     text-align: center;
+}
+
+#head_container {
+    width: 90%;
+    min-width: 980px;
+    margin: auto;
 }
 
 .button {
