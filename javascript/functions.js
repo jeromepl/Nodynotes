@@ -12,20 +12,36 @@ function refreshLinkBars(node) { //node is optionnal
 }
 
 function moveIntoView() { //Moves the nodesArea in case the information would be hidden (use only when content shower is shown)
+
+    var areaY = $('#nodesArea').position().top, showY = $('#showContent').position().top, showHeight = $('#showContent').outerHeight(), viewHeight = $('#nodesContainer').outerHeight();
+	var bottomY = areaY + showY + showHeight; //position of the bottom of the content shower
+    var areaX = $('#nodesArea').position().left, showX = $('#showContent').position().left;
+    var tool2Y = $('#toolbar2').position().top, headerHeight = $('header').outerHeight();
+    var tool2RightX = $('#toolbar2').position().left + $('#toolbar2').outerWidth(), tool1X = $('#toolbar').position().left;
+
+    //if its too high
+    if(tool2Y < headerHeight) {
+        $('#nodesArea').css('top', $('#nodesArea').position().top + (headerHeight - tool2Y) + 5); //5 to leave a little space
+		$('#toolbar2').css('top', headerHeight + 5); //also move the 2nd toolbar (it's placed outside of the nodesArea)
+    }
+
 	//if it's too low
-	var areaY = $('#nodesArea').position().top, showY = $('#showContent').position().top, showHeight = $('#showContent').outerHeight(), viewHeight = $('#nodesContainer').outerHeight();
-	var totalY = areaY + showY + showHeight;
-	if(totalY > viewHeight && showHeight < viewHeight) { //if part of the content shower is hidden and if the content shower is not higher than the page
-		$('#nodesArea').css('top', areaY - (totalY - viewHeight));
-		$('#toolbar2').css('top', $('#toolbar2').position().top - (totalY - viewHeight)); //also move the 2nd toolbar (it's placed outside of the nodesArea
+	if(bottomY > viewHeight && showHeight < viewHeight) { //if part of the content shower is hidden and if the content shower is not higher than the page
+		$('#nodesArea').css('top', areaY - (bottomY - viewHeight));
+		$('#toolbar2').css('top', $('#toolbar2').position().top - (bottomY - viewHeight));
 	}
 
 	//if it's too far to the left
-	var areaX = $('#nodesArea').position().left, showX = $('#showContent').position().left;
 	if(showX + areaX < 0) {
-		$('#nodesArea').css('left', areaX + Math.abs(areaX + showX) + 5); //to to leave a little space
-		$('#toolbar2').css('left', $('#toolbar2').position().left + Math.abs(areaX + showX)); //also move the 2nd toolbar
+		$('#nodesArea').css('left', areaX + Math.abs(areaX + showX) + 5); //5 to leave a little space
+		$('#toolbar2').css('left', $('#toolbar2').position().left + Math.abs(areaX + showX) + 5);
 	}
+
+    //if it's too far on the right
+    if(tool2RightX > tool1X) {
+        $('#nodesArea').css('left', $('#nodesArea').position().left - (tool2RightX - tool1X) - 5); //-5 to leave a little space
+		$('#toolbar2').css('left', $('#toolbar2').position().left - (tool2RightX - tool1X) - 5);
+    }
 }
 
 function save() {} //These methods are overidden in save.js (to avoid errors when someone else is viewing the board)

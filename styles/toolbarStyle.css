@@ -364,6 +364,31 @@
 	box-shadow: none;
 }
 
+#tag_suggestions {
+    display: none;
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    background-color: white;
+    width: 186px;
+    padding: 2px 0;
+    border: 1px solid #020024;
+    border-top: none;
+}
+
+.tag_suggestion {
+    margin: 0;
+    padding: 0 5px;
+    font-size: 15px;
+    overflow:hidden;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.tag_suggestion:hover {
+    background-color: #dbdbdb;
+}
+
 #all_tags {
 	height: 47px;
 	padding: 5px;

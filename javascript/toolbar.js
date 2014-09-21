@@ -320,6 +320,7 @@ $(function() {
 		if(tagsOpen) { //don't show tags and colors at the same time
 			$('#tag_box').hide();
 			$('#tag_name').val('');
+            $('#tag_suggestions').hide();
 			tagsOpen = false;
 		}
         if(iconsOpen) { //don't show icons and colors at the same time
@@ -355,6 +356,7 @@ $(function() {
         if(tagsOpen) { //don't show tags and icons at the same time
 			$('#tag_box').hide();
             $('#tag_name').val('');
+            $('#tag_suggestions').hide();
 			tagsOpen = false;
 		}
 
@@ -439,6 +441,7 @@ $(function() {
     }
 
 	$(document).on('click', '#tool2_img_5', function() { // Inputs/Outputs
+        alert("We are currently working on this feature. Sorry for the inconvenience."); //TODO remove when done
 	});
 
 	$(document).on('click', '#tool2_img_6', function() { // Manage tags
@@ -449,6 +452,7 @@ $(function() {
 		else { //toggle
 			$('#tag_box').hide();
 			$('#tag_name').val('');
+            $('#tag_suggestions').hide();
 			tagsOpen = false;
 		}
 
@@ -463,15 +467,27 @@ $(function() {
 	});
 	//TAGS EVENTS
 	$(document).on('click', '#add_tag', function(e) {
-		addTagEvent();
+		addTagEvent($('#tag_name').val());
+        $('#tag_suggestions').hide();
 	});
-	$(document).on('keydown', function(e) {
-		if(e.which == 13 && $('#tag_name').is(":focus")) {
-			addTagEvent();
+	$(document).on('keyup', '#tag_name', function(e) {
+		if(e.which == 13) {
+			addTagEvent($('#tag_name').val());
+            $('#tag_suggestions').hide();
 		}
+        else { //tag suggestions
+            suggestTags();
+        }
 	});
-	function addTagEvent() {
-		var title = $('#tag_name').val();
+    $(document).on('focus', '#tag_name', function(e) {
+        suggestTags();
+    });
+    $(document).on('click', '.tag_suggestion', function(e) {
+        addTagEvent($(this).text());
+        $('.tag_suggestion').remove();
+        $('#tag_suggestions').hide();
+    });
+	function addTagEvent(title) { //adds a tag
 		var node = $.data($('#toolbar2')[0], 'node').object;
 		if(title != '') {
 			node.addTag(id--, title);
@@ -480,11 +496,28 @@ $(function() {
 			save({action: 'insert', what2Add: 'tag', node_id: node.id, title: title}, node.tags[node.tags.length - 1]);
 		}
 	}
+    function suggestTags() {
+        $.getJSON("server_side/last_tags.php?query=" + $('#tag_name').val(), function(data) {
+                //console.log(data);
+                $('#tag_suggestions').show();
+                $('.tag_suggestion').remove();
+
+                for(var i = 0; i < data.length; i++) {
+                    var currentA = $('<p>').appendTo('#tag_suggestions').addClass('tag_suggestion').text(data[i]);
+                }
+
+                if(data.length == 0) $('#tag_suggestions').hide();
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert("An eror occured while trying to get tags\n" + textStatus + ": " + errorThrown);
+            });
+    }
 	$(document).on('click', '.tag_x', function(e) {
 		var tag = $.data($(this).parent('.tag')[0], 'tag').object;
 		tag.deleteTag();
 	});
 
-	$(document).on('click', '#tool2_img_7', function() { // Sublink
+	$(document).on('click', '#tool2_img_7', function() { // Others
+        alert("We are currently working on this feature. Sorry for the inconvenience."); //TODO remove when done
 	});
 });

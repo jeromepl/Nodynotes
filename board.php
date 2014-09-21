@@ -1,6 +1,6 @@
 <?php
 	session_start();
-    $baseUrl = 'http://localhost/Nodes/'; //TODO try if it would work without any base url
+    $baseUrl = 'http://localhost/Nodes/';
     $isConnected = false; //to know if it's an anonymous person viewing a public board or a connected one
     $isPublic = false;
     $isCreator = false;
@@ -167,22 +167,23 @@
                         <div class='colorBox' style='background-color: #555;'></div>
                         <div class='colorBox' style='background-color: #000;'></div>
                     
-                        <img src="images/pointer-grey.png" draggable = "false">
+                        <img src="images/pointer-grey.png" draggable="false">
                     </div>
             <?php }  //leave the tags to avoid errors during board loading?>
             <div id='tag_box'>
                 <div id='tag_form'>
                     <input type='text' id='tag_name' >
+                    <div id='tag_suggestions'></div>
                     <div id='add_tag'>Add tag</div>
                 </div>
                 <div id='all_tags'></div>
-                <img src="images/pointer-grey.png" draggable = "false">
+                <img src="images/pointer-grey.png" draggable="false">
             </div>
             <?php if(!$isPublic || $isCreator) { ?>
                     <div id='icon_box'>
                         <h2>Icons:</h2>
                         <div id='all_icons'></div>
-                        <img src="images/pointer-grey.png" draggable = "false">
+                        <img src="images/pointer-grey.png" draggable="false">
                     </div>
             <?php } ?>
             </div>

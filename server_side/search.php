@@ -10,7 +10,7 @@
 	
     //TODO Add option to search in the current board instead of all of them
 
-	if(isset($_SESSION['id']) && isset($_GET['query'])) {
+	if(isset($_SESSION['id']) && is_numeric($_SESSION['id']) && isset($_GET['query'])) {
 		$answer = $bdd->prepare('SELECT n.*,
 									MATCH(n.title, n.text) AGAINST(:query1 IN BOOLEAN MODE) AS score
 									FROM nodes n

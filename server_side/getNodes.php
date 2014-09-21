@@ -65,21 +65,21 @@
 				}
 				$answer2->closeCursor();
 				
-				$answer3 = $bdd->prepare('SELECT * FROM linkbars WHERE (node1_id = :nodeId1 OR node2_id = :nodeId2)');
-				$answer3->execute(array('nodeId1' => $data1['id'], 'nodeId2' => $data1['id'])) or die(print_r($bdd->errorInfo()));
-				while($data3 = $answer3->fetch()) {
+				$answer2 = $bdd->prepare('SELECT * FROM linkbars WHERE (node1_id = :nodeId1 OR node2_id = :nodeId2)');
+				$answer2->execute(array('nodeId1' => $data1['id'], 'nodeId2' => $data1['id'])) or die(print_r($bdd->errorInfo()));
+				while($data2 = $answer2->fetch()) {
 
 					$link_key = count($post_data['linkBars']);
 
-					if($data3['node1_id'] > $data1['id'] || $data3['node2_id'] > $data1['id']) {
+					if($data2['node1_id'] > $data1['id'] || $data2['node2_id'] > $data1['id']) {
 						$post_data['linkBars'][] = $link_key;
 						$post_data['linkBars'][$link_key] = array();
-						$post_data['linkBars'][$link_key]['id'] = $data3['id'];
-						$post_data['linkBars'][$link_key]['node1_id'] = $data3['node1_id'];
-						$post_data['linkBars'][$link_key]['node2_id'] = $data3['node2_id'];
+						$post_data['linkBars'][$link_key]['id'] = $data2['id'];
+						$post_data['linkBars'][$link_key]['node1_id'] = $data2['node1_id'];
+						$post_data['linkBars'][$link_key]['node2_id'] = $data2['node2_id'];
 					}
 				}
-				$answer3->closeCursor();
+				$answer2->closeCursor();
 			}
 			$answer1->closeCursor();
 		}

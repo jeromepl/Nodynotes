@@ -184,6 +184,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 
 		$('#toolbar2').hide();
 		$('#tags' + this.id).hide(); //hide tags for the next selected node
+        $('#tag_suggestions').hide(); //hide tag suggestions in case they were open
 
 		if(colorChanging) {
 			$('#colorChoices').hide();

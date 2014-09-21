@@ -7,13 +7,13 @@ $(function() {
 		}, 20);
 	});
     $(document).on('keyup', '#head_middle input[type="text"]', function(e) {
-        if(e.which != 38 && e.which != 40)
+        if(e.which != 38 && e.which != 40) //up and down arrows
             mainSearch($('#head_middle input[type="text"]').val());
 	});
 	$(document).on('click', '#head_search', function(e) {
         mainSearch($('#head_middle input[type="text"]').val());
 	});
-    $(document).on('click', function(e) {
+    $(document).on('click', function(e) { //hide search results when clicking elsewhere
         var tar = $(e.target);
         if(!tar.is('#search_results') && !tar.parents('#search_results').length &&
             !tar.is('#search input') && !tar.parents('#search input').length &&
