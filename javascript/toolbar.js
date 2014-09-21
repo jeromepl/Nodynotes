@@ -482,6 +482,9 @@ $(function() {
     $(document).on('focus', '#tag_name', function(e) {
         suggestTags();
     });
+    $(document).on('blur', '#tag_name', function(e) {
+        $('#tag_suggestions').hide();
+    });
     $(document).on('click', '.tag_suggestion', function(e) {
         addTagEvent($(this).text());
         $('.tag_suggestion').remove();
