@@ -331,17 +331,17 @@ $(function() {
 	//COLOR CHANGING
 	$(document).on('mouseenter', '.colorBox', function(e) { //to give a preview
 		node = $.data($('#toolbar2')[0], 'node').object;
-		node.element.css('background', 'radial-gradient(#999 40%,' + colorToHex($(this).css('background-color')) + ' 65%)');
+		node.element.css('background-color', colorToHex($(this).css('background-color')));
 	});
 	$(document).on('mouseleave', '.colorBox', function(e) {
 		node = $.data($('#toolbar2')[0], 'node').object;
-		node.element.css('background', 'radial-gradient(#999 40%,' + node.color + ' 65%)');
+		node.element.css('background-color', node.color);
 	});
 	$(document).on('click', '.colorBox', function(e) {
 		node = $.data($('#toolbar2')[0], 'node').object;
 
 		node.color = colorToHex($(this).css('background-color'));
-		node.element.css('background', 'radial-gradient(#999 40%,' + node.color + ' 65%)');
+		node.element.css('background-color', node.color);
 		$('#colorChoices').hide();
 		colorChanging = false;
 

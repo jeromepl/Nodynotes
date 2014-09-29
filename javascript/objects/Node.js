@@ -12,7 +12,8 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 	this.tags = [];
 	this.moveInfo = {}; // Info about the movement of the node (setted in the mousedown/mouseup/mousemove events)
 
-	this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
+	//this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
+    this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', 'background-color': this.color}).attr('id', 'node' + this.id);
 	$.data(this.element[0], 'node', {object: this}); //save the object's reference to be able to act on it in event listeners
 
 	this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);

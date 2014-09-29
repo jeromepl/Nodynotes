@@ -68,8 +68,8 @@ header .iconic-property-accent {
     stroke: #75b5e2 !important;
 }
 .node .iconic * {
-	fill: black;
-    stroke: black;
+	fill: white;
+    stroke: white;
 }
 
 /* Sidebar icons */

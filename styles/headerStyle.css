@@ -5,8 +5,8 @@ header {
 	position: relative;
 	width: 100%;
     min-width: 980px;
-	height: 40px;
-	border-bottom: solid 4px #09F;
+	height: 42px;
+	border-bottom: solid 2px #09F;
     background-color: #020024;
 	z-index: 10;
     text-align: center;

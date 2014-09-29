@@ -45,7 +45,7 @@ body {
 	width: 70px;
 	height: 70px;
 	text-align: center;
-	border: solid 2px #000;
+	border: solid 2px #FFF;
 	border-radius: 50%;
 	box-shadow: #666 0 0 50px;
 	z-index: 1;
@@ -120,9 +120,9 @@ body {
 
 .linkBar {
 	position: absolute;
-	height: 4px;
+	height: 5px;
 	background-color: #B1B1B1;
-	box-shadow: #000 4px 0 5px;
+	/*box-shadow: #000 4px 0 5px;*/
 	z-index: 0;
 }
 

@@ -154,18 +154,18 @@
             	    <div id='tool2_img_7' class="tool2_icon" title='More'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
                 
                     <div id='colorChoices'>
-                        <div class='colorBox' style='background-color: #FB001A;'></div>
+                        <div class='colorBox' style='background-color: #e74c3c;'></div>
                         <div class='colorBox' style='background-color: #E500D9;'></div>
-                        <div class='colorBox' style='background-color: #90F;'></div>
-                        <div class='colorBox' style='background-color: #4140E1;'></div>
+                        <div class='colorBox' style='background-color: #9b59b6;'></div>
+                        <div class='colorBox' style='background-color: #3498db;'></div>
                         <div class='colorBox' style='background-color: #00D7DD;'></div>
-                        <div class='colorBox' style='background-color: #2F2;'></div>
-                        <div class='colorBox' style='background-color: #FF0;'></div>
-                        <div class='colorBox' style='background-color: #FFA500;'></div>
+                        <div class='colorBox' style='background-color: #2ecc71;'></div>
+                        <div class='colorBox' style='background-color: #f1c40f;'></div>
+                        <div class='colorBox' style='background-color: #e67e22;'></div>
                         <div class='colorBox' style='background-color: #7E2B02;'></div>
-                        <div class='colorBox' style='background-color: #FFF;'></div>
-                        <div class='colorBox' style='background-color: #555;'></div>
-                        <div class='colorBox' style='background-color: #000;'></div>
+                        <div class='colorBox' style='background-color: #bdc3c7;'></div>
+                        <div class='colorBox' style='background-color: #95a5a6;'></div>
+                        <div class='colorBox' style='background-color: #34495e;'></div>
                     
                         <img src="images/pointer-grey.png" draggable="false">
                     </div>
