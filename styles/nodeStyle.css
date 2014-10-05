@@ -47,7 +47,7 @@ body {
 	text-align: center;
 	border: solid 2px #FFF;
 	border-radius: 50%;
-	box-shadow: #666 0 0 50px;
+	box-shadow: #666 0 0 50px; /*Removing this drastically improves the FPS when moving the board!*/
 	z-index: 1;
 }
 

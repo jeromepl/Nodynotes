@@ -64,6 +64,7 @@
         <title>Your board - Nodynotes</title>
         <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
+        <!--<link rel="stylesheet" type="text/css" href="styles/boardStyle.php">-->
         <link rel="stylesheet" type="text/css" href="styles/nodeStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/toolbarStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/headerStyle.css">
@@ -279,6 +280,7 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
         
+        <!--<script src="javascript/objects/allObjects.php"></script>-->
         <script src="javascript/objects/Board.js"></script>
         <script src="javascript/objects/Node.js"></script>
         <script src="javascript/objects/Subtitle.js"></script>
