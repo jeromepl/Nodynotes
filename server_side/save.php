@@ -203,7 +203,7 @@
 			
 			else if($_POST['what2Del'] == 'link' && isset($_POST['link_id']) && is_numeric($_POST['link_id'])) {
 				
-				$req = $bdd->prepare('DELETE l FROM linkBars l
+				$req = $bdd->prepare('DELETE l FROM linkbars l
 										INNER JOIN nodes n ON n.id = l.node1_id
 										INNER JOIN boards b ON b.id = n.board_id
 										WHERE l.id = :id AND b.user_id = :user_id');
