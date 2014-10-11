@@ -64,7 +64,7 @@
         <title>Your board - Nodynotes</title>
         <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
-        <link rel="stylesheet" type="text/css" href="styles/boardStyle.php">
+        <link rel="stylesheet" type="text/css" href="styles/allBoardStyles.php">
         <!--[if lte IE 9]>
             <script>window.onload = function() {document.body.innerHTML = '<p>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">here</a>.</p>'
             };</script>
