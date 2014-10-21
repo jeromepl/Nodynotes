@@ -114,7 +114,7 @@
                     </form>
                 </div>
             </div>
-            <a id='what_link' onclick="$('#what').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400, padding:40});" class='button'>What is Nodynotes? <span style="font-size: 12px;">&#x25BC</span></a>
+            <a id='what_link' onclick="$('#what').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400, padding:40});" class='button'>What is Nodynotes? <span style="font-size: 12px;">&#x25BC;</span></a>
         </section>
 
         <section class='container'>
@@ -164,7 +164,7 @@
             </div>
         </section>
 
-        <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now! <span>&#x25B2</span></a></div>
+        <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now! <span>&#x25B2;</span></a></div>
         
         <footer>
             <div class='container'>

@@ -8,6 +8,7 @@ Instead of download all the following files individually, download them all as o
 */
 
 include("Board.js");
+include("Toolbar1.js")
 include("LinkBar.js");
 include("Subtitle.js");
 include("Node.js");

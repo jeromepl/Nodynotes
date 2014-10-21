@@ -212,7 +212,7 @@ $(function() {
 				save({action: 'insert', what2Add: 'node', board_id: board_id, xPos: position.left, yPos: position.top, color: '00d7dd', icon: 'none'},
 					nodes[nodes.length - 1], selectedNode, newLinkBar); //also send selected node and the new link bar the save it
 
-				selectedNode.deselected(); //to select the next one
+				selectedNode.deselect(); //to select the next one
 			}
 			else {
 				var position = nodes[nodes.length - 1].element.position(); //to clarify
@@ -221,7 +221,7 @@ $(function() {
 			}
 
 			//Change the content of the new node
-			nodes[nodes.length - 1].selected();
+			nodes[nodes.length - 1].select();
 			nodes[nodes.length - 1].changeContent();
 		}
 	});
@@ -286,13 +286,13 @@ $(function() {
 	$(document).on('click', '#tool2_img_1', function() { // Add subtitle
 		if(!changingContent && !addingBoard && selectedTool != 6) {
 			var node = $.data($('#toolbar2')[0], 'node').object;
-			node.deselected(); //deselect to reset the subtitles
+			node.deselect(); //deselect to reset the subtitles
 			node.addSubtitle(id--, node.subtitles.length, 'Subtitle', 'Change content...');
 
 			save({action: 'insert', what2Add: 'subtitle', node_id: node.id, pos: node.subtitles.length - 1},
 				node.subtitles[node.subtitles.length - 1]);
 
-			node.subtitles[node.subtitles.length - 1].selected();
+			node.subtitles[node.subtitles.length - 1].select();
 			node.subtitles[node.subtitles.length - 1].changeContent();
 		}
 	});
@@ -300,7 +300,7 @@ $(function() {
 	$(document).on('click', '#tool2_img_2', function() { // Delete node
 		if(selectedType == 'subtitle') {
 			var subtitle = $.data($('#toolbar2')[0], 'subtitle').object;
-			subtitle.node.selected();
+			subtitle.node.select();
 			subtitle.deleteSubtitle();
 		}
 		else

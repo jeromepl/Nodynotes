@@ -267,7 +267,7 @@ function Node(title, text, color, icon, xPos, yPos, id) {
 		save({action: 'delete', what2Del: 'node', node_id: this.id});
 		//deleting subtitles related to the node is done in php
 
-		this.deselected();
+		this.deselect();
 		if(changingContent) this.setContent(false);
 
 		for(var i = 0; i < nodes.length; i++) {

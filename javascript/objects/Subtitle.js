@@ -32,7 +32,7 @@ function Subtitle(id, position, title, text, node) {
 	}
 
 	this.selected = function() {
-		this.node.selected();
+		this.node.select();
 		this.isSelected = true;
 		//show the new title and text corresponding to the subtitle
 		$('#showContent p').html(this.text);

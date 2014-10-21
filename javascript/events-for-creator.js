@@ -36,7 +36,7 @@ $(function() {
 			mouseDownNode.element.css({top: (e.clientY - mouseDownNode.moveInfo.offsetTop), left: (e.clientX - mouseDownNode.moveInfo.offsetLeft)});
 			refreshLinkBars(mouseDownNode);
 
-			if(mouseDownNode.isSelected) mouseDownNode.deselected(); //stop showing content if dragged
+			if(mouseDownNode.isSelected) mouseDownNode.deselect(); //stop showing content if dragged
 
 			mouseDownNode.scale(1.1);
 		}

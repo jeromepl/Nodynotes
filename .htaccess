@@ -4,7 +4,7 @@ Options +FollowSymLinks
 RewriteEngine on
 RewriteCond %{HTTP_HOST} ^nodynotes.com[NC]
 RewriteRule ^(.*)$ http://www.nodynotes.com/$1 [R=301,NC]
-RewriteRule ^board/([0-9]+)(?:/?(.*))? board.php?id=$1&$2 [NC,L]
+RewriteRule ^board/([0-9]+)(?:/?(.*))? controller.php?id=$1&$2 [NC,L]
 
 #IN CASE OF A MAINTENANCE
 #ErrorDocument 403 /maintenance.html 

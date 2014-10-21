@@ -136,7 +136,7 @@ $(function() {
 					clickedOnNewNode = true;
 				}
 
-				selectedNode.deselected();
+				selectedNode.deselect();
 
 				if(!clickedOnNewNode) return; //if no node has been clicked to hide the content shower, don't show it again, so stop function
 			}
@@ -151,25 +151,25 @@ $(function() {
 			var tarParent = tar.parents('.node');
 			var tarParentSub = tar.parents('.subtitle:not(.ellipsis)');
 			if(tar.hasClass('subtitle') && !tar.hasClass('ellipsis')) {
-				$.data(tar[0], 'subtitle').object.selected();
+				$.data(tar[0], 'subtitle').object.select();
 				moveIntoView();
 
 				lastClickTime = clickTime;
 			}
 			else if(tarParentSub.length) {
-				$.data(tarParentSub[0], 'subtitle').object.selected();
+				$.data(tarParentSub[0], 'subtitle').object.select();
 				moveIntoView();
 
 				lastClickTime = clickTime;
 			}
 			else if(tar.hasClass('node') && !tar.hasClass('board_node')) {
-				$.data(tar[0], 'node').object.selected();
+				$.data(tar[0], 'node').object.select();
 				moveIntoView();
 
 				lastClickTime = clickTime;
 			}
 			else if(tarParent.length && !tar.parents('.board_node').length) {
-				$.data(tarParent[0], 'node').object.selected();
+				$.data(tarParent[0], 'node').object.select();
 				moveIntoView();
 
 				lastClickTime = clickTime;
