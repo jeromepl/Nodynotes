@@ -12,7 +12,7 @@
             <script>window.onload = function() {document.body.innerHTML = '<p>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">here</a>.</p>'
             };</script>
         <![endif]-->
-        
+
         <script src="http://use.edgefonts.net/asap.js"></script>
 	</head>
 
@@ -56,7 +56,7 @@
                         <p></p>
                         <textarea></textarea>
                     </div>
-                    
+
                     <img src="images/pointer.png" id="pointer" class="pointerRight" draggable = "false">
                     <?php if(!$isPublic || $isCreator) { ?>
                         <div id='changeContent'>
@@ -91,7 +91,7 @@
                     <div id='tool2_img_5' class="tool2_icon" title='Inputs/Outputs'><img data-src="images/icons/transfer.svg" class='iconic iconic-md'></div>
             	    <div id='tool2_img_6' class="tool2_icon" title='Manage Tags'><img data-src="images/icons/tags.svg" class='iconic iconic-md'></div>
             	    <div id='tool2_img_7' class="tool2_icon" title='More'><img data-src="images/icons/ellipses.svg" class='iconic iconic-md'></div>
-                
+
                     <div id='colorChoices'>
                         <div class='colorBox' style='background-color: #e74c3c;'></div>
                         <div class='colorBox' style='background-color: #E500D9;'></div>
@@ -105,7 +105,7 @@
                         <div class='colorBox' style='background-color: #bdc3c7;'></div>
                         <div class='colorBox' style='background-color: #95a5a6;'></div>
                         <div class='colorBox' style='background-color: #34495e;'></div>
-                    
+
                         <img src="images/pointer-grey.png" draggable="false">
                     </div>
             <?php }  //leave the tags to avoid errors during board loading?>
@@ -174,7 +174,7 @@
                     <img data-src="images/icons/magnifying-glass.svg" class="iconic iconic-md" id="board_search_img">
                 </div>
                 <div id='boards'>
-                	<?php 
+                	<?php
                         $answer = $bdd->prepare('SELECT b.id, b.title
                                                 FROM access a
                                                 RIGHT JOIN boards b ON b.id = a.board_id
@@ -214,17 +214,17 @@
                 <img src="images/ajax-loader.gif" alt="Loading" draggable="false">
             </div>
         <?php } ?>
-        
+
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
-        
+
         <script type="text/javascript" src="javascript/objects/allObjects.php"></script>
-        
+
         <script src="javascript/functions.js"></script>
         <?php if(!$isPublic || $isCreator) { ?>
             <script src="javascript/save.js"></script>
         <?php } ?>
-        
+
         <script>
 			//Global variables
 			var changingContent = false;
@@ -241,7 +241,7 @@
 			var selectedNode = null;
 			var changedSub = null;
             var searchedFor = ''; //if the value doesn't change, there was no redirection from search
-			
+
             //Initialize Iconic
 			var iconic = new IconicJS({
 				autoInjectDone: function (count) {

@@ -1,4 +1,4 @@
-<?php	
+<?php
     session_start();
     include_once("server_side/mySQL_connection.php");
 
@@ -165,7 +165,7 @@
         </section>
 
         <div class='container'><a id='backToTop' onclick="$('header').animatescroll({easing:'easeInOutCirc', scrollSpeed:1400});" class='button'>Try it now! <span>&#x25B2;</span></a></div>
-        
+
         <footer>
             <div class='container'>
                 <h3>©Nodynotes 2014</h3>

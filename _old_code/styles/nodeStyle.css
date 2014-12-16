@@ -1,0 +1,344 @@
+@charset "utf-8";
+
+body {
+	font-family: asap, sans-serif;
+    font-style: normal;
+	font-weight: 400;
+	margin: 0;
+	overflow: hidden; /*no scroll bar on the right*/
+	background-color: #EAEAEA;
+
+	user-select: none; /* L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+    -o-user-select: none;
+}
+
+.iconic {
+	display: none; /*show them only when svg injection is done */
+}
+
+#nodesContainer {
+	position: absolute;
+    top: 0; /* make sure its taking all the space */
+    bottom: 0;
+    left: 0;
+    right: 0;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+    cursor: url('../cursors/openhand.cur'), default;
+}
+
+#nodesContainer:active {
+    cursor: url('../cursors/closedhand.cur'), default;
+}
+
+#nodesArea {
+	position: absolute;
+}
+
+.node {
+	position: absolute;
+	width: 70px;
+	height: 70px;
+	text-align: center;
+	border: solid 2px #FFF;
+	border-radius: 50%;
+	box-shadow: #666 0 0 50px; /*Removing this drastically improves the FPS when moving the board!*/
+	z-index: 1;
+}
+
+.node:not(.board_node) {
+	cursor: move;
+}
+
+.nodeTitle {
+	color: white;
+	position: absolute;
+	top: 42px;
+	left: -45px;
+	text-align: center;
+	vertical-align: bottom;
+	width: 90px;
+	min-width: 90px; /*So that when showing title, does not get smaller (must be equal to width)*/
+	height: 20px;
+	padding: 3px 4px 1px 4px;
+	margin: 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.6);
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: 600;
+	z-index: 1;
+}
+
+.node svg {
+	display: inline-block;
+	width: 40% !important;
+	height: 40% !important;
+	pointer-events: none;
+	vertical-align: middle;
+
+	-moz-user-select: none; /* In firefox, need to re-specify this*/
+}
+
+.node span { /* so that the image is vertically centered */
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+}
+
+.subtitle {
+	color: white;
+	position: absolute;
+	text-align: left;
+	vertical-align: bottom;
+	max-width: 110px;
+	height: 15px;
+	padding: 3px 6px 1px 6px;
+	margin: 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	background-color: rgba(100, 100, 100, 0.6);
+	border-radius: 5px;
+	font-size: 12px;
+	z-index: 0;
+}
+
+.ellipsis {
+	letter-spacing: 2px; /*so that the '...' are not all on top of each other*/
+	top: 75px;
+	left: 52px;
+	cursor: pointer;
+}
+
+.linkBar {
+	position: absolute;
+	height: 5px;
+	background-color: #B1B1B1;
+	/*box-shadow: #000 4px 0 5px;*/
+	z-index: 0;
+}
+
+#saving {
+	display: none;
+	background-color: #020024;
+	border: solid 1px #06F;
+	border-radius: 7px;
+	padding: 5px;
+	width: 90px;
+	height: 25px;
+	position: fixed;
+	bottom: 20px;
+	right: 35px;
+}
+
+#saving p {
+	display: inline-block;
+	height: 100%;
+	margin: 0;
+	margin-left: 4px;
+	padding: 3px;
+	vertical-align: middle;
+	color: white;
+}
+
+#saving img {
+	display: inline-block;
+	vertical-align: middle;
+	padding-top: 2px;
+	height: 5px;
+}
+
+#newTitle {
+	background-color: transparent;
+	border: none;
+	width: 100%;
+	outline: none;
+	color: white;
+	font-family: asap, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#newSubtitle {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	color: white;
+	font-family: asap, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#showContent {
+	position: absolute;
+	display: none;
+	width: 250px;
+	min-height: 60px;
+	padding: 8px;
+	background-color: white;
+	border: solid 3px #020024;
+	border-radius: 4px;
+	box-shadow: #666 3px 3px 5px;
+	z-index: 10;
+	cursor: text;
+
+	user-select: text;
+	-moz-user-select: text;
+	-khtml-user-select: text;
+	-webkit-user-select: text;
+	-ms-user-select: text;
+    -o-user-select: text;
+}
+
+#content_title {
+	padding: 0;
+	margin: 0;
+	font-weight: bold;
+	margin-bottom: 7px;
+}
+
+#showContent h1 {
+	padding: 0;
+	margin: 0;
+	font-size: 1.3em;
+}
+
+#content_title input {
+	width: 99%;
+	font-size: 1.3em;
+	border: none;
+	outline: none;
+	font-weight: bold;
+	border: #CCC solid 1px;
+}
+
+#content_text {
+	padding: 0;
+	margin: 0;
+	/*text-align: justify;*/
+	line-height: 125%;
+	font-size: 16px;
+}
+
+#showContent p {
+	padding: 0;
+	margin: 0;
+}
+
+#content_text textarea {
+	width: 98%;
+	min-height: 150px;
+	font-family: asap, sans-serif;
+	border: none;
+	outline: none;
+	resize: none;
+	font-size: 16px;
+	border: #CCC solid 1px;
+}
+
+#showContent #pointer {
+	width: 10px;
+	height: 15px;
+	position: absolute;
+	top: 25px;
+
+	user-select: none; /*L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+    -o-user-select: none;
+}
+
+#showContent .pointerRight {
+	left: 266px;
+}
+
+#showContent .pointerLeft {
+	left: -10px;
+
+	-moz-transform: scaleX(-1); /*Flip the image */
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+#changeContent {
+	position: absolute;
+	display: inline-block;
+	right: -10px;
+	top: -10px;
+	margin: 0;
+	padding: 0;
+}
+
+#changeContent svg {
+	cursor: pointer;
+	width: 25px !important;
+	height: 25px !important;
+}
+
+#changeContent_change, #changeContent_cancel {
+    display: inline-block;
+    width: 25px; /* Something was causing a margin otherwise (and setting margin to 0 did not solve this) */
+    height: 25px;
+	border-radius: 50%;
+	background-color: white;
+}
+
+#overlay_nodeDel {
+	position: absolute;
+	display: none;
+	width: 74px; /*include the border*/
+	height: 74px;
+	border-radius: 50%;
+	z-index: 3;
+	background-color: rgba(255, 0, 0, 0.3);
+	cursor: default;
+}
+
+#overlay_titleDel {
+	position: absolute;
+	top: 44px; /* +2 because border doesn't count */
+	left: -43px;
+	width: 90px;
+	height: 20px;
+	margin: 0;
+	padding: 3px 4px 1px 4px;
+	background-color: rgba(255, 0, 0, 0.3);
+	border-radius: 5px;
+	z-index: 3;
+	vertical-align: bottom;
+}
+
+.overlay_subDel {
+	position: absolute;
+	height: 15px;
+	margin: 0;
+	padding: 3px 6px 1px 6px;
+	background-color: rgba(255, 0, 0, 0.3);
+	border-radius: 5px;
+	z-index: 3;
+}
+
+#overlay_subDelSingle {
+	display: none;
+	cursor: default;
+}
+
+#overlay_linkDel {
+	position: absolute;
+	display: none;
+	height: 4px;
+	background-color: rgba(255, 0, 0, 0.3);
+	z-index: 1;
+	cursor: default;
+}

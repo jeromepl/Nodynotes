@@ -1,0 +1,449 @@
+@charset "utf-8";
+
+html {
+    font-family: asap, ubuntu, sans-serif;
+    font-style: normal;
+	font-weight: 400;
+}
+
+body {
+    margin: 0;
+	background-color: white;
+    width: 100%;
+}
+
+strong { /* only used for SEO */
+    font-weight: 400;
+}
+
+.container {
+    width: 980px;
+    margin: auto;
+    text-align: center;
+}
+
+#head_container {
+    width: 90%;
+    min-width: 980px;
+    margin: auto;
+}
+
+.button {
+	background: linear-gradient(#0BF, #09F);
+	border: solid #06F 1px;
+	border-radius: 4px;
+    width: 80px;
+	height: 35px;
+	color: white;
+	cursor: pointer;
+	text-align: center;
+	font-family: asap;
+	font-size: 17px;
+    font-weight: bold;
+    text-shadow: 0 1px 1px #333;
+}
+
+.button:hover {
+	background: linear-gradient(#0AF, #08F);
+}
+
+header {
+    height: 55px;
+    background-color: white;
+	box-shadow: 0 5px 5px #CCC;
+	z-index: 10;
+    width: 100%;
+}
+
+#head_container h1 {
+	display: inline-block;
+    float: left;
+    color: #020024;
+	height: 40px;
+	padding: 0;
+    padding-top: 5px;
+    margin: 0;
+	font-size: 42px;
+	font-weight: bold;
+	font-style: italic;
+    text-shadow: 0 2px 2px #999;
+    cursor: default;
+}
+
+#alpha {
+    position: relative;
+    bottom: -5px;
+    left: -6px;
+    font-family: arial;
+    font-size: 32px;
+    color: #05c147;
+}
+
+#head_container form {
+    float: right;
+    padding-top: 10px;
+}
+
+#head_container input[type='text'], #head_container input[type='password'] {
+	display: inline-block;
+	margin-right: 10px;
+    margin-top: 9px;
+	border-radius: 3px;
+    border: solid 1px #AAA;
+    padding: 3px 5px;
+	height: 20px;
+    font-size: 14px;
+	outline: none;
+}
+
+#head_container input[type='text']:focus, #head_container input[type='password']:focus {
+    box-shadow: #09F 0 0 5px;
+}
+
+#login {
+    position: relative;
+    top: -3px;
+    text-shadow: 0 1px 1px #777;
+    border-radius: 2px;
+    background: #09F;
+}
+
+#login:hover {
+    background: #038eeb;
+}
+
+#banner {
+    position: relative;
+    background: url('../images/banner.png') repeat;
+    height: 100vh;
+    min-height: 570px;
+}
+
+#alpha_note {
+    position: absolute;
+    text-align: center;
+    width: 980px;
+    color: #f00;
+    top: 0;
+    left: 50%;
+    margin-left: -490px;
+    font-size: 18px;
+}
+
+#banner_text {
+    display: table;
+    height: 100%;
+}
+
+#intro {
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+    color: white;
+}
+
+#intro h1 {
+    margin: 0;
+    margin-top: 45px;
+    text-align: left;
+    font-size: 56px;
+    font-family: ubuntu;
+    text-shadow: 1px 1px 1px #9b9b9b;
+}
+
+#intro p {
+    text-align: left;
+    font-size: 20px;
+    font-family: ubuntu;
+    line-height: 30px;
+}
+
+#signup_block {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 50%;
+}
+
+#signup_block form {
+    position: relative;
+    display: inline-block;
+    margin-top: 50px;
+    width: 80%;
+}
+
+#signup_block input {
+    width: 300px;
+    height: 30px;
+    border-radius: 7px;
+	padding: 3px 5px;
+	border: solid 1px #666;
+	outline: none;
+    font-size: 18px;
+}
+
+#signup {
+    width: 312px;
+    height: 44px;
+    margin-top: 15px;
+    border-radius: 7px;
+    border: solid 1px #020024;
+    font-size: 21px;
+}
+
+#signup_block form p {
+    width: 320px;
+    margin: 15px 0 15px 30px;
+    color: #BBB;
+    text-align: left;
+    padding: 5px 10px 5px 10px;
+    text-align: justify;
+}
+
+#signup_block form p a {
+    color: #09F;
+    text-decoration: none;
+}
+
+#signup_block form p a:hover {
+    text-decoration: underline;
+}
+
+.input {
+    position: relative;
+    height: 38px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.input_good, .input_bad { /* the 'x' or 'check' icon */
+    display: none;
+    position: absolute;
+    width: 25px !important;
+    height: 25px !important;
+    top: 7px;
+    right: 5px;
+}
+
+#what_link {
+    position: absolute;
+    text-align: center;
+    padding-top: 10px;
+    height: 30px;
+    bottom: 90px;
+    width: 240px;
+    left: 50%;
+    margin-left: -120px;
+    font-size: 20px;
+    background: #09F;
+    border-radius: 0;
+    border: 1px solid white;
+}
+
+#what_link:hover {
+    background: #038eeb;
+}
+
+#what {
+    margin-top: 80px;
+    font-size: 44px;
+    font-family: ubuntu;
+}
+
+#what_description {
+    font-size: 19px;
+    letter-spacing: 1px;
+    line-height: 25px;
+}
+
+.feature {
+    display: table;
+    height: 265px;
+    width: 100%;
+}
+
+.feature_left {
+    text-align: left;
+}
+
+.feature_right {
+    text-align: right;
+    background-color: #FAFAFA;
+}
+
+.feature_icon {
+    display: table-cell;
+    vertical-align: middle;
+    width: 20%;
+    padding: 0 15px;
+}
+
+.feature_icon svg {
+    width: 175px !important;
+    height: 175px !important;
+}
+
+.feature_left .feature_text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 175px;
+    padding-left: 30px;
+}
+
+.feature_right .feature_text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 175px;
+    padding-right: 30px;
+}
+
+.feature_text h2 {
+    margin: 0;
+    font-size: 36px;
+    font-family: ubuntu;
+}
+
+.feature_text p {
+    margin: 0;
+    font-size: 18px;
+}
+
+#backToTop {
+    display: inline-block;
+    width: 250px;
+    height: 40px;
+    padding-top: 5px;
+    margin-top: 30px;
+    font-size: 28px;
+    background: #09F;
+    border-radius: 2px;
+    border: 1px solid #020024;
+    text-decoration: none;
+    text-shadow: 0 1px 2px #333;
+}
+
+#backToTop:hover {
+    background: #038eeb;
+}
+
+#backToTop span {
+    position: relative;
+    bottom: 5px;
+    font-size: 14px;
+}
+
+footer {
+    height: 22px;
+    margin-top: 75px;
+    padding-top: 5px;
+    background-color: #EEE;
+}
+
+footer h3 {
+    text-align: left;
+    float: left;
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+#links {
+    float: right;
+    height: 19px;
+}
+
+footer a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/** ICONIC STYLING **/
+.input_good.iconic * {
+    fill: #6CC729;
+    stroke: #6CC729;
+}
+
+.input_bad.iconic * {
+    fill: #D20000;
+    stroke: #D20000;
+}
+
+.iconic-globe-land-mass {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-brush-head {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-share-boxed-arrow {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-shield-shadow {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-magnifying-glass-handle-connector, .iconic-magnifying-glass-reflection {
+    fill: #09F;
+    stroke: #09F;
+}
+
+.iconic-connections-dot-center {
+    fill: #09F;
+    stroke: #09F;
+}
+
+/** ERRORS **/
+#old_ie {
+    background-color: red;
+    padding: 5px;
+    margin: 0;
+    color: white;
+}
+
+#error_connect {
+    display: block;
+    position: absolute;
+    top: 36px;
+    padding: 3px 7px;
+    color: white;
+    background: linear-gradient(#F00, #d00);
+    border: solid 2px black;
+    border-radius: 6px;
+    z-index: 2;
+}
+
+#error_connect img {
+    position: absolute;
+    top: -8px;
+    left: 60px;
+    width: 15px;
+	height: 8px;
+}
+
+#error_signup {
+    text-align: center !important; /* !important because otherwise the "#signup_block form p" has priority */
+    color: white !important;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.6);
+    border-radius: 5px;
+    box-shadow: 0 0 10px white;
+}
+
+.input_error {
+    display: none;
+    padding-top: 5px;
+    color: #e30000;
+    font-weight: bold;
+}
