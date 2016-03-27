@@ -1,12 +1,20 @@
 @charset "utf-8";
 
+html {
+    width: 100%;
+    height: 100%;
+}
+
 body {
+    width: 100%;
+    height: 100%;
+
 	font-family: asap, sans-serif;
     font-style: normal;
 	font-weight: 400;
 	margin: 0;
 	overflow: hidden; /*no scroll bar on the right*/
-	background-color: #EAEAEA;
+	background-color: rgb(240, 240, 240);
 	
 	user-select: none; /* L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
 	-moz-user-select: none;
@@ -20,51 +28,66 @@ body {
 	display: none; /*show them only when svg injection is done */
 }
 
-#nodesContainer {
-	position: absolute;
-    top: 0; /* make sure its taking all the space */
-    bottom: 0;
-    left: 0;
-    right: 0;
+#boardContainer {
+    width: 100%;
+    height: 100%;
 	margin: 0;
 	padding: 0;
 	z-index: 1;
     cursor: url('../cursors/openhand.cur'), default;
 }
 
-#nodesContainer:active {
+#boardContainer:active {
     cursor: url('../cursors/closedhand.cur'), default;
 }
  
-#nodesArea {
+#board {
 	position: absolute;
+}
+
+#backgroundTextContainer {
+    width: 100%;
+    height: 100%;
+    display: table;
+}
+
+#backgroundText {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    font-style: italic;
+    text-transform: uppercase;
+    color: #DEDEDE;
+    padding-bottom: 100px;
+}
+
+.node_container {
+    position: absolute;
+    z-index: 1;
 }
 
 .node {
-	position: absolute;
 	width: 70px;
 	height: 70px;
 	text-align: center;
-	border: solid 2px #FFF;
+	border: solid 2px white;
 	border-radius: 50%;
-	box-shadow: #666 0 0 50px; /*Removing this drastically improves the FPS when moving the board!*/
-	z-index: 1;
-}
-
-.node:not(.board_node) {
-	cursor: move;
+	/*box-shadow: #666 0 0 50px; /*Removing this drastically improves the FPS when moving the board!*/
+    cursor: pointer;
 }
 
 .nodeTitle {
 	color: white;
 	position: absolute;
-	top: 42px;
-	left: -45px;
+	top: 60%;
+	left: -64%;
 	text-align: center;
 	vertical-align: bottom;
-	width: 90px;
-	min-width: 90px; /*So that when showing title, does not get smaller (must be equal to width)*/
-	height: 20px;
+	width: 129%;
+	min-width: 129%; /*So that when showing title, does not get smaller (must be equal to width)*/
+	height: 29%;
 	padding: 3px 4px 1px 4px;
 	margin: 0;
 	white-space: nowrap;
@@ -72,7 +95,7 @@ body {
 	overflow: hidden;
 	background-color: rgba(0, 0, 0, 0.6);
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 100%;
 	font-weight: 600;
 	z-index: 1;
 }
@@ -94,21 +117,24 @@ body {
 }
 
 .subtitle {
-	color: white;
+	color: #8E8E8E;
 	position: absolute;
 	text-align: left;
 	vertical-align: bottom;
 	max-width: 110px;
-	height: 15px;
-	padding: 3px 6px 1px 6px;
+	height: 13px;
+	padding: 1px 6px 2px 6px;
 	margin: 0;
+    border-bottom: solid 2px #9A9A9A;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	background-color: rgba(100, 100, 100, 0.6);
-	border-radius: 5px;
 	font-size: 12px;
-	z-index: 0;
+    cursor: pointer;
+}
+
+.subtitle_selected {
+    border: solid 2px #09F;
 }
 
 .ellipsis {
@@ -118,11 +144,10 @@ body {
 	cursor: pointer;
 }
 
-.linkBar {
+.linkbar {
 	position: absolute;
 	height: 5px;
-	background-color: #B1B1B1;
-	/*box-shadow: #000 4px 0 5px;*/
+	background-color: #CACACA;
 	z-index: 0;
 }
 
@@ -185,9 +210,7 @@ body {
 	padding: 8px;
 	background-color: white;
 	border: solid 3px #020024;
-	border-radius: 4px;
-	box-shadow: #666 3px 3px 5px;
-	z-index: 10;
+	z-index: 7;
 	cursor: text;
 	
 	user-select: text;
@@ -212,6 +235,7 @@ body {
 }
 
 #content_title input {
+    display: none;
 	width: 99%;
 	font-size: 1.3em;
 	border: none;
@@ -223,7 +247,7 @@ body {
 #content_text {
 	padding: 0;
 	margin: 0;
-	/*text-align: justify;*/
+    word-wrap: break-word; /* Allows html links to not show outside of the div */
 	line-height: 125%;
 	font-size: 16px;
 }
@@ -234,6 +258,7 @@ body {
 }
 
 #content_text textarea {
+    display: none;
 	width: 98%;
 	min-height: 150px;
 	font-family: asap, sans-serif;
@@ -249,6 +274,7 @@ body {
 	height: 15px;
 	position: absolute;
 	top: 25px;
+    left: 266px;
 	
 	user-select: none; /*L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
 	-moz-user-select: none;
@@ -256,19 +282,6 @@ body {
 	-webkit-user-select: none;
 	-ms-user-select: none;
     -o-user-select: none;
-}
-
-#showContent .pointerRight {
-	left: 266px;
-}
-
-#showContent .pointerLeft {
-	left: -10px;
-	
-	-moz-transform: scaleX(-1); /*Flip the image */
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
 }
 
 #changeContent {

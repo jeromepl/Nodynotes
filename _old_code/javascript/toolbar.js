@@ -273,7 +273,7 @@ $(function() {
             $("#text_public_prop").show();
 
         //saving
-        saveBoard({action: 'update', board_id: board_id, public: $(this).val()})
+        saveBoard({action: 'update', board_id: board_id, public: $(this).val()});
     });
     $(document).on('click', '#board_delete', function(e) {
         //TODO redirect to another board after deleting this one and verify if this is last user's board
@@ -501,19 +501,19 @@ $(function() {
 	}
     function suggestTags() {
         $.getJSON("server_side/last_tags.php?query=" + $('#tag_name').val(), function(data) {
-                //console.log(data);
-                $('#tag_suggestions').show();
-                $('.tag_suggestion').remove();
+            //console.log(data);
+            $('#tag_suggestions').show();
+            $('.tag_suggestion').remove();
 
-                for(var i = 0; i < data.length; i++) {
-                    var currentA = $('<p>').appendTo('#tag_suggestions').addClass('tag_suggestion').text(data[i]);
-                }
+            for(var i = 0; i < data.length; i++) {
+                var currentA = $('<p>').appendTo('#tag_suggestions').addClass('tag_suggestion').text(data[i]);
+            }
 
-                if(data.length == 0) $('#tag_suggestions').hide();
+            if(data.length == 0) $('#tag_suggestions').hide();
 
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                alert("An eror occured while trying to get tags\n" + textStatus + ": " + errorThrown);
-            });
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert("An eror occured while trying to get tags\n" + textStatus + ": " + errorThrown);
+        });
     }
 	$(document).on('click', '.tag_x', function(e) {
 		var tag = $.data($(this).parent('.tag')[0], 'tag').object;

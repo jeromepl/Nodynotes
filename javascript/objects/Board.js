@@ -1,63 +1,225 @@
-function Board(id) {
-    //Most variables are setted in the setup function
-	this.id = id;
-	this.nodes = [];
-	this.linkBars = [];
+function Board(id) { //Constructor of Board
+    this.id = id;
 
-    this.subMaxWidth = 0;
-    this.nodeTitleMinWidth = 0;
+    this.xPos = 0;
+    this.yPos = 0;
 
-    //other objects
-    this.toolbar1 = Toolbar1(); //instantiate a toolbar (the one on the right side)
+    this.element = $('#board');
+    this.containerElement = $('#boardContainer');
+    this.backgroundText = $('#backgroundText');
 
-	$.getJSON("server_side/getNodes.php?board_id=" + this.id, function(data) {
-		//console.log(data);
-		loadData(data);
+    this.nodes = [];
+    this.linkbars = [];
+    this.contentShower = new ContentShower();
 
-	}).fail(function(jqXHR, textStatus, errorThrown) {
-		alert("An error occured while trying to get your data. Please check your internet connection and try again later.");
-        // Offline should go here... load data using another method
-	});
+    this.moveInfo = {}; //variables used for dragging the board
+    this.moveInfo.moving = false;
 
-	function loadData(data) {
-		for(var i = 0; i < data.nodes.length; i++) { //nodes
-			this.nodes.push(new Node(data.nodes[i].title, data.nodes[i].text, data.nodes[i].color, data.nodes[i].icon, data.nodes[i].xPos, data.nodes[i].yPos, data.nodes[i].id));
+    this.locked = false; //Locking prevents the board from being modified
 
-			for(var j = 0; j < data.nodes[i].subtitles.length; j++) { //subtitles
-				this.nodes[this.nodes.length - 1].addSubtitle(data.nodes[i].subtitles[j].id, data.nodes[i].subtitles[j].position, data.nodes[i].subtitles[j].title, data.nodes[i].subtitles[j].text);
+    /** CONSTANT VARIABLES **/
+    this.nodeOpacity = 0.6;
+    this.linkOpacity = 0.3;
+    this.deceleration = 0.5;
+
+    //Add the toolbars
+    this.boardToolbar = new BoardToolbar(true);
+    this.nodeToolbar = new NodeToolbar(true);
+
+    //For the deceleration when moving the board
+    this.decelerationInterval;
+
+    if(User.canSee)
+        this.loadData(); //loads the nodes and stuff via ajax
+    else
+        this.backgroundText.text("This board isn't shared with you");
+}
+
+Board.prototype.loadData = function() {
+    var that = this;
+
+    $.getJSON("server_side/getNodes.php?board_id=" + that.id, function(data) {
+        //console.log(data);
+
+        that.xPos = data.board.xPos;
+        that.yPos = data.board.yPos;
+        that.element.css({left: that.xPos, top: that.yPos}); //move the board to the last saved location
+
+        for(var i = 0; i < data.nodes.length; i++) { //add a node
+            that.nodes.push(new TextNode(data.nodes[i].id, data.nodes[i].title, data.nodes[i].xPos, data.nodes[i].yPos, data.nodes[i].text, data.nodes[i].color, data.nodes[i].icon));
+
+            for(var j = 0; j < data.nodes[i].subtitles.length; j++) { // add subtitles to that node
+				that.nodes[that.nodes.length - 1].addSubtitle(data.nodes[i].subtitles[j].id, data.nodes[i].subtitles[j].position, data.nodes[i].subtitles[j].title, data.nodes[i].subtitles[j].text);
 			}
 
-			for(var j = 0; j < data.nodes[i].tags.length; j++) { //tags
-				this.nodes[this.nodes.length - 1].addTag(data.nodes[i].tags[j].id, data.nodes[i].tags[j].title);
+			for(var j = 0; j < data.nodes[i].tags.length; j++) { //add tags to that node
+				that.nodes[that.nodes.length - 1].addTag(data.nodes[i].tags[j].id, data.nodes[i].tags[j].title);
 			}
-		}
+        }
 
-		for(var i = 0; i < data.linkBars.length; i++) { //link bars
-			for(var j = 0; j < this.nodes.length; j++) {
-				if(this.nodes[j].id == data.linkBars[i].node1_id) { //on trouve le premier node auquel ce lien est attaché
-					for(var k = 0; k < this.nodes.length; k++) {
-						if(this.nodes[k].id == data.linkBars[i].node2_id) { //puis le second
-							this.linkBars.push(new LinkBar(data.linkBars[i].id, this.nodes[j], this.nodes[k]));
+        for(var i = 0; i < data.linkbars.length; i++) { //add a linkbar
+			for(var j = 0; j < that.nodes.length; j++) {
+				if(that.nodes[j].id == data.linkbars[i].node1_id) { //on trouve le premier node auquel ce linkbar est attaché (all nodes should be loaded by now)
+					for(var k = 0; k < that.nodes.length; k++) {
+						if(that.nodes[k].id == data.linkbars[i].node2_id) { //...puis le second
+							that.linkbars.push(new Linkbar(data.linkbars[i].id, that.nodes[j], that.nodes[k]));
 							break;
 						}
 					}
 					break;
 				}
 			}
-		}
-
-		setup(); //function called when the data has loaded
-	}
-
-	function setup() { //function called when the data has loaded
-		this.subMaxWidth = $('.subtitle').css('max-width'); //récupère la valeur spécifiée dans le css
-		this.nodeTitleMinWidth = $('.node').css('min-width');
-
-        if(searchedFor) {
-            if(searchedFor.charAt(1) =='n') //it's a node
-                $.data($(searchedFor)[0], 'node').object.select();
-            else if(searchedFor.charAt(1) =='s') //it's a subtitle
-                $.data($(searchedFor)[0], 'subtitle').object.select();
         }
-	}
+
+        //Everything has loaded, we can now remove the text saying it was loading
+        that.backgroundText.parent().remove();
+
+    }).fail(function(jqXHR, textStatus, errorThrown) { //if a connection error occurs
+		alert("An error occured while trying to get your data. Please check your internet connection and try again later.");
+	});
+};
+
+Board.prototype.deselectAllNodes = function() { //Also deselects all subtitles!
+    for(var i = 0; i < this.nodes.length; i++) {
+        if(this.nodes[i].selected) {
+            this.nodes[i].deselect();
+        }
+        else if(this.nodes[i].subtitleListExpanded) {
+            this.nodes[i].retractSubtitleList();
+        }
+    }
+};
+
+Board.prototype.fade = function() {
+    $('.node_container').css('opacity', '0.6'); //decrease all nodes and linkbars' opacity
+    $('.linkbar').css('opacity', '0.3');
+};
+
+Board.prototype.unfade = function() {
+    $('.node_container').css('opacity', '1');
+    $('.linkbar').css('opacity', '1');
+};
+
+Board.prototype.lock = function() { //Locks the board (nothing can be clicked on or dragged), for prompt messages
+    /* How this works: Create a div that covers the entire site surface and that is over everything
+    so that the user can't click on anything */
+    if(!this.locked) {
+        $('<div>').appendTo('body').attr('id', 'lock').css({position: 'absolute', width: '100%', height: '100%', 'z-index': '100'});
+        this.locked = true;
+    }
+};
+
+Board.prototype.unlock = function() {
+    if(this.locked) {
+        $('#lock').remove();
+        this.locked = false;
+    }
+};
+
+Board.prototype.addNode = function(node) {
+    this.nodes.push(node);
+};
+
+Board.prototype.removeNode = function(node) {
+    for(var i = 0; i < this.nodes.length; i++) {
+        if(this.nodes[i] == node) {
+            this.nodes.splice(i, 1);
+            break;
+        }
+    }
+};
+
+Board.prototype.addLinkbar = function(linkbar) {
+    this.linkbars.push(linkbar);
+};
+
+Board.prototype.removeLinkbar = function(linkbar) {
+    for(var i = 0; i < this.linkbars.length; i++) {
+        if(linkbar == this.linkbars[i]) { //find the index of the linkbar
+            this.linkbars.splice(i, 1); //remove the linkbar from the array
+            break;
+        }
+    }
+};
+
+Board.prototype.centerNode = function(node) { //Centers a node on the page
+    this.xPos = -node.xPos - node.containerElement.width() / 2 + this.containerElement.width() / 2;
+    this.yPos = -node.yPos - node.containerElement.height() / 2 + this.containerElement.height() / 2;
+
+    //Animate the movement of the board
+    this.element.animate({top: this.yPos, left: this.xPos}, 700, 'swing');
+
+    saver.save({action: 'update', board_id: this.id, yPos: this.yPos, xPos: this.xPos}, Saver.types.BOARD, false); //Save the new position
+};
+
+/** ALL EVENTS **/
+Board.prototype.mouseDown = function(e) {
+    this.moveInfo.moving = true;
+    this.moveInfo.startX = e.clientX; //Starting position
+    this.moveInfo.startY = e.clientY;
+    this.moveInfo.lastX = e.clientX;
+    this.moveInfo.lastY = e.clientY;
+    this.moveInfo.speedX = this.moveInfo.speedY = 0;
+
+    if(this.decelerationInterval)
+        clearInterval(this.decelerationInterval);
+};
+
+Board.prototype.mouseMove = function(e) {
+    if(this.moveInfo.moving) {
+        this.xPos += (e.clientX - this.moveInfo.lastX);
+        this.yPos += (e.clientY - this.moveInfo.lastY);
+        this.element.css({top: this.yPos, left: this.xPos}); //Move the board
+
+        //For deceleration
+        this.moveInfo.speedX = e.clientX - this.moveInfo.lastX;
+        this.moveInfo.speedXSign = signum(this.moveInfo.speedX); //The initial sign
+        this.moveInfo.speedY = e.clientY - this.moveInfo.lastY;
+        this.moveInfo.speedYSign = signum(this.moveInfo.speedY);
+
+        this.moveInfo.lastX = e.clientX; //get the new position for the next update
+        this.moveInfo.lastY = e.clientY;
+    }
 }
+
+Board.prototype.mouseUp = function(e) {
+    if(this.moveInfo.moving) {
+        this.moveInfo.moving = false;
+
+        //Deselect all the nodes if the board was clicked, not dragged (and if no node/subtitle is being edited)
+        if(!board.contentShower.editing) {
+            if(Math.sqrt(Math.pow(e.clientX - this.moveInfo.startX, 2) + Math.pow(e.clientY - this.moveInfo.startY, 2)) <= 2) {
+                this.deselectAllNodes();
+            }
+        }
+
+        //Board deceleration
+        var that = this;
+        this.decelerationInterval = setInterval(function () {
+
+            //Update the speed only if the board is still going in the initial direction
+            if(that.moveInfo.speedXSign !=0 && signum(that.moveInfo.speedX) == that.moveInfo.speedXSign)
+                that.moveInfo.speedX -= that.moveInfo.speedXSign * that.deceleration;
+            if(that.moveInfo.speedYSign !=0 && signum(that.moveInfo.speedY) == that.moveInfo.speedYSign)
+                that.moveInfo.speedY -= that.moveInfo.speedYSign * that.deceleration;
+
+            //Move the board
+            that.xPos += that.moveInfo.speedX;
+            that.yPos += that.moveInfo.speedY;
+            that.element.css({top: that.yPos, left: that.xPos});
+
+            //Stop the loop when the board stops moving (or starts going in the opposite direction)
+            if((signum(that.moveInfo.speedX) != that.moveInfo.speedXSign || that.moveInfo.speedXSign == 0)
+                && (signum(that.moveInfo.speedY) != that.moveInfo.speedYSign || that.moveInfo.speedYSign == 0)) {
+
+                //Save the new board position
+                if(Math.sqrt(Math.pow(e.clientX - that.moveInfo.startX, 2) + Math.pow(e.clientY - that.moveInfo.startY, 2)) > 2) { //Save only if moved
+                    saver.save({action: 'update', board_id: that.id, yPos: that.yPos, xPos: that.xPos}, Saver.types.BOARD, false);
+                }
+
+                clearInterval(that.decelerationInterval); //Stop the infinite loop
+            }
+        }, 17); //About 60fps
+
+    }
+};

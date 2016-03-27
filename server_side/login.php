@@ -14,7 +14,7 @@
             $req->closeCursor();
 
             if(!$answer) {
-                header('Location: ../?er=1'); //tell ther user email-password doesn't work
+                header('Location: ../?er=1'); //tell the user email-password doesn't work
             }
             else {
                 login($answer);
@@ -29,7 +29,7 @@
             $req->closeCursor();
 
             if(!$answer) {
-                header('Location: ../?er=1'); //tell ther user email-password doesn't work
+                header('Location: ../?er=1'); //tell the user email-password doesn't work
             }
             else {
                 login($answer);

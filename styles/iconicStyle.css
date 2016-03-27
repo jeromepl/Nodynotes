@@ -14,34 +14,30 @@ header .iconic-property-accent {
     stroke: white;
 }
 
-/* Toolbar 1 (Right side) */
-#toolbar .iconic *, #toolbar2 .iconic * {
+/* Board Toolbar (Right side) */
+#boardToolbar .iconic * {
 	fill: #020024;
     stroke: #020024;
 }
-#toolbar .iconic-property-accent, #toolbar2 .iconic-property-accent {
+#boardToolbar .iconic-property-accent {
 	fill: #06F;
 	stroke: #06F;
 }
-#toolbar .iconic-action-undo * {
-    fill: #c1c1d0;
-    stroke: #c1c1d0;
-}
-#toolbar .iconic-connections-dot-center { /* Connections icon */
+#boardToolbar .iconic-connections-dot-center { /* Connections icon */
     fill: #020024;
     stroke: #020024;
 }
-#toolbar .iconic-connections-line { /* Connections icon */
+#boardToolbar .iconic-connections-line { /* Connections icon */
     fill: #06F;
     stroke: #06F;
 }
 
-/* Toolbar 2 */
-#toolbar2 .iconic * {
+/* Node Toolbar */
+#nodeToolbar .iconic * {
     fill: #020024;
     stroke: #020024;
 }
-#toolbar2 .iconic-property-accent {
+#nodeToolbar .iconic-property-accent {
     fill: #09F;
     stroke: #09F;
 }
@@ -63,10 +59,10 @@ header .iconic-property-accent {
     fill: #AAA;
     stroke: #AAA;
 }
-.selectedIcon .iconic * {
+/*.selectedIcon .iconic * { Acted weirdly... The icons were the right color, but all holes were filled...
     fill: #75b5e2 !important;
     stroke: #75b5e2 !important;
-}
+}*/
 .node .iconic * {
 	fill: white;
     stroke: white;

@@ -1,76 +1,74 @@
 @charset "utf-8";
 
-/** TOOLBAR 1 **/
-#toolbar {
+/** BOARD TOOLBAR **/
+#boardToolbar {
 	position: fixed;
-	height: 340px;
-	width: 70px;
+	height: 360px;
+	width: 60px;
 	right: 25px;
 	top: 50%;
-	margin-top: -155px;
-	background-color: #EEE;
-	border: solid 3px #020024;
-	border-radius: 7px;
-	z-index: 2;
+	margin-top: -180px;
+	border: solid 4px #29BFCE;
+	z-index: 50;
 }
 
-.tool_icon svg {
+.boardTool svg {
 	display: block;
-	padding: 5px;
-	width: 35px !important;
-	height: 35px !important;
-	background-color: #EEE;
+	padding: 12px;
+	width: 36px !important;
+	height: 36px !important;
 	
 	-moz-user-select: none; /* In firefox, need to re-specify this*/
 }
 
-.tool_icon {
-	margin: 10px;
-	border-radius: 5px;
+.boardTool {
+    width: 60px;
+    height: 60px;
 	cursor: pointer;
+    background-color: white;
 }
 
-.tool_icon:hover {
-	box-shadow: 0 2px 3px #666;
+.boardTool:hover {
+	background-color: #F4F4F4;
 }
 
-.tool_icon:active {
-	box-shadow: 0 0 0 #666;
+.boardTool:active {
+	background-color: #F4F4F4;
 }
 
-#tool_img_1:hover {
-	border-left: 5px #90F solid !important; /*!important allows the attribute to not disappear after jquery has been used to change the border-left*/
+.boardTool.selected {
+    background-color: #F4F4F4;
 }
-#tool_img_2:hover {
-	border-left: 5px #4140E1 solid !important;
-}
-#tool_img_3:hover {
-	border-left: 5px #00D7DD solid !important;
-}
-#tool_img_4:hover {
-	border-left: 5px #2F2 solid !important;
-}
-#tool_img_5:hover {
-	border-left: 5px #FF0 solid !important;
-}
-#tool_img_6:hover {
-	border-left: 5px #FFA500 solid !important;
+
+#boardToolbarTitle {
+    position: absolute;
+    top: 35px;
+    left: -52px;
+    color: white;
+    letter-spacing: 1px;
+    background-color: #29BFCE;
+    padding: 4px 7px;
+    cursor: default;
+
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
 }
 
 #board_properties { /* pop-up window in the middle of the screen */
     display: none;
     position: fixed;
     width: 650px;
-    height: 330px;
+    height: 335px;
     top: 50%;
     margin-top: -165px;
     left: 50%;
     margin-left: -325px;
     padding: 10px;
-    background-color: #F3F3F3;
+    background-color: #F9F9F9;
 	border: solid 3px #020024;
-	border-radius: 3px;
-	box-shadow: 0 2px 7px #666;
     z-index: 20;
     font-weight: 400;
     cursor: default;
@@ -94,13 +92,17 @@
     padding: 1px 0;
     border-width: 2px;
     text-align: center;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: bold;
     cursor: text;
+    text-transform: uppercase;
+    font-style: italic;
 }
 #board_properties h1 {
     height: 32px;
     margin: 15px;
+    text-transform: uppercase;
+    font-style: italic;
     text-align: center;
     font-size: 28px;
     font-weight: bold;
@@ -153,7 +155,7 @@
     margin: 15px 20px;
     padding: 0 10px;
 	border: solid #020024 2px;
-	border-radius: 4px;
+    background-color: #2873a0;
 	height: 35px;
 	line-height: 35px;
 	color: white;
@@ -161,22 +163,16 @@
 	text-align: center;
 }
 
-#board_changetitle {
-    float: left;
-    background: linear-gradient(#0CF, #09F);
+.property_button:hover {
+    background-color: #2b7bac;
 }
 
-#board_changetitle:hover {
-	background: linear-gradient(#0BF, #08F);
+#board_changetitle {
+    float: left;
 }
 
 #board_delete {
     float: right;
-    background: linear-gradient(#E30, #C00);
-}
-
-#board_delete:hover {
-	background: linear-gradient(#E03301, #B00);
 }
 
 #properties_close {
@@ -187,88 +183,81 @@
 }
 
 
-/** TOOLBAR 2 **/
+/** NODE TOOLBAR **/
 
-#toolbar2 {
+#nodeToolbar {
 	display: none; /*Don't show on opening*/
 	position: absolute;
-	height: 43px;
-	width: 332px;
-	border: solid 2px #020024;
-	border-radius: 7px;
-	background-color: #EEE;
-	box-shadow: 0 2px 7px #666;
+	height: 44px;
+	width: 236px;
+	border: solid 3px #29BFCE;
+    background-color: white;
 	z-index: 9;
 	cursor: default;
 }
 
-.tool2_icon svg { /*class for the second toolbar icons*/
-	padding: 4px;
+.nodeTool svg { /*class for the second toolbar icons*/
+	padding: 8px;
 	width: 28px !important;
 	height: 28px !important;
 	
 	-moz-user-select: none; /* In firefox, need to re-specify this*/
 }
 
-.tool2_icon {
+.nodeTool {
 	display: inline-block;
 	vertical-align: top;
-	height: 32px;
-	margin: 4px;
-	padding-bottom: 3px;
-	border-radius: 5px;
+	height: 44px;
+    width: 44px;
 	cursor: pointer;
+    background-color: white;
 }
 
-.tool2_icon:hover {
-	box-shadow: 0 3px 5px #666;
+.nodeTool:hover {
+	background-color: #F4F4F4;
 }
 
-.tool2_icon:active {
-	box-shadow: 0 0 0 #666;
+.nodeTool:active {
+	background-color: #F4F4F4;
 }
 
-#tool2_img_1:hover {
-	border-bottom: 5px #90F solid;
-}
-#tool2_img_2:hover {
-	border-bottom: 5px #4140E1 solid;
-}
-#tool2_img_3:hover {
-	border-bottom: 5px #00D7DD solid;
-}
-#tool2_img_4:hover {
-	border-bottom: 5px #2F2 solid;
-}
-#tool2_img_5:hover {
-	border-bottom: 5px #FF0 solid;
-}
-#tool2_img_6:hover {
-	border-bottom: 5px #FFA500 solid;
-}
-#tool2_img_7:hover {
-	border-bottom: 5px #7E2B02 solid;
+.nodeTool.selected {
+    background-color: #F4F4F4;
 }
 
-#tool2_img_7 svg {
+#nodeTool_7 svg {
 
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+#nodeToolbarPointer {
+    width: 28px;
+	height: 10px;
+	position: absolute;
+	top: 45px;
+	left: 50%;
+    margin-left: -14px;
+
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 #colorChoices {
 	display: none;
 	position: absolute;
-	top: -70px;
+	top: -65px;
 	left: -145px;
 	height: 40px;
 	width: 525px;
-	background-color: #EEE;
+	background-color: white;
 	border: solid 2px #020024;
-	border-radius: 3px;
-	box-shadow: 0 2px 7px #666;
 	cursor: default;
 }
 
@@ -283,9 +272,10 @@
 	-moz-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
-.colorBox {
+.colorChoice {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
@@ -296,14 +286,12 @@
 #tag_box {
 	display: none;
 	position: absolute;
-	top: -130px;
-	left: 50px;
+	top: -125px;
+	left: 5px;
 	height: 100px;
 	width: 300px;
-	background-color: #EEE;
+	background-color: white;
 	border: solid 2px #020024;
-	border-radius: 3px;
-	box-shadow: 0 2px 7px #666;
 	cursor: default;
 }
 
@@ -318,6 +306,7 @@
 	-moz-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 #tag_form {
@@ -329,7 +318,6 @@
 #tag_name {
 	display: inline-block;
 	border: 1px #999 solid;
-	border-radius: 2px;
 	width: 180px;
 	height: 20px;
 	margin: 4px;
@@ -339,41 +327,38 @@
 
 #tag_name:focus {
 	border: 1px #09F solid;
-	box-shadow: 0 0 2px black;
+    outline: none;
 }
 
 #add_tag {
 	display: inline-block;
+    width: 60px;
+    height: 20px;
 	font-size: 16px;
 	text-align: center;
 	color: white;
-	border-radius: 4px;
-	border: 2px #020024 solid;
-	background: linear-gradient(#0BF, #09F);
+	border: 1px #020024 solid;
+	background-color: #2873a0;
 	padding: 3px 5px;
-	margin: 4px;
+	margin: 3px 4px;
 	cursor: pointer;
 }
 
 #add_tag:hover {
-	box-shadow: 0 1px 1px #999
-	background: linear-gradient(#04BFFF, #049DFF);
-}
-
-#add_tag:active {
-	box-shadow: none;
+	background-color: #2b7bac;
 }
 
 #tag_suggestions {
     display: none;
     position: absolute;
-    top: 34px;
+    top: 32px;
     left: 10px;
     background-color: white;
-    width: 186px;
+    width: 188px;
     padding: 2px 0;
-    border: 1px solid #020024;
+    border: 1px solid #8e8e8e;
     border-top: none;
+    z-index: 2;
 }
 
 .tag_suggestion {
@@ -386,7 +371,7 @@
 }
 
 .tag_suggestion:hover {
-    background-color: #dbdbdb;
+    background-color: #f5f5f5;
 }
 
 #all_tags {
@@ -399,7 +384,6 @@
 	display: inline-block;
 	margin: 2px 1px 2px 2px;
 	padding: 2px 5px;
-	border-radius: 4px;
 	height: 13px;
 	background-color: #CCC;
 }
@@ -408,7 +392,6 @@
 	display: inline-block;
 	padding: 0;
 	vertical-align: top;
-	padding-top: 1px;
 	margin: 0;
 	margin-right: 3px;
 	font-size: 12px;
@@ -423,12 +406,11 @@
 }
 
 .tag_x {
+    position: relative;
+    top: -3px;
 	display: inline-block;
 	width: 10px !important;
 	height: 10px !important;
-	border-radius: 50%;
-	padding: 2px;
-	background-color: #BBB;
 	
 	cursor: pointer;
 }
@@ -436,14 +418,12 @@
 #icon_box {
 	display: none;
 	position: absolute;
-	top: -230px;
+	top: -225px;
 	left: 50px;
 	height: 200px;
 	width: 285px;
-	background-color: #EEE;
+	background-color: white;
 	border: solid 2px #020024;
-	border-radius: 3px;
-	box-shadow: 0 2px 7px #666;
 	cursor: default;
 }
 
@@ -471,6 +451,7 @@
 	-moz-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .icon_choice {

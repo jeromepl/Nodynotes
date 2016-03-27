@@ -2,9 +2,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="description" content="Save your knowledge and thoughts in an organized fashion. Never forget anything again.">
 		<title>Nodynotes - Your thoughts, organized</title>
-        <!--<base href="http://localhost/Nodes/">-->
+        <base href="http://localhost/Nodes/">
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/homeStyle.css">
         <script src="http://use.edgefonts.net/asap:n7,i4,n4,i7:all;ubuntu:n4,i4,n7,i7,n3,i3,n5,i5:all.js"></script>
@@ -18,31 +17,70 @@
             <p id='old_ie'>Your browser is too old for this website. Please download the latest version of your browser <a target="_blank" href="http://windows.microsoft.com/en-us/internet-explorer/download-ie" rel="nofollow">here</a>.</p>
         <![endif]-->
         <header>
-            <div id='head_left'>
-                <h1>Nodynotes</h1>
+            <div id='top-header-container'>
+                <div id='head_right'>
+                    <form method='post' action='server_side/login.php'>
+                        <input id='login_box' type='text' name='email_username' placeholder='Email or username'>
+                        <input id='password_box' type='password' name='password' placeholder='Password'>
+                        <input type='submit' id='login' class='button' value='Log in'>
+                    </form>
+                </div>
             </div>
-            <div id='head_right'>
-                <form method="post" action="server_side/login.php">
-                    <input type="text" name="email_username" placeholder="Email or username">
-                    <input type="password" name="password" placeholder="Password">
-                    <input type="submit" id="login" class="button" value="Log in">
-                </form>
+
+            <div class='container'>
+                <h1 id='logo'>N<span>ODYNOTES</span></h1>
+                <h2>Save and organize your thoughts in an beautiful tree-shaped diagram</h2>
+                <a id='discover' class='button' href="board/demo">Discover Nodynotes</a>
             </div>
         </header>
 
-        <section id='banner'>
-
+        <section class='flexible_container feature_left'>
+            <article>
+                <h2>Free your mind</h2>
+                <p>Nodynotes is the perfect tool to quickly write your ideas down and empty your busy brain.
+                It provides you easy-to-use tools to quickly transform a simple idea into a full-blown project.</p>
+            </article>
+            <aside>
+                <img src="images/img1.png" width=500 height = 300>
+            </aside>
         </section>
 
-        <section class='container'>
-            <div class='feature'>
+        <section class='flexible_container feature_right'>
+            <aside>
+                <img src="images/img2.png" width=500 height = 300>
+            </aside>
+            <article>
+               <h2>Free your mind</h2>
+                <p>Nodynotes is the perfect tool to quickly write your ideas down and empty your busy brain.
+                It provides you easy-to-use tools to quickly transform a simple idea into a full-blown project
+                <span style="float:right">!</span></p>
+            </article>
+        </section>
 
-            </div>
+        <section class='flexible_container feature_left'>
+            <article>
+                <h2>Free your mind</h2>
+                <p>Nodynotes is the perfect tool to quickly write your ideas down and empty your busy brain.
+                It provides you easy-to-use tools to quickly transform a simple idea into a full-blown project.</p>
+            </article>
+            <aside>
+                <img src="images/img3.png" width=500 height = 300>
+            </aside>
         </section>
 
         <footer>
+            <div id='social_networks' class='container'>
+                <h3>Facebook - Twitter!</h3>
+            </div>
+            <div id='bottom_links'>
+                <div id='bottom_links_left'>
+                    <h3>Language</h3>
+                </div>
+                <div id='bottom_links_right'>
+                    <h3>Terms of Use</h3>
+                </div>
+            </div>
         </footer>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     </body>
 </html>

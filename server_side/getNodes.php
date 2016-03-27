@@ -4,22 +4,31 @@
     header('Content-Type: application/json');
 
 	$post_data = array();
+    $post_data['board'] = array();
 	$post_data['nodes'] = array();
-	$post_data['linkBars'] = array();
+	$post_data['linkbars'] = array();
 
-    if(isset($_SESSION['id']) && is_numeric($_SESSION['id']) && isset($_GET['board_id']) && is_numeric($_GET['board_id'])) {
-        //Verify the user has access to this board:
-        $req = $bdd->prepare('SELECT b.id
+    $user_id;
+    if(isset($_SESSION['id']) && is_numeric($_SESSION['id']))
+        $user_id = $_SESSION['id'];
+    else
+        $user_id = 0;
+
+    if(isset($_GET['board_id']) && is_numeric($_GET['board_id'])) {
+        //Verify the user has access to this board: (if shared w/ user, if public, or if user is creator)
+        $req = $bdd->prepare('SELECT b.id, b.xPos, b.yPos
                                 FROM access a
                                 RIGHT JOIN boards b ON b.id = a.board_id
                                 WHERE b.id = :id AND (a.user_id = :user_id OR b.user_id = :user_id2 OR b.public = \'T\')');
         $req->execute(array('id' => $_GET['board_id'],
-                            'user_id' => $_SESSION['id'],
-                            'user_id2' => $_SESSION['id'])) or die(print_r($bdd->errorInfo()));
+                            'user_id' => $user_id,
+                            'user_id2' => $user_id)) or die(print_r($bdd->errorInfo()));
 	
         $data = $req->fetch();
         $req->closeCursor();
         if($data) { //if the user possesses the board or has access to it
+            $post_data['board']['xPos'] = $data['xPos']; //send the board position
+            $post_data['board']['yPos'] = $data['yPos'];
 			
 			$answer1 = $bdd->prepare('SELECT * FROM nodes WHERE board_id = :board_id ORDER BY id DESC');
 			$answer1->execute(array('board_id' => $_GET['board_id'])) or die(print_r($bdd->errorInfo()));
@@ -69,14 +78,14 @@
 				$answer2->execute(array('nodeId1' => $data1['id'], 'nodeId2' => $data1['id'])) or die(print_r($bdd->errorInfo()));
 				while($data2 = $answer2->fetch()) {
 
-					$link_key = count($post_data['linkBars']);
+					$link_key = count($post_data['linkbars']);
 
 					if($data2['node1_id'] > $data1['id'] || $data2['node2_id'] > $data1['id']) {
-						$post_data['linkBars'][] = $link_key;
-						$post_data['linkBars'][$link_key] = array();
-						$post_data['linkBars'][$link_key]['id'] = $data2['id'];
-						$post_data['linkBars'][$link_key]['node1_id'] = $data2['node1_id'];
-						$post_data['linkBars'][$link_key]['node2_id'] = $data2['node2_id'];
+						$post_data['linkbars'][] = $link_key;
+						$post_data['linkbars'][$link_key] = array();
+						$post_data['linkbars'][$link_key]['id'] = $data2['id'];
+						$post_data['linkbars'][$link_key]['node1_id'] = $data2['node1_id'];
+						$post_data['linkbars'][$link_key]['node2_id'] = $data2['node2_id'];
 					}
 				}
 				$answer2->closeCursor();

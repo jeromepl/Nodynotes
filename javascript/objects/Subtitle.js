@@ -1,190 +1,181 @@
 function Subtitle(id, position, title, text, node) {
-	this.id = id;
-	this.position = position; //starts from 0
+
+    this.id = id;
+	this.position = position; //vertical position (starts at 0)
 	this.title = title;
 	this.text = text;
-	this.top = 0;
-	this.left = 0;
-	this.node = node;
-	this.isChanging = false;
-	this.isSelected = false;
-	this.moveInfo = {}; // Info about the movement of the node (setted in the mousedown/mouseup/mousemove events)
+    this.node = node;
 
-	this.xPos = [52, 75, 86, 75, 52];
+    this.selected = false;
 
-	if (this.position < 4) {
-		this.left = this.xPos[this.position];
-	}
-	else this.left = this.xPos[4];
+    this.moveInfo = {}; //all variables required to move the subtitle
+    this.moveInfo.moving = false;
 
-	this.top = -25 + this.position * 25;
-	this.element = $('<h4>').appendTo(this.node.element).addClass('subtitle').html(this.title).css({top: this.top * this.node.scaleFactor, left: this.left}).attr('id', 'subtitle' + this.id);
-	$.data(this.element[0], 'subtitle', {object: this}); //save the object's reference to be able to act on it in event listeners
+    /** CONSTANT VARIABLES **/
+    this.xPositions = [52, 75, 86, 75, 52];
+    this.spaceBetween = 25; //Nb of pixels between two subtitles
+    this.ellipsisPosition = 4;
 
-	this.paddingTop = this.element.css('padding-top');
-	this.paddingLeft = this.element.css('padding-left');
+    this.top = 0; //Are set up in updatePosition()
+    this.left = 0;
 
-	if (this.position == 4) {
-		this.ellipsis = $('<h4>').appendTo(this.node.element).addClass('subtitle ellipsis').text('...'); //create an ellipsis
-	}
-	if (this.position >= 4) {
-		this.element.hide();
-	}
+    this.element = $('<h4>').appendTo(this.node.containerElement).addClass('subtitle').html(this.title);
+    this.updatePosition();
 
-	this.selected = function() {
-		this.node.select();
-		this.isSelected = true;
-		//show the new title and text corresponding to the subtitle
-		$('#showContent p').html(this.text);
-		$('#showContent h1').html(this.title);
-        $('#tool2_img_2').attr('title', 'Delete Subtitle');
+    $.data(this.element[0], 'object', {reference: this}); //save the object's reference to be able to act on it in event listeners
 
-		this.element.css('border', 'solid 2px #09F');
-
-		$.data($('#toolbar2')[0], 'subtitle', {object: this});
-		$.data($('#showContent')[0], 'subtitle', {object: this}); //add the subtitle in the showContent element
-		selectedType = 'subtitle';
-	}
-
-	this.changeContent = function() {
-		changingContent = true;
-		this.isChanging = true;
-        this.title = activateHtml(this.title);
-		$('#content_title input').show().val(this.title).select();
-        this.text = activateHtml(br2nl(this.text));
-		$('#content_text textArea').show().val(this.text).css('height', $('#content_text p').innerHeight());
-		$('#content_title h1').hide();
-		$('#content_text p').hide();
-		$('#changeContent').show();
-		$('#changeContentButton').hide();
-		$('#changeContent_change').show();
-		$('#changeContent_cancel').show();
-
-		changeContentType = 'subtitle';
-		selectedType = 'subtitle';
-	}
-
-	this.setContent = function(saveIt) {
-		changingContent = false;
-		this.isChanging = false;
-		if(saveIt) {
-            this.title = escapeHtml($('#content_title input').val());
-            this.text = nl2br(escapeHtml($('#content_text textarea').val()));
-			this.element.html(this.title);
-			$('#showContent p').html(this.text);
-			$('#showContent h1').html(this.title);
-
-			save({action: 'update', subtitle: activateHtml(this.title), text: activateHtml(this.text), id: this.id});
-		}
-		$('#content_title input').hide();
-		$('#content_text textArea').hide();
-		$('#content_title h1').show();
-		$('#content_text p').show();
-
-		$('#changeContentButton').show();
-		$('#changeContent_change').hide();
-		$('#changeContent_cancel').hide();
-	}
-
-	this.moveSubtitle = function(up) {
-		if(up) {
-			this.position -= 1;
-			//make sure position exists
-			if(ellipsisNode) { //if it's not null
-				if(this.position > this.node.subtitles.length - 1) this.position = this.node.subtitles.length - 1;
-			}
-			else if(this.position > 3) this.position = 3;
-
-			if(this.position < 0) this.position = 0;
-
-			for(var i = 0; i < this.node.subtitles.length; i++) {
-				if(this.node.subtitles[i].position == this.position && this.node.subtitles[i] !== this) { //find other subtitles with the same position
-					this.node.subtitles[i].position += 1;
-					this.node.subtitles[i].top = -25 + this.node.subtitles[i].position * 25;
-					if(this.node.subtitles[i].position > 4) this.node.subtitles[i].left = this.xPos[4];
-					else this.node.subtitles[i].left = this.xPos[this.node.subtitles[i].position];
-
-					save({action: 'update', subtitle_position: this.node.subtitles[i].position, id: this.node.subtitles[i].id}); //save the new position
-				}
-			}
-		}
-		else {
-			this.position += 1;
-			//make sure position exists
-			if(ellipsisNode || this.node.subtitles.length < 4) {
-				if(this.position > this.node.subtitles.length - 1) this.position = this.node.subtitles.length - 1;
-			}
-			else if(this.position > 3) this.position = 3;
-
-			if(this.position < 0) this.position = 0;
-
-			for(var i = 0; i < this.node.subtitles.length; i++) {
-				if(this.node.subtitles[i].position == this.position && this.node.subtitles[i] !== this) {
-					this.node.subtitles[i].position -= 1;
-					this.node.subtitles[i].top = -25 + this.node.subtitles[i].position * 25;
-					if(this.node.subtitles[i].position > 4) this.node.subtitles[i].left = this.xPos[4];
-					else this.node.subtitles[i].left = this.xPos[this.node.subtitles[i].position];
-
-					save({action: 'update', subtitle_position: this.node.subtitles[i].position, id: this.node.subtitles[i].id}); //save the new position
-				}
-			}
-		}
-
-		this.refreshPosition();
-
-		//then update the subtitles position
-		for(var i = 0; i < this.node.subtitles.length; i++) {
-			if(this.node.subtitles[i].element && this.node.subtitles[i] !== this) {
-				this.node.subtitles[i].element.css({top: this.node.subtitles[i].top, left: this.node.subtitles[i].left});
-			}
-		}
-
-		//saving of the subtitle moved is done in nodes.php
-	}
-
-	this.refreshPosition = function() {
-		this.top = -25 + this.position * 25;
-		if(this.position > 4) this.left = this.xPos[4];
-		else this.left = this.xPos[this.position];
-	}
-
-	this.showSubtitle = function() {
-		this.element.css({'max-width': 'none', 'z-index': 2});
-		this.node.element.css('z-index', 2);
-	}
-
-	this.hideSubtitle = function() {
-		this.element.css({'max-width': subMaxWidth, 'z-index': 0});
-		this.node.element.css('z-index', 1);
-	}
-
-	this.deleteSubtitle = function() {
-		this.element.remove();
-		save({action: 'delete', what2Del: 'subtitle', sub_id: this.id});
-
-		var highPos = 0;
-		var index = 0;
-		for(var i = 0; i < this.node.subtitles.length; i++) {
-			if(this === this.node.subtitles[i]) index = i; //find the index of the subtitle
-			else if(this.node.subtitles[i].position > this.position) {
-				this.node.subtitles[i].position--;
-				this.node.subtitles[i].refreshPosition();
-				this.node.subtitles[i].element.css({top: this.node.subtitles[i].top, left: this.node.subtitles[i].left}); //refresh position
-				save({action: 'update', subtitle_position: this.node.subtitles[i].position, id: this.node.subtitles[i].id}); //save new position
-
-				if(this.node.subtitles[i].position == 3) this.node.subtitles[i].element.show(); //if it was hidden before, show it
-
-				if(this.node.subtitles[i].position > highPos) highPos = this.node.subtitles[i].position; //to delete the ellipsis if < 4
-			}
-			else if(this.node.subtitles[i].position > highPos) highPos = this.node.subtitles[i].position; //to delete the ellipsis if < 4
-		}
-
-		if(highPos < 4) { //remove the ellipsis if no more than 4 subtitles
-			for(var i = 0; i < this.node.subtitles.length; i++) {
-				if(this.node.subtitles[i].ellipsis) this.node.subtitles[i].ellipsis.remove();
-			}
-		}
-
-		this.node.subtitles.splice(index, 1); //delete at the very end
-	}
+    this.hide();
 }
+
+Subtitle.prototype.updatePosition = function() {
+    if (this.position < this.ellipsisPosition)
+		this.left = this.xPositions[this.position];
+	else
+        this.left = this.xPositions[this.ellipsisPosition]; //all the remaining subtitles are aligned horizontally
+
+    this.top = -25 + this.position * this.spaceBetween;
+
+    this.element.css({top: this.top, left: this.left});
+};
+
+Subtitle.prototype.setContent = function(title, text, log) {
+    log = (typeof log !== 'undefined') ? log : true; //Sets the default value of log to 'true'
+    var previousSub = this.title, previousText = this.text;
+
+    this.title = title;
+    this.text = text;
+    this.element.html(title);
+
+    saver.save({action: 'update', subtitle: activateHtml(this.title), text: activateHtml(this.text), id: this.id}, Saver.types.CONTENT, log, this, {subtitle: previousSub, text: previousText});
+};
+
+Subtitle.prototype.select = function() {
+    this.node.select(this); //this sends the reference to this subtitle
+
+    this.selected = true;
+    board.contentShower.linkTo(this); //show the content shower
+    board.nodeToolbar.linkTo(this); //show the node Toolbar
+    this.element.addClass('subtitle_selected'); //highlights the subtitle (adds a colored border)
+};
+
+Subtitle.prototype.deselect = function() { //When this is called the node is either also deselected or the contentShower is linked to the node itself (this no need to hide the content shower)
+    this.element.removeClass('subtitle_selected');
+    this.selected = false;
+    this.node.selectedSubtitle = null; //no subtitle selected on the node anymore
+};
+
+Subtitle.prototype.show = function() { //when this is called it also means the node is selected
+    this.element.show();
+    this.showText();
+};
+
+Subtitle.prototype.hide = function() { //when this is called it also means the node is not selected
+	if(this.position >= this.ellipsisPosition) //hide all subtitles after or at position 4
+		this.element.hide();
+    this.hideText();
+};
+
+Subtitle.prototype.showText = function() { //Show all the text if a subtitle's content is too long
+    this.element.css({'max-width': 'none', 'z-index': 2, 'background-color': Styles.boardBgColor});
+};
+
+Subtitle.prototype.hideText = function() {
+    this.element.css({'max-width': Styles.subtitleMaxWidth, 'z-index': 0, 'background-color': Styles.subtitleBgColor});
+};
+
+Subtitle.prototype.moveUp = function() { //Move up ON THE SCREEN
+    this.position--;
+    this.updatePosition();
+
+    saver.save({action: 'update', subtitle_position: this.position, id: this.id}, Saver.types.CONTENT, false, this);
+};
+
+Subtitle.prototype.moveDown = function() {
+    this.position++;
+    this.updatePosition();
+
+    saver.save({action: 'update', subtitle_position: this.position, id: this.id}, Saver.types.CONTENT, false, this);
+};
+
+Subtitle.prototype.delete = function(log) {
+    log = (typeof log !== 'undefined') ? log : true; //Sets the default value of log to 'true'
+    this.element.hide();
+    this.node.removeSubtitle(this);
+
+    for(var i = 0; i < this.node.subtitles.length; i++) { //Need to reposition all following subtitles (move them all up)
+        if(this.node.subtitles[i].position > this.position) {
+            this.node.subtitles[i].moveUp();
+        }
+    }
+
+    this.node.expandSubtitleList(); //Expand and retract to refresh wich subtitles should be shown, which should be hidden, and if an ellipsis should be shown
+    this.node.retractSubtitleList();
+
+    saver.save({action: 'delete', what2Del: 'subtitle', sub_id: this.id}, Saver.types.CONTENT, log, this);
+};
+
+/** ALL EVENTS **/
+Subtitle.prototype.mouseEnter = function(e) {
+    this.node.containerElement.css('z-index', '3');
+    this.showText();
+};
+
+Subtitle.prototype.mouseLeave = function(e) {
+    if(!this.node.selected && !this.node.subtitleListExpanded) { //Do not retract the subtitles if the list is expanded or if the ndoe is selected
+        this.node.containerElement.css('z-index', '1');
+        this.hideText(); //only hide if the node is not selected
+    }
+};
+
+Subtitle.prototype.mouseDown = function(e) {
+    this.moveInfo.moving = true;
+    this.moveInfo.startX = e.clientX; //starting position
+    this.moveInfo.startY = e.clientY;
+    this.moveInfo.lastX = e.clientX;
+    this.moveInfo.lastY = e.clientY;
+};
+
+Subtitle.prototype.mouseMove = function(e) {
+    if(User.canEdit && this.moveInfo.moving) {
+        this.left += (e.clientX - this.moveInfo.lastX);
+        this.top += (e.clientY - this.moveInfo.lastY);
+        this.element.css({top: this.top, left: this.left});
+
+        //Check if other subtitles need to move
+        for(var i = 0; i < this.node.subtitles.length; i++) {
+            if(this.node.subtitles[i] != this) {
+                if(((this.node.subtitles[i].position > this.position && this.node.subtitles[i].top < this.top)
+                  || (this.node.subtitles[i].position < this.position && this.node.subtitles[i].top > this.top))
+                  && (this.node.subtitleListExpanded || this.node.subtitles[i].position < this.ellipsisPosition)) { //If the subtitle list isn't expanded, do not move subtitles on or after the ellipsis
+                    var temp = this.position; //Swap the two positions. DO NOT JUST INCREMENT OR DECREMENT (Doesn't work if users moves the subtitles too fast.)
+                    this.position = this.node.subtitles[i].position;
+                    this.node.subtitles[i].position = temp;
+                    this.node.subtitles[i].updatePosition();
+
+                    saver.save({action: 'update', subtitle_position: this.position, id: this.id}, Saver.types.CONTENT, true, this, {position: temp, otherSub: this.node.subtitles[i], otherPos: this.position});
+                    saver.save({action: 'update', subtitle_position: temp, id: this.node.subtitles[i].id}, Saver.types.CONTENT, false);
+                }
+            }
+        }
+
+        this.moveInfo.lastX = e.clientX; //get the new position for the next update
+        this.moveInfo.lastY = e.clientY;
+    }
+};
+
+Subtitle.prototype.mouseUp = function(e) {
+    if(this.moveInfo.moving) {
+        this.moveInfo.moving = false;
+
+        //Select or deselect the subtitle if it was clicked, not dragged
+        if(Math.sqrt(Math.pow(e.clientX - this.moveInfo.startX, 2) + Math.pow(e.clientY - this.moveInfo.startY, 2)) <= 2) {
+            if(!this.selected) {
+                board.deselectAllNodes(); //Deselect all the other nodes
+                this.select(); //if the subtitle is not selected, select it (also selects the node)
+            }
+        }
+        else { //It was dragged
+            this.updatePosition();
+        }
+    }
+};

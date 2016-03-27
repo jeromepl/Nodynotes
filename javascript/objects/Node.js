@@ -1,280 +1,241 @@
-function Node(title, text, color, icon, xPos, yPos, id) {
-	this.isScaled = false;
-	this.scaleFactor = 1;
-	this.isSelected = false;
-	this.isExpanded = false;
-	this.title = title.replace(/(<([^>]+)>)/ig,""); //remove html elements
-	this.text = text;
-	this.color = '#' + color;
-	this.icon = icon;
-	this.id = id;
-	this.subtitles = [];
-	this.tags = [];
-	this.moveInfo = {}; // Info about the movement of the node (setted in the mousedown/mouseup/mousemove events)
+function Node(id, title, xPos, yPos) {
 
-	//this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', background: 'radial-gradient(#999 40%,' + this.color + ' 65%)'}).attr('id', 'node' + this.id);
-    this.element = $('<div>').appendTo('#nodesArea').addClass('node').css({top: yPos + 'px', left: xPos + 'px', 'background-color': this.color}).attr('id', 'node' + this.id);
-	$.data(this.element[0], 'node', {object: this}); //save the object's reference to be able to act on it in event listeners
+    this.id = id;
+    this.title = title; //escaping html elements is done in php
+    this.xPos = xPos;
+    this.yPos = yPos;
 
-	this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);
+    /** CONSTANT VARIABLES **/
+    this.scaleFactor = 1.1;
 
-    $('<span>').appendTo(this.element); // this empty span allows the image to be vertically centered (put it anyway in case an iconis added later)
-	if(icon != 'none') { //if there is an icon
-		$('<img>').appendTo(this.element).attr({'data-src': 'images/icons/' + this.icon + '.svg', id: 'icon_node' + this.id}).addClass('iconic-md').hide();
-		var iconEl;
-		iconic.inject('#icon_node' + this.id, {
-			each: function (svg) {
-				iconEl = $(svg);
-			}
-		}, function (count) {
-			iconEl.show();
-		});
-	}
+    this.subtitles = [];
+    this.tags = [];
 
-	//add an element inside the tagbox to contain all tags of this node
-	$('<div>').appendTo('#all_tags').attr('id', 'tags' + this.id).hide();
+    this.moveInfo = {}; //all variables required to move the node
+    this.moveInfo.moving = false;
 
-	this.paddingTop = this.titleElement.css('padding-top');
-	this.paddingLeft = this.titleElement.css('padding-left');
+    this.selected = false; //if the node is selected
+    this.selectedSubtitle = null; //Keeps the reference to the selected subtitle. Used to not deselect the node when clicking if a subtitle is selected
 
-	//add a subtitle
-	this.addSubtitle = function(id, position, title, text) {
-		this.subtitles.push(new Subtitle(id, position, title, text, this));
-	}
+    this.subtitleListExpanded = false; //Whether all subtitles are shown or not (i.e. if the ellipsis is hidden or not)
 
-	//add a tag
-	this.addTag = function(id, title) {
-		this.tags.push(new Tag(id, title, this));
-	}
+    this.containerElement = $('<div>').appendTo(board.element).addClass('node_container').css({top: this.yPos + 'px', left: this.xPos + 'px'}); //Contains the node and the subtitles (so that the subtitles are not inside the node div for easier event handling)
+    this.element = $('<div>').appendTo(this.containerElement).addClass('node'); //the html node element (a div)
+    this.titleElement = $('<h3>').appendTo(this.element).addClass('nodeTitle').html(this.title);
 
-	//scaling variables
-	this.initVal = {
-			width: this.element.width(),
-			height: this.element.height(),
+    $.data(this.element[0], 'object', {reference: this}); //save the object's reference to be able to act on it in event listeners
 
-			titleWidth: this.titleElement.width(),
-			titleHeight: this.titleElement.height(),
-			titleTop: this.titleElement.position().top,
-			titleLeft: this.titleElement.position().left,
-			titleFontSize: parseInt(this.titleElement.css('font-size')),
-			titlePaddingTop: parseInt(this.titleElement.css('padding-top'))
-		};
-	this.addedVal = { // so that the origin point of the scaling is the center of the circle
-			top: 0,
-			left: 0
-		};
-	this.scale = function(factor) {
-		if(!this.isScaled) {
-			this.addedVal.top = (this.initVal.height * factor - this.initVal.height) / 2;
-			this.addedVal.left = (this.initVal.width * factor - this.initVal.width) / 2;
+    //ELLIPSIS for subtitles (shows only if there are more than 4)
+    this.ellipsis = $('<h4>').appendTo(this.containerElement).addClass('subtitle ellipsis').text('...'); //create an ellipsis
+    this.ellipsis.hide();
+    $.data(this.ellipsis[0], 'object', {reference: this}); //Save the reference of the node to be able to expand the subtitle list when clicked
+};
 
-			this.element.css({width: this.initVal.width * factor, height: this.initVal.height * factor});
-			this.element.css({top: this.element.position().top - this.addedVal.top, left: this.element.position().left - this.addedVal.left});
-			this.titleElement.css({width: this.initVal.titleWidth * factor, height: this.initVal.titleHeight * factor,
-				top: this.initVal.titleTop * factor, left: this.initVal.titleLeft * factor,
-				fontSize: this.initVal.titleFontSize * factor, paddingTop: this.initVal.titlePaddingTop * factor });
+Node.prototype.addSubtitle = function(id, position, title, text) {
+    this.subtitles.push(new Subtitle(id, position, title, text, this));
 
-			this.scaleFactor = factor;
-			this.isScaled = true;
+    if(this.subtitles.length > 4) //show the ellipsis if there are enough subtitles
+        this.ellipsis.show();
+};
 
-			this.showTitle();
-		}
-		//put this one out to be able to reset it whenever subtitles are being moved
-		for(var i = 0; i < this.subtitles.length; i++) {
-			this.subtitles[i].element.css({top: this.subtitles[i].top * factor, left: this.subtitles[i].left * factor});
-			if(this.subtitles[i].ellipsis) {
-				this.subtitles[i].ellipsis.css({top: (-25 + 4 * 25) * factor, left: this.subtitles[i].xPos[4] * factor});
-			}
-		}
-	}
-
-	this.resetScale = function() {
-		if(this.isScaled && !this.isSelected) {
-			this.element.css({width: this.initVal.width, height: this.initVal.height});
-			this.element.css({top: this.element.position().top + this.addedVal.top, left: this.element.position().left + this.addedVal.left});
-			this.titleElement.css({width: this.initVal.titleWidth, height: this.initVal.titleHeight,
-				top: this.initVal.titleTop, left: this.initVal.titleLeft,
-				fontSize: this.initVal.titleFontSize, paddingTop: this.initVal.titlePaddingTop });
-			if($('#newTitle')[0]) this.titleElement.css('padding-top', '0'); // remove the padding if the title is being modified
-
-			for(var i = 0; i < this.subtitles.length; i++) {
-				this.subtitles[i].element.css({top: this.subtitles[i].top, left: this.subtitles[i].left});
-				if(this.subtitles[i].ellipsis) {
-					this.subtitles[i].ellipsis.css({top: -25 + 4 * 25, left: this.subtitles[i].xPos[4]});
-				}
-			}
-
-			this.isScaled = false;
-			this.scaleFactor = 1;
-			this.addedVal.top = 0;
-			this.addedVal.left = 0;
-
-			this.hideTitle();
-		}
-	}
-
-	this.showTitle = function() {
-		this.titleElement.css('min-width', this.titleElement.css('width'));
-		this.titleElement.css('width', 'auto');
-	}
-
-	this.hideTitle = function() {
-		this.titleElement.css('min-width', nodeTitleMinWidth);
-	}
-
-	this.selected = function() {
-		$('#showContent').show();
-		$('#showContent p').html(this.text);
-		$('#showContent h1').html(this.title);
-        $('#tool2_img_2').attr('title', 'Delete Node');
-
-		/*if(this.element.position().left + $('#nodesArea').position().left > $('#showContent').outerWidth() + 30) {*/ // to show the content shower to the right or left of the element
-			$('#showContent').css({top: this.element.position().top - 25, left: this.element.position().left - 280});
-			$('#showContent #pointer').attr('class', 'pointerRight');
-		/*}
-		else {
-			$('#showContent').css({top: this.element.position().top - 25, left: this.element.position().left
-				+ this.element.outerWidth() + 30});
-			$('#showContent #pointer').attr('class', 'pointerLeft');
-		}*/
-
-		selectedNode = this;
-		this.isSelected = true;
-
-		this.expandSubtitles();
-		for(var i = 0; i < this.subtitles.length; i++) {
-			this.subtitles[i].showSubtitle(); //need to be before the scale so that it acts on all subtitles
-		}
-		this.scale(1.1); //so that the node stays scaled
-
-		$('.node:not(.board_node)').css('opacity', '0.6');
-		$('.linkBar').css('opacity', '0.3');
-		this.element.css('opacity', '1');
-		this.element.css('z-index', '3');
-
-		var distLeft = this.element.position().left + this.element.outerWidth() / 2 - $('#toolbar2').outerWidth() / 2 + $('#nodesArea').position().left;
-		var distTop = this.element.position().top - 100 + $('#nodesArea').position().top;
-		$('#toolbar2').css({left: distLeft, top: distTop});
-		$('#toolbar2').show();
-
-		$('#tags' + this.id).css('display', 'inline-block'); //show the good set of tags (use css to show them as inline-blocks)
-
-		$.data($('#toolbar2')[0], 'node', {object: this});
-		$.data($('#showContent')[0], 'node', {object: this}); //save the node in the showContent element
-		selectedType = 'node';
-	}
-
-	this.deselected = function() {
-		$('#showContent').hide(); //remove the content shower
-		$('.node').css('opacity', '1');
-		$('.linkBar').css('opacity', '1');
-
-		selectedNode = null;
-		this.isSelected = false;
-
-		this.retractSubtitles();
-		for(var i = 0; i < this.subtitles.length; i++) { //reset subtitle
-			this.subtitles[i].hideSubtitle();
-			if(this.subtitles[i].isSelected) {
-				this.subtitles[i].element.css('border', 'none');
-				this.subtitles[i].isSelected = false;
-			}
-		}
-		this.resetScale();
-		this.element.css('z-index', '1');
-
-		$('#toolbar2').hide();
-		$('#tags' + this.id).hide(); //hide tags for the next selected node
-        $('#tag_suggestions').hide(); //hide tag suggestions in case they were open
-
-		if(colorChanging) {
-			$('#colorChoices').hide();
-			colorChanging = false;
-		}
-		else if(tagsOpen) {
-			$('#tag_box').hide();
-			$('#tag_name').val('');
-			tagsOpen = false;
-		}
-        else if(iconsOpen) {
-			$('#icon_box').hide();
-			iconsOpen = false;
-		}
-	}
-
-	this.changeContent = function() {
-		changingContent = true;
-        this.title = activateHtml(this.title);
-		$('#content_title input').show().val(this.title).select();
-        this.text = activateHtml(br2nl(this.text));
-		$('#content_text textArea').show().val(this.text).css('height', $('#content_text p').innerHeight());
-		$('#content_title h1').hide();
-		$('#content_text p').hide();
-		$('#changeContent').show();
-		$('#changeContentButton').hide();
-		$('#changeContent_change').show();
-		$('#changeContent_cancel').show();
-
-		changeContentType = 'node';
-		selectedType = 'node';
-	}
-
-	this.setContent = function(saveIt) {
-		changingContent = false;
-		if(saveIt) {
-            this.title = escapeHtml($('#content_title input').val());
-            this.text = nl2br(escapeHtml($('#content_text textarea').val()));
-			this.titleElement.html(this.title);
-			$('#showContent p').html(this.text);
-			$('#showContent h1').html(this.title);
-
-            save({action: 'update', title: activateHtml(this.title), text: activateHtml(this.text), id: this.id});
+Node.prototype.removeSubtitle = function(subtitle) { //deleting is handled in the Subtitle class
+    for(var i = 0; i < this.subtitles.length; i++) {
+        if(this.subtitles[i] == subtitle) {
+            this.subtitles.splice(i, 1);
+            break;
         }
-		$('#content_title input').hide();
-		$('#content_text textArea').hide();
-		$('#content_title h1').show();
-		$('#content_text p').show();
+    }
+};
 
-		$('#changeContentButton').show();
-		$('#changeContent_change').hide();
-		$('#changeContent_cancel').hide();
-	}
+Node.prototype.addTag = function(id, title) {
+    this.tags.push(new Tag(id, title, this));
+};
 
-	this.expandSubtitles = function() {
-		for(var i = 0; i < this.subtitles.length; i++) {
-			this.subtitles[i].element.show();
-			if(this.subtitles[i].ellipsis) this.subtitles[i].ellipsis.hide();
-		}
-		this.isExpanded = true;
-        this.element.css('z-index', 3);
-		ellipsisNode = this; //save the node's reference to know which ellipsis was clicked
-	}
+Node.prototype.removeTag = function(tag) { //deleting is handled in the Tag class
+    for(var i = 0; i < this.tags.length; i++) {
+        if(this.tags[i] == tag) {
+            this.tags.splice(i, 1);
+            break;
+        }
+    }
+};
 
-	this.retractSubtitles = function() {
-		for(var i = 0; i < this.subtitles.length; i++) {
-			if(this.subtitles[i].position >= 4) this.subtitles[i].element.hide();
-			if(this.subtitles[i].ellipsis) this.subtitles[i].ellipsis.show();
-		}
-		this.isExpanded = false;
-        this.element.css('z-index', 1);
-		ellipsisNode = null;
-	}
+Node.prototype.select = function(subtitle) { //subtitle is optionnal. If specified, means a subtitle was selected
+    this.selected = true;
 
-	this.deleteNode = function() {
-		deleteLinks(this);
+    if(subtitle)
+        this.selectedSubtitle = subtitle;
 
-		this.element.remove();
-		save({action: 'delete', what2Del: 'node', node_id: this.id});
-		//deleting subtitles related to the node is done in php
+    this.expandSubtitleList();
 
-		this.deselect();
-		if(changingContent) this.setContent(false);
+    board.fade(); //decrease all nodes and linkbars' opacity
+    this.containerElement.css('opacity', '1'); //don't change the opacity of the selected node
+    this.containerElement.css('z-index', '3'); //put the selected node on top of the others
+    this.scaleUp(); //scale it up (might already be scaled up because of mouseEnter)
 
-		for(var i = 0; i < nodes.length; i++) {
-			if(this === nodes[i]) { //find the index of the node
-				nodes.splice(i, 1);
-				break;
-			}
-		}
-	}
-}
+    board.nodeToolbar.linkTo(this); //show the node Toolbar
+};
+
+Node.prototype.deselect = function() {
+    this.selected = false;
+    this.selectedSubtitle = null;
+
+    board.unfade(); //reset the opacity of all nodes and linkbars
+    this.containerElement.css('z-index', '1'); //also reset the z-index
+    this.resetScale(); //and reset the scale
+
+    this.retractSubtitleList();
+
+    board.nodeToolbar.hide();
+
+    //deselect all subtitles
+    for(var i = 0; i < this.subtitles.length; i++) {
+        if(this.subtitles[i].selected) {
+            this.subtitles[i].deselect();
+        }
+    }
+};
+
+Node.prototype.moveTo = function(x, y) { //Update the Node's position
+    this.xPos = x;
+    this.yPos = y;
+    this.containerElement.css({top: this.yPos, left: this.xPos});
+
+    for(var i = 0; i < board.linkbars.length; i++) { //refresh the position of the linkbars everytime
+        if(board.linkbars[i].node1 === this || board.linkbars[i].node2 === this) { //if this linkbar is attached to the node that moved
+            board.linkbars[i].refreshPos();
+        }
+    }
+};
+
+Node.prototype.scaleUp = function() {
+    this.containerElement.css('transform', 'scale(' + this.scaleFactor + ')');
+    this.containerElement.css('z-index', '3');
+    this.showTitle();
+};
+
+Node.prototype.resetScale = function() {
+    this.containerElement.css('transform', 'scale(1)');
+    this.containerElement.css('z-index', '1'); //also reset the z-index
+    this.hideTitle();
+};
+
+Node.prototype.showTitle = function() {
+    this.titleElement.css('width', 'auto');
+};
+
+Node.prototype.hideTitle = function() {
+    this.titleElement.css('width', Styles.nodeTitleMinWidth); //set the width equal to the minimum width to limit the size
+};
+
+Node.prototype.expandSubtitleList = function() { //To show all subtitles
+    for(var i = 0; i < this.subtitles.length; i++) {
+        this.subtitles[i].show();
+    }
+    this.ellipsis.hide();
+
+    this.subtitleListExpanded = true;
+};
+
+Node.prototype.retractSubtitleList = function() {
+    for(var i = 0; i < this.subtitles.length; i++) {
+        this.subtitles[i].hide();
+    }
+    if(this.subtitles.length > 4) //show the ellipsis if there are enough subtitles
+        this.ellipsis.show();
+
+    this.subtitleListExpanded = false;
+};
+
+Node.prototype.delete = function(log) {
+    log = (typeof log !== 'undefined') ? log : true; //Sets the default value of log to 'true'
+    var previousSubs = this.subtitles.slice(0), previousTags = this.tags.slice(0); //slice(0) is equal to cloning
+    var previousLinks = [];
+
+    for(var i = this.subtitles.length - 1; i >= 0; i--) { //delete all subtitles linked to this node
+        this.subtitles[i].delete(false);
+    }
+    for(var i = this.tags.length - 1; i >= 0; i--) { //delete all tags linked to this node
+        this.tags[i].delete(false);
+    }
+    for(var i = board.linkbars.length - 1; i >= 0; i--) {
+        if(board.linkbars[i].node1 == this || board.linkbars[i].node2 == this) {
+            previousLinks.push(board.linkbars[i]);
+            board.linkbars[i].delete(false); //calls the method removeLinkbar in Board
+        }
+    }
+
+    this.containerElement.hide();
+    board.removeNode(this);
+
+    saver.save({action: 'delete', what2Del: 'node', node_id: this.id}, Saver.types.CONTENT, log, this, {subtitles: previousSubs, tags: previousTags, linkbars: previousLinks});
+};
+
+/** ALL EVENTS **/
+Node.prototype.mouseEnter = function(e) {
+    this.scaleUp();
+};
+
+Node.prototype.mouseLeave = function(e) {
+    if(!this.selected) { //shrink the node only if the mouse leaves it and it is NOT selected
+        this.resetScale();
+    }
+};
+
+Node.prototype.mouseDown = function(e) {
+    this.moveInfo.moving = true;
+    this.moveInfo.startX = e.clientX; //starting position
+    this.moveInfo.startY = e.clientY;
+    this.moveInfo.lastX = e.clientX; //starting position
+    this.moveInfo.lastY = e.clientY;
+    this.moveInfo.startPosX = this.xPos;
+    this.moveInfo.startPosY = this.yPos;
+};
+
+Node.prototype.mouseMove = function(e) {
+    if(User.canEdit && this.moveInfo.moving) {
+        this.moveTo(this.xPos + (e.clientX - this.moveInfo.lastX), this.yPos + (e.clientY - this.moveInfo.lastY)); //Update the Node's position (also updates the linkbars)
+
+        this.moveInfo.lastX = e.clientX; //get the new position for the next update
+        this.moveInfo.lastY = e.clientY;
+
+        if(Math.sqrt(Math.pow(e.clientX - this.moveInfo.startX, 2) + Math.pow(e.clientY - this.moveInfo.startY, 2)) > 2) {
+            if(this.selected) {
+                board.unfade(); //Unfade the rest of the nodes when a selected node is being dragged
+                board.nodeToolbar.hide(); // ...and hide the toolbar
+            }
+        }
+    }
+};
+
+Node.prototype.mouseUp = function(e) {
+    if(this.moveInfo.moving) {
+        this.moveInfo.moving = false;
+
+        //Select or deselect the node if the node was clicked, not dragged
+        if(Math.sqrt(Math.pow(e.clientX - this.moveInfo.startX, 2) + Math.pow(e.clientY - this.moveInfo.startY, 2)) <= 2) {
+            if(!this.selected) {
+                board.deselectAllNodes(); //Deselect all the other nodes
+                this.select(); //if the node is not selected, select it
+            }
+            else if(this.selectedSubtitle) { //if a subtitle is selected, do not deselect the node, only the subtitle
+                this.select(); //reselect to show the right content in the content shower
+                this.selectedSubtitle.deselect(); //sets selectedSubtitle to null
+            }
+            else {
+                this.deselect();
+                this.scaleUp(); //Don't change the scale because the mouse is still over it
+            }
+        }
+        else {
+            if(this.selected) //If a node is selected and then dragged, deselect it
+                this.deselect();
+
+            saver.save({action: 'update', xPos: this.xPos, yPos: this.yPos, id: this.id}, Saver.types.CONTENT, true, this, {xPos: this.moveInfo.startPosX, yPos: this.moveInfo.startPosY});
+        }
+    }
+};
+
+Node.prototype.ellipsisClicked = function(e) {
+    this.expandSubtitleList();
+};

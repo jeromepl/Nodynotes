@@ -6,6 +6,8 @@
 
     $last_tags = array();
 
+    //No need to handle if the user is not connected since if he's not connected, he can't see his last used tags
+
     if(isset($_SESSION['id']) && is_numeric($_SESSION['id']) && isset($_GET['query'])) {
 
         $answer = $bdd->prepare('SELECT DISTINCT(t.title)

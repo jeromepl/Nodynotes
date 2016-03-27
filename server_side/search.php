@@ -1,5 +1,7 @@
 <?php
 
+    //NOTE: THIS CODE IS NOT WORKING ON THE HOSTGATOR'S SERVERS BECAUSE IT USES A NEWER VERSION OF MYSQL
+
 	include_once("mySQL_connection.php"); //where $bdd is set
 	session_start();
     header('Content-Type: application/json');
@@ -8,7 +10,7 @@
 	$nodes = array();
 	$subtitles = array();
 	
-    //TODO Add option to search in the current board instead of all of them
+    //TODO Add option to search in the current board (And if user is not connected) instead of all of them
 
 	if(isset($_SESSION['id']) && is_numeric($_SESSION['id']) && isset($_GET['query'])) {
 		$answer = $bdd->prepare('SELECT n.*,

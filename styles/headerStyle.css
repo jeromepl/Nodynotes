@@ -5,19 +5,15 @@ header {
 	position: relative;
 	width: 100%;
     min-width: 980px;
-	height: 42px;
-	border-bottom: solid 2px #09F;
-    background-color: #020024;
+	height: 48px;
+    background-color: #2873A0;
 	z-index: 10;
     text-align: center;
+    font-family: ubuntu;
 }
 
 #head_left {
     float: left;
-    height: 100%;
-}
-
-#head_middle {
     height: 100%;
 }
 
@@ -29,11 +25,11 @@ header {
 #logo {
 	display: inline-block;
 	color: white;
-	padding: 5px 15px;
+	padding: 6px 15px;
 	margin: 0;
 	margin-right: 20px;
 	vertical-align: middle;
-	font-size: 28px;
+	font-size: 32px;
 	font-weight: bold;
 	font-style: italic;
 	cursor: default;
@@ -42,13 +38,8 @@ header {
     text-shadow: 0 2px 2px #999;
 }
 
-#alpha {
-    position: relative;
-    bottom: -5px;
-    left: -6px;
-    font-family: arial;
+#logo span {
     font-size: 24px;
-    color: #05c147;
 }
 
 header svg:not(.search_resultSVG) {
@@ -63,23 +54,17 @@ header svg:not(.search_resultSVG) {
 .head_icon {
 	display: inline-block;
     margin-right: 15px;
-	border-radius: 5px;
+    margin-top: 4px;
 	cursor: pointer;
 	vertical-align: middle;
-	border-bottom: 5px transparent solid;
 }
 
 .head_icon:hover {
-	box-shadow: 0 3px 5px #AAA;
-    border-bottom: 5px #09F solid;
+    background-color: #2778a8;
 }
 
 .head_icon:active {
 	box-shadow: 0 0 0 #AAA;
-}
-
-#head_search:hover {
-	border-bottom: 5px #2F2 solid;
 }
 
 #logout {
@@ -94,10 +79,6 @@ header svg:not(.search_resultSVG) {
     margin-right: 20px;
 }
 
-#head_profile:hover {
-	border-bottom: 5px #4140E1 solid;
-}
-
 #head_friends {
     height: 40px;
     overflow: hidden;
@@ -110,77 +91,62 @@ header svg:not(.search_resultSVG) {
     padding: 0;
 }
 
-#head_friends:hover {
-    border-bottom: 5px #00D7DD solid;
+#head_right form {
+    height: 100%;
+    margin: 0;
 }
 
-#head_right input[type='text'], #head_right input[type='password'] {
+#login_box, #password_box {
     display: inline-block;
     margin-right: 10px;
-    margin-top: 9px;
-    border-radius: 3px;
+    margin-top: 12px;
     border: solid 1px #AAA;
     padding: 3px 5px;
-    height: 18px;
+    height: 20px;
     font-size: 14px;
     border: none;
     outline: none;
 }
 
-#head_right input[type='text']:focus, #head_right input[type='password']:focus {
-    box-shadow: #09F 0 0 12px;
-}
-
 #login {
     margin-right: 15px;
-    background: linear-gradient(#0BF, #09F);
-    border: solid #06F 1px;
-    border-radius: 4px;
+    background-color: #29BFCE;
     width: 80px;
-    height: 30px;
+    height: 36px;
     color: white;
-    cursor: pointer;
     text-align: center;
     font-family: asap;
     font-size: 17px;
     font-weight: bold;
-    text-shadow: 0 1px 1px #777;
+    border: none;
+    cursor: pointer;
 }
 
-#search {
-    display: inline-block;
-    margin-left: -350px;
-    width: 350px;
-    text-align: center;
-}
-
-#head_middle input {
+#search_box {
+    position: relative;
+    top: 3px;
 	border: none;
 	outline: none;
-	padding: 3px 5px;
-	border-radius: 2px;
-	width: 220px;
-}
-
-#head_middle input:focus {
-	box-shadow: #09F 0 0 12px;
+	padding: 3px 0; /* Pading left and right go up to 5 when animation the opening */
+	border-radius: 1px;
+	height: 20px;
+    font-size: 14px;
+    width: 0; /* Goes up to 250 when animating the opening */
 }
 
 #search_results {
     display: none;
     position: absolute;
     margin-top: -5px;
-    margin-left: -9px;
+    margin-left: -2px;
     padding-top: 4px;
     min-height: 65px;
     max-height: 450px;
     overflow-y: scroll;
-    width: 350px;
+    width: 258px;
     background-color: white;
     border: 2px solid #020024;
     border-top: none;
-    border-radius: 0 0 3px 3px;
-    box-shadow: #999 0 2px 3px;
 }
 
 #search_noResults {
@@ -234,7 +200,7 @@ header svg:not(.search_resultSVG) {
 
 .search_textResult {
     display: inline-block;
-    width: 82%;
+    width: 75%;
     text-align: left;
     float: right;
     white-space: nowrap;

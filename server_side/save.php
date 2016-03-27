@@ -104,7 +104,7 @@
 			}
 		}
 		
-		else if($_POST['action'] == 'update'){ //modifing something
+		else if($_POST['action'] == 'update'){ //modifying something
 			if(isset($_POST['id']) && is_numeric($_POST['id'])) {			
 				if(isset($_POST['xPos']) && isset($_POST['yPos']) && is_numeric($_POST['xPos']) && is_numeric($_POST['yPos'])) {
 							
