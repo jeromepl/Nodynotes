@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Nodynotes - Maintenance Page</title>
+        <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
+        <style>
+            body
+            {
+                padding-top: 50px;
+
+                font-family: asap, sans-serif;
+                font-style: normal;
+                font-weight: 400;
+            }
+
+            #maintenance-img {
+                transform-origin: 50% 0%;
+                animation: oscillation 1s ease-in-out infinite alternate;
+                outline: 1px solid transparent;
+            }
+
+            @keyframes oscillation {
+                from {
+                    transform: rotateZ(10deg);
+                }
+                to {
+                    transform: rotateZ(-10deg);
+                }
+            }
+
+            #logo {
+                color: #008abd;
+                padding: 6px 15px;
+                margin: 0;
+                font-size: 32px;
+                font-weight: bold;
+                font-style: italic;
+                text-shadow: 0 2px 2px #999;
+            }
+
+            #logo span {
+                font-size: 24px;
+            }
+
+            #logo-img {
+                position: fixed;
+                width: 30px;
+                bottom: 50px;
+                left: 50%;
+                margin-left: -15px;
+            }
+
+            .container {
+                width: 980px;
+                margin: auto;
+                text-align: center;
+            }
+        </style>
+        <script src="http://use.edgefonts.net/asap:n7,i4,n4,i7:all;ubuntu:n4,i4,n7,i7,n3,i3,n5,i5:all.js"></script>
+	</head>
+    <body>
+        <div class="container">
+            <img id='maintenance-img' src="images/maintenance.png" width=150 />
+            <p>We are currently undergoing maintenance. A newer and better version of Nodynotes will be available soon!</p>
+
+            <h5 id='logo'>N<span>ODYNOTES</span></h5>
+            <img id='logo-img' src='images/shortcut_icon.png'>
+        </div>
+    </body>
+</html>
