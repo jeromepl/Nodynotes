@@ -1,6 +1,8 @@
 <?php
+    include_once('settings.php');
+
 	try {
-		$bdd = new PDO('mysql:host=108.167.140.108;dbname=anecdote_nodynotes', 'anecdote_user', 'H0T_Gu!t@r3');
+		$bdd = new PDO($mysqlHost, $mysqlUser, $mysqlPassword);
 	} catch(Exception $e) {
 		die('Error : ' . $e->getMessage());
 	}

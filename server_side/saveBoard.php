@@ -8,15 +8,26 @@
 		
 		if($_POST['action'] == 'insert' && isset($_POST['title']) && isset($_POST['public'])) {
 			
-			$req = $bdd->prepare('INSERT INTO boards(id, user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation, public)
-									VALUES(\'\', :user_id, :title, 0, 0, NOW(), NOW(), 0, :ip, :public)');
+			$req = $bdd->prepare('INSERT INTO boards(user_id, title, xPos, yPos, date_creation, date_seen, views, ip_creation, public)
+									VALUES(:user_id, :title, 0, 0, NOW(), NOW(), 0, :ip, :public)');
 			$req->execute(array('user_id' => $_SESSION['id'],
 								'title' => $_POST['title'],
                                 'ip' => $_SERVER['REMOTE_ADDR'],
                                 'public' => $_POST['public']));
 			
-			echo $bdd->lastInsertId();
+			$id = $bdd->lastInsertId();
             $req->closeCursor();
+            
+            //Also insert a node:
+            $req = $bdd->prepare('INSERT INTO nodes(board_id, title, text, xPos, yPos, color, icon, date_creation, date_update, ip_creation)
+									VALUES(:board_id, :title, \'\', 0, 0, \'00d7dd\', \'none\', NOW(), NOW(), :ip)');
+			$req->execute(array('board_id' => $id,
+								'title' => $_POST['title'],
+                                'ip' => $_SERVER['REMOTE_ADDR']));
+			
+            $req->closeCursor();
+            
+            echo $id; //Returns the board id
             return;
 		}
 		
@@ -58,7 +69,7 @@
 		
 		else if($_POST['action'] == 'delete' && isset($_POST['board_id']) && is_numeric($_POST['board_id'])) {
 			
-			$req = $bdd->prepare('DELETE boards
+			$req = $bdd->prepare('DELETE FROM boards
 									WHERE id = :id AND user_id = :user_id');
 			$nb = $req->execute(array('id' => $_POST['board_id'],
 										'user_id' => $_SESSION['id']));

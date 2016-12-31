@@ -18,8 +18,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++; //check if board belongs to the user
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO nodes(id, board_id, title, text, xPos, yPos, color, icon, date_creation, date_update, ip_creation)
-											VALUES(\'\', :boardId, \'Title\', \'Change content...\', :xPos, :yPos, :color, :icon, NOW(), NOW(), :ip)');
+					$req = $bdd->prepare('INSERT INTO nodes(board_id, title, text, xPos, yPos, color, icon, date_creation, date_update, ip_creation)
+											VALUES(:boardId, \'Title\', \'\', :xPos, :yPos, :color, :icon, NOW(), NOW(), :ip)');
 					$req->execute(array('boardId' => $_POST['board_id'],
 										'xPos' => $_POST['xPos'],
 										'yPos' => $_POST['yPos'],
@@ -45,8 +45,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO subtitles(id, node_id, title, text, position, date_creation, date_update, ip_creation)
-											VALUES(\'\', :nodeId, \'Subtitle\', \'Change content...\', :position, NOW(), NOW(), :ip)');
+					$req = $bdd->prepare('INSERT INTO subtitles(node_id, title, text, position, date_creation, date_update, ip_creation)
+											VALUES(:nodeId, \'Subtitle\', \'\', :position, NOW(), NOW(), :ip)');
 					$req->execute(array('nodeId' => $_POST['node_id'],
 										'position' => $_POST['pos'],
                                         'ip' => $_SERVER['REMOTE_ADDR']));
@@ -69,8 +69,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO tags(id, node_id, title, date_creation)
-											VALUES(\'\', :nodeId, :title, NOW())');
+					$req = $bdd->prepare('INSERT INTO tags(node_id, title, date_creation)
+											VALUES(:nodeId, :title, NOW())');
 					$req->execute(array('nodeId' => $_POST['node_id'],
 										'title' => $_POST['title']));
 					echo $bdd->lastInsertId();
@@ -92,8 +92,8 @@
 				$count = 0;
 				while($data = $answer->fetch()) $count++;
 				if($count != 0) {
-					$req = $bdd->prepare('INSERT INTO linkbars(id, node1_id, node2_id, date_creation)
-											VALUES(\'\', :node1Id, :node2Id, NOW())');
+					$req = $bdd->prepare('INSERT INTO linkbars(node1_id, node2_id, date_creation)
+											VALUES(:node1Id, :node2Id, NOW())');
 					$req->execute(array('node1Id' => $_POST['node1_id'],
 										'node2Id' => $_POST['node2_id']));
 					echo $bdd->lastInsertId();

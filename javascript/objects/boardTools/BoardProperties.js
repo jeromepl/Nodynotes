@@ -46,10 +46,12 @@ function BoardProperties(toolbar) {
     });
 
     $(document).on('click', '#board_delete', function(e) {
-        //TODO redirect to another board after deleting this one and verify if this is last user's board
-        /*var del = confirm("Are you sure you want to delete this board? This action can't be undone!");
-        if(del) saveBoard({action: 'delete', board_id: board_id});*/
-        alert("We are currently working on this feature. Sorry for the inconvenience.");
+        var del = confirm("Are you sure you want to delete this board? This action cannot be undone!");
+        if(del) {
+            saver.save({action: 'delete', board_id: board.id}, Saver.types.BOARD, false, null, null, function() {
+                window.location.replace('explorer.php');
+            });
+        }
     });
 }
 

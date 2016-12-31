@@ -36,18 +36,22 @@
                     <a id='logout' class='head_icon' href='server_side/disconnect.php' title='Log out'><img data-src='images/icons/account.svg' class='iconic iconic-md' data-state='logout'></a>
 
                 <?php } else { //show login form ?>
-
+                
                     <form method='post' action='server_side/login.php?ref_id=<?=$_GET['id']?>'>
                         <input id='login_box' type='text' name='email_username' placeholder='Email or username'>
                         <input id='password_box' type='password' name='password' placeholder='Password'>
-                        <input type='submit' id='login' value='Log in'>
+                        <input type='submit' id='login' class='button' value='Log in'>
                     </form>
+                    <a id='signup' class='button' href='./?signup'>Sign Up</a>
 
                 <?php } ?>
 
             </div>
             <div id='head_left'>
                <h1 id='logo'>N<span>ODYNOTES</span></h1>
+            </div>
+            <div id='head_center'>
+                <h2><?=$board_info['title']?></h2>
             </div>
         </header>
 
@@ -109,7 +113,7 @@
                     </div>
                     <div id='content_text'>
                         <p></p>
-                        <textarea></textarea>
+                        <textarea placeholder="Add a Description"></textarea>
                     </div>
 
                     <img src="images/pointer.png" id='pointer' draggable='false'>
@@ -176,7 +180,17 @@
             var saver = new Saver();
             var search = new Search();
 
-            var board = new Board(<?=$_GET['id']?>);
+            var selectedNode = <?=$_GET['node_id']?>;
+            var callback = null;
+            if (selectedNode) {
+                callback = function() {
+                    var node = board.getNode(selectedNode);
+                    board.centerNode(node, true);
+                    node.select();
+                };
+            }
+            
+            var board = new Board(<?=$_GET['id']?>, callback);
 
             var tempId = -1; //This variable is used to create new objects such as Nodes and Subtitles without knowing their id (provided by the server) yet. The value should decrease (tempId--) everytime it is used to ensure that no objects will have the same ID.
 
@@ -196,9 +210,9 @@
                 deleteNodeTool: 'Delete Node',
                 deleteSubtitleTool: 'Delete Subtitle',
                 newNodeTitle: 'Title',
-                newNodeText: 'Change content...',
+                newNodeText: '',
                 newSubtitleTitle: 'Subtitle',
-                newSubtitleText: 'Change content...'
+                newSubtitleText: ''
             };
 
             //Initialize Iconic

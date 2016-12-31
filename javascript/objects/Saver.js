@@ -23,15 +23,15 @@ Saver.prototype.toServer = function(data, type, object, callback) { //object is 
         saveScript = "save.php";
 
     $.post("server_side/" + saveScript, data, function(answer) { //returns the number of nodes changed or the new id
-        console.log(data);
-        console.log(answer);
+//        console.log(data);
+//        console.log(answer);
 
         if(data.action == 'insert' && object) {
             object.id = answer; //When creating a new object, the id is specified by the server and thus the local id needs to be updated
         }
 
         if(callback)
-            callback();
+            callback(answer);
     })
     .fail(function(jqXHR, textStatus, errorThrown) { //if there is an error
         //TODO localStorage save

@@ -12,10 +12,9 @@ body {
 }
 
 header {
-    height: 40px;
+    height: 50px;
     width: 100%;
-    background-color: #020024;
-    border-bottom: solid 4px #09F;
+    background-color: #2873A0;
 }
 
 .container {
@@ -31,22 +30,13 @@ header {
 	margin: 0;
 	margin-right: 20px;
 	vertical-align: middle;
-	font-size: 28px;
+	font-size: 34px;
 	font-weight: bold;
 	font-style: italic;
 	cursor: pointer;
 	border-radius: 4px 4px 0 0;
 	text-decoration: none;
     text-shadow: 0 2px 1px #777;
-}
-
-#alpha {
-    position: relative;
-    bottom: -5px;
-    left: -6px;
-    font-family: arial;
-    font-size: 24px;
-    color: #05c147;
 }
 
 #title {
@@ -77,6 +67,7 @@ nav li {
 nav li a {
     color: black;
     text-decoration: none;
+    font-size: 19px;
 }
 
 nav li a:hover {

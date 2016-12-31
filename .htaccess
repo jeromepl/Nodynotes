@@ -5,7 +5,7 @@ RewriteEngine on
 RewriteCond %{HTTP_HOST} ^nodynotes.com [NC]
 RewriteRule ^(.*)$ http://www.nodynotes.com/$1 [R=301,NC]
 RewriteRule ^board/([0-9]+)(?:/?(.*))? board.php?id=$1&$2 [NC,L]
-RewriteRule ^board/demo board.php?id=99 [NC,L]
+RewriteRule ^board/demo/? board.php?id=99&node_id=585 [NC,L]
 
 #IN CASE OF A MAINTENANCE
 #ErrorDocument 403 /maintenance.html 

@@ -1,4 +1,4 @@
-function Board(id) { //Constructor of Board
+function Board(id, callback) { //Constructor of Board, second parameter is optional
     this.id = id;
 
     this.xPos = 0;
@@ -30,12 +30,12 @@ function Board(id) { //Constructor of Board
     this.decelerationInterval;
 
     if(User.canSee)
-        this.loadData(); //loads the nodes and stuff via ajax
+        this.loadData(callback); //loads the nodes and stuff via ajax
     else
         this.backgroundText.text("This board isn't shared with you");
 }
 
-Board.prototype.loadData = function() {
+Board.prototype.loadData = function(callback) {
     var that = this;
 
     $.getJSON("server_side/getNodes.php?board_id=" + that.id, function(data) {
@@ -73,6 +73,9 @@ Board.prototype.loadData = function() {
 
         //Everything has loaded, we can now remove the text saying it was loading
         that.backgroundText.parent().remove();
+        
+        if (callback)
+            callback();
 
     }).fail(function(jqXHR, textStatus, errorThrown) { //if a connection error occurs
 		alert("An error occured while trying to get your data. Please check your internet connection and try again later.");
@@ -129,6 +132,14 @@ Board.prototype.removeNode = function(node) {
     }
 };
 
+Board.prototype.getNode = function(id) {
+    for(var i = 0; i < this.nodes.length; i++) {
+        if (this.nodes[i].id === id)
+            return this.nodes[i];
+    }
+    return null;
+};
+
 Board.prototype.addLinkbar = function(linkbar) {
     this.linkbars.push(linkbar);
 };
@@ -142,15 +153,31 @@ Board.prototype.removeLinkbar = function(linkbar) {
     }
 };
 
-Board.prototype.centerNode = function(node) { //Centers a node on the page
+Board.prototype.centerNode = function(node, skipAnimation) { //Centers a node on the page, second argument is optional
     this.xPos = -node.xPos - node.containerElement.width() / 2 + this.containerElement.width() / 2;
     this.yPos = -node.yPos - node.containerElement.height() / 2 + this.containerElement.height() / 2;
 
     //Animate the movement of the board
-    this.element.animate({top: this.yPos, left: this.xPos}, 700, 'swing');
+    if (skipAnimation)
+        this.element.css({top: this.yPos, left: this.xPos});
+    else
+        this.element.animate({top: this.yPos, left: this.xPos}, 700, 'swing');
 
     saver.save({action: 'update', board_id: this.id, yPos: this.yPos, xPos: this.xPos}, Saver.types.BOARD, false); //Save the new position
 };
+
+Board.prototype.moveBy = function(x, y, animate) { // animate argument is optional
+    this.xPos += x;
+    this.yPos += y;
+    
+    //Animate the movement of the board
+    if (animate)
+        this.element.animate({top: this.yPos, left: this.xPos}, 300, 'swing');
+    else
+        this.element.css({top: this.yPos, left: this.xPos});
+    
+    saver.save({action: 'update', board_id: this.id, yPos: this.yPos, xPos: this.xPos}, Saver.types.BOARD, false); //Save the new position
+}
 
 /** ALL EVENTS **/
 Board.prototype.mouseDown = function(e) {

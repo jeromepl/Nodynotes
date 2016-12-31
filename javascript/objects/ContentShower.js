@@ -14,6 +14,10 @@ function ContentShower() {
     this.cancelButton = $('#changeContent_cancel');
 
     this.editing = false;
+    
+    //CONSTANT variables
+    this.HORIZONTAL_OFFSET = 18; // Offset to the node
+    this.VERTICAL_OFFSET = 25;
 
     if(!User.canEdit) //Hide the option to edit text if the user is not allowed to
         this.editButton.hide();
@@ -44,7 +48,7 @@ function ContentShower() {
     $(document).on('click', '#changeContent_change', {context: this}, function(e) { //Apply changes
         var that = e.data.context;
         that.object.setContent(escapeHtml(that.titleField.val()), nl2br(escapeHtml(that.textField.val())));
-        that.textElement.html(that.object.text); //set the title and the text of the content shower to the ones of this node
+        that.textElement.html(matchHyperlinks(that.object.text)); //set the title and the text of the content shower to the ones of this node
         that.titleElement.html(that.object.title);
         that.reset();
     });
@@ -64,14 +68,14 @@ ContentShower.prototype.linkTo = function(object) {
     if(object instanceof Node || object instanceof Subtitle) { //verify if the var node is a Node or a Subtitle object
         this.object = object; //store the node reference in order to modify its content later
 
-        this.textElement.html(this.object.text); //set the title and the text of the content shower to the ones of this node
+        this.textElement.html(matchHyperlinks(this.object.text)); //set the title and the text of the content shower to the ones of this node
         this.titleElement.html(this.object.title);
 
         if(object instanceof Subtitle) {
-            this.element.css({top: this.object.node.yPos - 25, left: this.object.node.xPos - this.element.outerWidth() - 18}); //position the content shower relative to the node
+            this.element.css({top: this.object.node.yPos - this.VERTICAL_OFFSET, left: this.object.node.xPos - this.element.outerWidth() - this.HORIZONTAL_OFFSET}); //position the content shower relative to the node
         }
         else { //its a Node
-            this.element.css({top: this.object.yPos - 25, left: this.object.xPos - this.element.outerWidth() - 18});
+            this.element.css({top: this.object.yPos - this.VERTICAL_OFFSET, left: this.object.xPos - this.element.outerWidth() - this.HORIZONTAL_OFFSET});
         }
 
         this.element.show();

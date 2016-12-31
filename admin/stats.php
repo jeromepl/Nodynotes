@@ -29,19 +29,19 @@
 
     print "<br><strong>Colors:</strong><br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'22ff22\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'2ecc71\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " lime<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'ffff00\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'f1c40f\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " yellow<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'ffa500\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'e67e22\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " orange<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'fb001a\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'e74c3c\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " red<br>";
 
@@ -49,11 +49,11 @@
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " fuchsia<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'9900ff\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'9b59b6\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " purple<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'4140e1\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'3498db\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " blue<br>";
 
@@ -65,15 +65,15 @@
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " brown<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'ffffff\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'bdc3c7\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " white<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'555555\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'95a5a6\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " grey<br>";
 
-    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'000000\'');
+    $answer = $bdd->prepare('SELECT COUNT(id) FROM nodes WHERE color=\'34495e\'');
     $answer->execute() or die(print_r($bdd->errorInfo()));
     print $answer->fetch()[0] . " black<br>";
 

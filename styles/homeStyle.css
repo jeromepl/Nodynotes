@@ -12,18 +12,16 @@ body {
     width: 100%;
 }
 
+body * {
+    box-sizing: border-box;
+}
+
 strong { /* only used for SEO */
     font-weight: 400;
 }
 
 .container {
     width: 980px;
-    margin: auto;
-    text-align: center;
-}
-
-.flexible_container {
-    width: 85%;
     margin: auto;
     text-align: center;
 }
@@ -42,16 +40,21 @@ strong { /* only used for SEO */
     cursor: pointer;
 }
 
+.button:hover {
+    box-shadow: 0px 1px 2px 0 #7fa3e6;
+}
+
 header {
 	display: block;
 	position: relative;
     color: white;
 	width: 100%;
     min-width: 980px;
-	height: 500px;
+	min-height: 500px;
     background-color: #2873A0;
 	z-index: 10;
     text-align: center;
+    padding-top: 10px;
 }
 
 #top-header-container {
@@ -91,10 +94,14 @@ header {
 #head_right form {
     height: 100%;
     margin: 0;
+    display: inline-block;
 }
 
 #login_box, #password_box {
     display: inline-block;
+}
+
+.form-text-input {
     margin-right: 10px;
     margin-top: 12px;
     border: solid 1px #AAA;
@@ -103,9 +110,10 @@ header {
     font-size: 14px;
     border: none;
     outline: none;
+    height: 27px;
 }
 
-#login {
+#login, #signup {
     margin-right: 15px;
     width: 80px;
     height: 36px;
@@ -115,18 +123,70 @@ header h2 {
     font-family: ubuntu;
 }
 
-#discover {
+.header-section {
+    display: inline-block;
+}
+
+.error {
+    color: red;
+    font-size: 18px;
+    margin: 0;
+    margin-top: 10px;
+    text-shadow: 0 1px 1px black;
+}
+
+#signup-section {
+    display: none; /* Start with the signup form hidden and make it appear when clicking the top-right button 'Signup' */
+    padding-top: 50px;
+}
+
+#signup-form {
+    text-align: center;
+}
+
+#signup-form input {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    height: 30px;
+    width: 250px;
+}
+
+#signup-form input[type="submit"] {
+    width: 80px;
+    height: 35px;
+}
+
+#terms {
+    padding-bottom: 30px;
+    font-weight: 400;
+}
+
+.discover {
     font-family: ubuntu;
     margin: auto;
     width: 340px;
-    height: 44px;
+    height: 47px;
     font-size: 32px;
     padding-top: 5px;
 }
 
 .feature_left, .feature_right {
     display: table;
-    margin-top: 25px;
+    margin: 20px 0;
+    width: 100%;
+    padding: 20px 5%;
+    text-align: center;
+}
+
+@media (min-width: 1375px) {
+    .feature_left, .feature_right {
+        padding: 20px 10%;
+    }
+}
+
+.feature_right {
+    background-color: #f5f5f5;
 }
 
 article {
@@ -136,6 +196,7 @@ article {
 }
 
 article h2 {
+    font-family: ubuntu;
     font-size: 32px;
 }
 
@@ -149,13 +210,9 @@ article h2 {
 
 article p {
     font-size: 19px;
-    font-family: ubuntu;
+    font-family: asap;
     line-height: 1.4em;
     text-align: justify;
-}
-
-.feature_right article p {
-    direction: rtl;
 }
 
 aside {
@@ -167,6 +224,15 @@ aside {
 aside img {
     height: 350px;
     width: auto;
+    margin: 0 20px;
+}
+
+.feature_left aside img {
+    box-shadow: 3px 4px 5px 2px #E3E3E3;
+}
+
+.feature_right aside img {
+    box-shadow: -3px 3px 5px 2px #CCC;
 }
 
 .feature_left article {
@@ -175,6 +241,19 @@ aside img {
 
 .feature_right article {
     text-align: right;
+}
+
+#discover-footer {
+    width: 100%;
+    margin: 0;
+    padding: 40px 0;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+#discover-footer h3 {
+    font-family: ubuntu;
+    font-size: 26px;
 }
 
 footer {
@@ -187,22 +266,39 @@ footer {
     width: 100%;
 }
 
+#social_networks h3 {
+    margin: 0;
+}
+
 #bottom_links {
-    width: 94%;
+    width: 100%;
     padding: 0 3%;
     height: 30px;
+}
+
+#bottom_links a, #bottom_links h5 {
+    margin: 0;
+}
+
+#bottom_links a {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+    top: 4px;
+    margin-left: 15px;
+}
+
+#bottom_links h5 {
+    padding-top: 7px;
 }
 
 #bottom_links_left {
     display: inline-block;
     float: left;
-    position: relative;
-    top: -22px;
 }
 
 #bottom_links_right {
     display: inline-block;
     float: right;
-    position: relative;
-    top: -22px;
 }

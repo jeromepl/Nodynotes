@@ -1,20 +1,36 @@
 <?php //check if email matches password
 
-	include("mySQL_connection.php"); //where $bdd is set
-	session_start(); //start session
+    session_start();
+	include_once("mySQL_connection.php"); //where $bdd is set
+    include_once("settings.php");
 
 	if(isset($_POST['email_username']) && isset($_POST['password'])) {
 
         if(strpos($_POST['email_username'],'@') !== false) { //The user used his email adress to connect
             $req = $bdd->prepare('SELECT id, username FROM users WHERE email = :email AND password = :password');
             $req->execute(array('email' => $_POST['email_username'],
-                                'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+                                'password' => crypt($_POST['password'], $salt)));
             $answer = $req->fetch();
 
             $req->closeCursor();
 
-            if(!$answer) {
-                header('Location: ../?er=1'); //tell the user email-password doesn't work
+            if(!$answer) {       
+                // Legacy support for really old accounts with passwords hashed with Sha1:
+                // TODO ask these users to enter a new password
+                
+                $req = $bdd->prepare('SELECT id, username FROM users WHERE email = :email AND password = :password');
+                $req->execute(array('email' => $_POST['email_username'],
+                                    'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+                $answer = $req->fetch();
+
+                $req->closeCursor();
+
+                if(!$answer) {
+                    header('Location: ../?er=1'); //tell the user email-password doesn't work
+                }
+                else {
+                    login($answer);
+                }
             }
             else {
                 login($answer);
@@ -23,13 +39,27 @@
         else { //The user used his username to connect
             $req = $bdd->prepare('SELECT id, username FROM users WHERE username = :username AND password = :password');
             $req->execute(array('username' => $_POST['email_username'],
-                                'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+                                'password' => crypt($_POST['password'], $salt)));
             $answer = $req->fetch();
 
             $req->closeCursor();
 
-            if(!$answer) {
-                header('Location: ../?er=1'); //tell the user email-password doesn't work
+            if(!$answer) {       
+                // Legacy support for really old accounts with passwords hashed with Sha1:
+                
+                $req = $bdd->prepare('SELECT id, username FROM users WHERE username = :username AND password = :password');
+                $req->execute(array('username' => $_POST['email_username'],
+                                    'password' => sha1("1996j" . $_POST['password'] . "pl42")));
+                $answer = $req->fetch();
+
+                $req->closeCursor();
+
+                if(!$answer) {
+                    header('Location: ../?er=1'); //tell the user email-password doesn't work
+                }
+                else {
+                    login($answer);
+                }
             }
             else {
                 login($answer);

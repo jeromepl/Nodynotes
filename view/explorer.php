@@ -1,10 +1,13 @@
+<?php
+    include_once("server_side/settings.php");
+?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="description" content="Save and organize your thoughts in an beautiful tree diagram. Free your mind.">
 		<title>Your Boards - Nodynotes</title>
-        <base href="http://localhost/Nodes/">
+        <base href=<?='"' . $baseUrl . '"'?>></base>
         <link rel="shortcut icon" href="images/shortcut_icon.png?v=1">
         <link rel="stylesheet" type="text/css" href="styles/explorerStyle.css">
         <link rel="stylesheet" type="text/css" href="styles/headerStyle.css">
@@ -27,10 +30,25 @@
             <div id='head_left'>
                <h1 id='logo'>N<span>ODYNOTES</span></h1>
             </div>
+            <div id='head_center'>
+                <h2>Your Boards</h2>
+            </div>
         </header>
+        
+        <div id="newBoard">
+            <h4>Create New Board</h4>
+            <input id="boardTitle" type="text" placeholder="Board Title">
+            <div id="radios">
+                <input type="radio" name="public" value="F" checked="checked"><label>Private</label>
+                <input type="radio" name="public" value="T"><label>Public</label>
+            </div>
+            <div id="createBoard" class="button">Create</div>
+            <div id="cancelCreate" class="button">Cancel</div>
+        </div>
 
         <div class="container">
             <div id="selector">
+                <div id="createNew" class="button" title="Create a new board">Create New</div>
                 <ul>
                     <li class="selected">All</li>
                     <li>Public</li>
@@ -51,6 +69,8 @@
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="plugins/iconic.min.js"></script>
+        
+        <script src="javascript/objects/Saver.js"></script>
 
         <script>
             $(document).ready(function(){
@@ -85,6 +105,50 @@
                 }
                 //If its neither of the above then "All" was selected and all boards are already shown
             });
+            
+            /* CREATING A NEW BOARD */
+            //Open the creation window
+            $('#createNew').on('click', function(e) {
+                $('#newBoard').show();
+                $('#boardTitle').focus();
+            });
+            
+            //Cancel creation
+            $('#cancelCreate').on('click', function(e) {
+                $('#newBoard').hide();
+                resetNewBoard();
+            });
+            
+            //Create the new board
+            $('#createBoard').on('click', function(e) {
+                createBoard();
+            });
+            
+            /* Board creation variables */
+            var saver = new Saver();
+            var User = {
+                canEdit: true,
+                canSave: true
+            };
+            
+            //Create the new board
+            function createBoard() {
+                var title = $('#boardTitle').val();
+                var public = $('#radios input[name="public"]:checked').val();
+                if(title.length > 0) {
+                    saver.save({action: 'insert', title: title, public: public}, Saver.types.BOARD, false, null, null,
+                        function(id) { //Callback
+                            window.location.href = "board/" + id; //Redirect to the new board
+                    });
+                }
+            }
+            
+            //Clear the text field and reset the radio buttons
+            function resetNewBoard() {
+                $('#boardTitle').val(""); //Clear the text field
+                $('#radios input[value="T"]').prop('checked', false);
+                $('#radios input[value="F"]').prop('checked', true);
+            }
         </script>
     </body>
 </html>

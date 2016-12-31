@@ -23,6 +23,12 @@ function activateHtml(text) {
     return text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp/g, "&");
 }
 
+function matchHyperlinks(text) {
+    // Taken from http://stackoverflow.com/a/3809435
+    var replacement = "<a href='$&' rel='nofollow' target='_blank'>$&</a>";
+    return text.replace(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g, replacement);
+}
+
 //Rgb to Hex
 function rgbToHex(rgb){
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);

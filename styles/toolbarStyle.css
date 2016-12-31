@@ -29,15 +29,15 @@
 }
 
 .boardTool:hover {
-	background-color: #F4F4F4;
+	background-color: #e6e6e6;
 }
 
 .boardTool:active {
-	background-color: #F4F4F4;
+	background-color: #e6e6e6;
 }
 
 .boardTool.selected {
-    background-color: #F4F4F4;
+    background-color: #e6e6e6;
 }
 
 #boardToolbarTitle {
@@ -214,15 +214,15 @@
 }
 
 .nodeTool:hover {
-	background-color: #F4F4F4;
+	background-color: #e6e6e6;
 }
 
 .nodeTool:active {
-	background-color: #F4F4F4;
+	background-color: #e6e6e6;
 }
 
 .nodeTool.selected {
-    background-color: #F4F4F4;
+    background-color: #e6e6e6;
 }
 
 #nodeTool_7 svg {

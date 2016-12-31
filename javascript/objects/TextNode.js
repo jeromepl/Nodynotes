@@ -51,7 +51,7 @@ TextNode.prototype.setContent = function(title, text, log) {
 TextNode.prototype.select = function(subtitle) { //subtitle is optionnal. If specified, means a subtitle was selected
     Node.prototype.select.call(this, subtitle); //call the super method
 
-    board.contentShower.linkTo(this);
+    board.contentShower.linkTo(this); // will move the board to show all content, if necessary
 };
 
 TextNode.prototype.deselect = function() {

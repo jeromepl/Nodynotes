@@ -17,6 +17,20 @@ header {
     height: 100%;
 }
 
+#head_center {
+    display: inline-block;
+    height: 100%; 
+}
+
+#head_center h2 {
+    position: relative;
+    font-family: ubuntu;
+    top: 11px;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
 #head_right {
     float: right;
     height: 100%;
@@ -94,6 +108,7 @@ header svg:not(.search_resultSVG) {
 #head_right form {
     height: 100%;
     margin: 0;
+    display: inline-block;
 }
 
 #login_box, #password_box {
@@ -108,8 +123,8 @@ header svg:not(.search_resultSVG) {
     outline: none;
 }
 
-#login {
-    margin-right: 15px;
+.button {
+    margin-right: 7px;
     background-color: #29BFCE;
     width: 80px;
     height: 36px;
@@ -120,6 +135,14 @@ header svg:not(.search_resultSVG) {
     font-weight: bold;
     border: none;
     cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 6px;
+    box-sizing: border-box;
+}
+
+#signup {
+    margin-right: 15px;
 }
 
 #search_box {
