@@ -35,7 +35,11 @@ body {
 }
 
 .button:hover {
-    background-color: #F2F2F2;
+    background-color: #28b7c6;
+}
+
+#createNew {
+    width: 120px;
 }
 
 #newBoard {
@@ -86,6 +90,7 @@ body {
 }
 
 #selector {
+    text-align: center;
     display: inline-block;
     background-color: rgb(245, 245, 245);
     vertical-align: top;
