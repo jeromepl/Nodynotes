@@ -41,19 +41,22 @@ Board.prototype.loadData = function(callback) {
     $.getJSON("server_side/getNodes.php?board_id=" + that.id, function(data) {
         //console.log(data);
 
-        that.xPos = data.board.xPos;
-        that.yPos = data.board.yPos;
+        that.xPos = parseInt(data.board.xPos, 10);
+        that.yPos = parseInt(data.board.yPos, 10);
         that.element.css({left: that.xPos, top: that.yPos}); //move the board to the last saved location
 
         for(var i = 0; i < data.nodes.length; i++) { //add a node
-            that.nodes.push(new TextNode(data.nodes[i].id, data.nodes[i].title, data.nodes[i].xPos, data.nodes[i].yPos, data.nodes[i].text, data.nodes[i].color, data.nodes[i].icon));
+            var nodeID = parseInt(data.nodes[i].id, 10);
+            that.nodes.push(new TextNode(nodeID, data.nodes[i].title, data.nodes[i].xPos, data.nodes[i].yPos, data.nodes[i].text, data.nodes[i].color, data.nodes[i].icon));
 
             for(var j = 0; j < data.nodes[i].subtitles.length; j++) { // add subtitles to that node
-				that.nodes[that.nodes.length - 1].addSubtitle(data.nodes[i].subtitles[j].id, data.nodes[i].subtitles[j].position, data.nodes[i].subtitles[j].title, data.nodes[i].subtitles[j].text);
+                var subID = parseInt(data.nodes[i].subtitles[j].id, 10);
+				that.nodes[that.nodes.length - 1].addSubtitle(subID, data.nodes[i].subtitles[j].position, data.nodes[i].subtitles[j].title, data.nodes[i].subtitles[j].text);
 			}
 
 			for(var j = 0; j < data.nodes[i].tags.length; j++) { //add tags to that node
-				that.nodes[that.nodes.length - 1].addTag(data.nodes[i].tags[j].id, data.nodes[i].tags[j].title);
+                var tagID = parseInt(data.nodes[i].tags[j].id, 10);
+				that.nodes[that.nodes.length - 1].addTag(tagID, data.nodes[i].tags[j].title);
 			}
         }
 
